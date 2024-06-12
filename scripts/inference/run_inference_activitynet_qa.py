@@ -9,7 +9,7 @@ from typing import Any, Callable
 import torch
 import wandb
 from accelerate import Accelerator
-from accelerate.utils import gather_object
+from accelerate.utils import gather_object, set_seed
 from decord import VideoReader
 from jsonargparse import CLI
 from prismatic import load
@@ -104,7 +104,7 @@ def run(
     random_seed: int = 42,
     print_gen_texts: bool = False,
 ) -> None:
-    torch.manual_seed(random_seed)
+    set_seed(random_seed)
 
     if gen_config is None:
         gen_config = {}
