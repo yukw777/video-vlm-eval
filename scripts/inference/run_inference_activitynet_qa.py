@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 import torch
+import wandb
 from accelerate import Accelerator
 from accelerate.utils import gather_object
 from decord import VideoReader
@@ -17,8 +18,6 @@ from prismatic.models.backbones.vision import VideoTransform
 from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader, Dataset
 from tqdm import tqdm
-
-import wandb
 
 # Disable Tokenizers Parallelism to Play Nice w/ PyTorch Multiprocessing DataLoaders
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
