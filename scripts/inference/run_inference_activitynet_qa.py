@@ -99,14 +99,15 @@ def run(
     dtype: TorchDType | None = None,
     num_dataloader_workers: int = 4,
     num_eval_steps: int | None = None,
-    generation_config: str = "{}",
+    gen_config: dict | None = None,
     wandb_project: str | None = None,
     random_seed: int = 42,
     print_gen_texts: bool = False,
 ) -> None:
     torch.manual_seed(random_seed)
 
-    gen_config = json.loads(generation_config)
+    if gen_config is None:
+        gen_config = {}
     if wandb_project is not None:
         accelerator = Accelerator(log_with="wandb")
         accelerator.init_trackers(
