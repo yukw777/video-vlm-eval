@@ -9,7 +9,7 @@ from typing import Any, Callable
 
 import torch
 from accelerate import Accelerator
-from accelerate.utils import gather_object, set_seed
+from accelerate.utils import gather_object, set_seed, tqdm
 from decord import VideoReader
 from jsonargparse import CLI
 from prismatic import load
@@ -17,7 +17,6 @@ from prismatic.models.backbones.llm.prompting import PromptBuilder
 from prismatic.models.backbones.vision import VideoTransform
 from torch.nn.parallel import DistributedDataParallel
 from torch.utils.data import DataLoader, Dataset
-from tqdm import tqdm
 
 # Disable Tokenizers Parallelism to Play Nice w/ PyTorch Multiprocessing DataLoaders
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
@@ -145,9 +144,7 @@ def run(
     module = model.module if isinstance(model, DistributedDataParallel) else model
     data: list = []
     for i, batch in enumerate(
-        tqdm(
-            dataloader, desc="Generating", disable=not accelerator.is_local_main_process
-        )
+        tqdm(dataloader, desc="Generating", total=num_eval_steps)
     ):
         if num_eval_steps is not None and i == num_eval_steps:
             break
