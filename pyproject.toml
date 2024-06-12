@@ -38,3 +38,6 @@ target-version = "py310"
 # which confuses isort, causing it to classify wandb
 # as a first-party library.
 known-third-party = ["wandb"]
+
+[tool.mypy]
+ignore_missing_imports = true
