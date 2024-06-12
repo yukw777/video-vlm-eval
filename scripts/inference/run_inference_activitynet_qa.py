@@ -1,4 +1,5 @@
 import copy
+import csv
 import enum
 import json
 import os
@@ -7,7 +8,6 @@ from pathlib import Path
 from typing import Any, Callable
 
 import torch
-import wandb
 from accelerate import Accelerator
 from accelerate.utils import gather_object, set_seed
 from decord import VideoReader
@@ -102,7 +102,7 @@ def run(
     gen_config: dict | None = None,
     wandb_project: str | None = None,
     random_seed: int = 42,
-    print_gen_texts: bool = False,
+    out_file_name: str | None = None,
 ) -> None:
     set_seed(random_seed)
 
@@ -118,12 +118,8 @@ def run(
                 **gen_config,
             },
         )
-        table = wandb.Table(
-            columns=["video_name", "question_id", "question", "generated"]
-        )
     else:
         accelerator = Accelerator()
-        table = None
 
     model = load(model_name_or_path)
     model.to(dtype.value if dtype is not None else None)
@@ -147,6 +143,7 @@ def run(
     )
 
     module = model.module if isinstance(model, DistributedDataParallel) else model
+    data: list = []
     for i, batch in enumerate(
         tqdm(
             dataloader, desc="Generating", disable=not accelerator.is_local_main_process
@@ -182,20 +179,26 @@ def run(
             gathered_gen_texts = gathered_gen_texts[
                 : accelerator.gradient_state.remainder
             ]
-        if print_gen_texts:
-            for gen_text in gathered_gen_texts:
-                accelerator.print(f"Generated text: {gen_text}")
-        if table is not None:
-            for data in zip(
+        data.extend(
+            zip(
                 gathered_video_names,
                 gathered_question_ids,
                 gathered_questions,
                 gathered_gen_texts,
-            ):
-                table.add_data(*data)
+            )
+        )
 
-    if table is not None:
-        accelerator.log({"generated": table})
+    columns = ["video_name", "question_id", "question", "generated"]
+    if out_file_name is not None and accelerator.is_main_process:
+        with open(out_file_name, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(columns)
+            writer.writerows(data)
+
+    if wandb_project is not None and accelerator.is_main_process:
+        accelerator.get_tracker("wandb").log_table(
+            "generated", columns=columns, data=data
+        )
 
     accelerator.end_training()
 
