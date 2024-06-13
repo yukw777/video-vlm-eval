@@ -1,25 +1,27 @@
 # Video VLM Eval
 
-## Inference
+## Commands
 
-Run `scripts/run_inference_zero_shot_qa.py` with appropriate arguments. It supports distributed inference via `torchrun`.
+- `scripts/run_inference_zero_shot_qa.py`: run inference on a zero-shot qa dataset. supports distributed inference via `torchrun`.
+- `scripts/run_eval_zero_shot_qa.py`: run evaluation on the inference results on a zero-shot qa dataset.
 
-### Datasets
+## Datasets
 
-#### ActivityNet-QA
+### ActivityNet-QA
 
 ```bash
-{python,torchrun} scripts/run_inference_zero_shot_qa.py \
+<command> \
 --dataset video_vlm_eval.ActivityNetQADataset \
 --dataset.video_dirs '[/path/to/v1-2/test, /path/to/v1-3/test]' \
 --dataset.gt_file_question /path/to/test_q.json \
+--dataset.gt_file_answer /path/to/test_a.json \
 ... other arguments
 ```
 
-#### MSVD-QA
+### MSVD-QA
 
 ```bash
-{python,torchrun} scripts/run_inference_zero_shot_qa.py \
+<command> \
 --dataset video_vlm_eval.MSVDQADataset \
 --dataset.video_dir /path/to/YouTubeClips \
 --dataset.video_mapping_file /path/to/youtube_mapping.txt \
@@ -27,12 +29,12 @@ Run `scripts/run_inference_zero_shot_qa.py` with appropriate arguments. It suppo
 ... other arguments
 ```
 
-### Models
+## Models
 
-#### Video-ChatGPT
+### Video-ChatGPT
 
 ```bash
-{python,torchrun} scripts/run_inference_zero_shot_qa.py \
+<command> \
 ---model_name_or_path /path/to/video/chatgpt/output/dir \
 ... other arguments
 ```

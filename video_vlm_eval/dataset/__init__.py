@@ -19,6 +19,21 @@ class Dataset(TorchDataset, Generic[T], abc.ABC):
     ) -> None:
         self.preprocessor = preprocessor
 
+    @abc.abstractmethod
+    def get_by_id(self, id: str) -> T: ...
+
     @property
     @abc.abstractmethod
     def columns(self) -> tuple[str, ...]: ...
+
+    @property
+    @abc.abstractmethod
+    def id_key(self) -> str: ...
+
+    @property
+    @abc.abstractmethod
+    def question_key(self) -> str: ...
+
+    @property
+    @abc.abstractmethod
+    def answer_key(self) -> str: ...

@@ -45,7 +45,17 @@ class MSVDQADataset(Dataset[dict[str, Any]]):
                     f"Multiple videos found matching {msvd_vid} for vid{msvd_qa_vid}"
                 )
             self.examples.append({"video_path": vids[0], **ann})
+
+        self._columns = tuple(k for k in self.examples[0].keys() if k != "video_path")
+        self._id_key = "id"
+        self._question_key = "question"
+        self._answer_key = "answer"
+        self._examples_by_id = {e[self._id_key]: e for e in self.examples}
+
         self.preprocessor = preprocessor
+
+    def get_by_id(self, id: str) -> dict[str, Any]:
+        return self._examples_by_id[id]
 
     def __getitem__(self, idx: int) -> dict[str, Any]:
         datapoint = self.examples[idx]
@@ -58,4 +68,16 @@ class MSVDQADataset(Dataset[dict[str, Any]]):
 
     @property
     def columns(self) -> tuple[str, ...]:
-        return tuple(k for k in self.examples[0].keys() if k not in {"video_path"})
+        return self._columns
+
+    @property
+    def id_key(self) -> str:
+        return self._id_key
+
+    @property
+    def question_key(self) -> str:
+        return self._question_key
+
+    @property
+    def answer_key(self) -> str:
+        return self._answer_key

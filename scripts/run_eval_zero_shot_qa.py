@@ -1,6 +1,5 @@
 import ast
 import csv
-import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pprint import pprint
@@ -15,12 +14,14 @@ from tenacity import (
 )
 from tqdm import tqdm
 
+from video_vlm_eval import Dataset
+
 
 @dataclass
 class OpenAIClient:
     client: OpenAI
 
-    @retry(wait=wait_random_exponential(), stop=stop_after_attempt(100))
+    @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(10))
     def annotate(self, question: str, answer: str, pred: str) -> dict:
         # Compute the correctness score
         chat_completion = self.client.chat.completions.create(
@@ -56,14 +57,12 @@ class OpenAIClient:
 
 
 def run(
-    openai_api_key: str, pred_path: str, gt_file_answer: str, out_path: str | None
+    openai_api_key: str, pred_path: str, dataset: Dataset, out_path: str | None
 ) -> None:
     wandb.init()
     with open(pred_path, newline="") as f:
         reader = csv.DictReader(f)
-        preds = {p["question_id"]: p for p in reader}
-    with open(gt_file_answer) as f:
-        answers = {a["question_id"]: a for a in json.load(f)}
+        preds = {p[dataset.id_key]: p for p in reader}
 
     client = OpenAIClient(OpenAI(api_key=openai_api_key))
 
@@ -73,8 +72,8 @@ def run(
         future_to_q_id = {
             executor.submit(
                 client.annotate,
-                preds[q_id]["question"],
-                answers[q_id]["answer"],
+                preds[q_id][dataset.question_key],
+                dataset.get_by_id(q_id)[dataset.answer_key],
                 preds[q_id]["generated"],
             ): q_id
             for q_id in preds
@@ -84,31 +83,16 @@ def run(
             ann = future.result()
             anns.append(ann)
             data.append(
-                [
-                    preds[q_id]["video_name"],
-                    preds[q_id]["question_id"],
-                    preds[q_id]["question"],
-                    answers[q_id]["answer"],
-                    preds[q_id]["generated"],
-                    ann["pred"],
-                    ann["score"],
-                ]
+                [dataset.get_by_id(q_id)[c] for c in dataset.columns]
+                + [preds[q_id]["generated"], ann["pred"], ann["score"]]
             )
-    columns = [
-        "video_name",
-        "question_id",
-        "question",
-        "answer",
-        "generated",
-        "chatgpt_pred",
-        "chatgpt_score",
-    ]
+    columns = dataset.columns + ("generated", "chatgpt_pred", "chatgpt_score")
     if out_path is not None:
         with open(out_path, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(columns)
             writer.writerows(data)
-    table = wandb.Table(columns=columns, data=data)
+    table = wandb.Table(columns=list(columns), data=data)
 
     # Calculate average score and accuracy
     score_sum = 0
