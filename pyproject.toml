@@ -12,6 +12,8 @@ jsonargparse = "^4.29.0"
 torch = { version = "^2.3.1+cu121", source = "pytorch-cu121" }
 prismatic = { git = "git@github.com:yukw777/prismatic-dev.git", rev = "video-chatgpt" }
 decord = "^0.6.0"
+openai = "^1.33.0"
+tenacity = "^8.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
