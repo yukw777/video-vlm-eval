@@ -86,13 +86,13 @@ def run(
                 [dataset.get_by_id(q_id)[c] for c in dataset.columns]
                 + [preds[q_id]["generated"], ann["pred"], ann["score"]]
             )
-    columns = dataset.columns + ("generated", "chatgpt_pred", "chatgpt_score")
+    columns = dataset.columns + ["generated", "chatgpt_pred", "chatgpt_score"]
     if out_path is not None:
         with open(out_path, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(columns)
             writer.writerows(data)
-    table = wandb.Table(columns=list(columns), data=data)
+    table = wandb.Table(columns=columns, data=data)
 
     # Calculate average score and accuracy
     score_sum = 0

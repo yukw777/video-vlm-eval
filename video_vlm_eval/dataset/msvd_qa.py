@@ -46,7 +46,7 @@ class MSVDQADataset(Dataset[dict[str, Any]]):
                 )
             self.examples.append({"video_path": vids[0], **ann})
 
-        self._columns = tuple(k for k in self.examples[0].keys() if k != "video_path")
+        self._columns = [k for k in self.examples[0].keys() if k != "video_path"]
         self._id_key = "id"
         self._question_key = "question"
         self._answer_key = "answer"
@@ -67,7 +67,7 @@ class MSVDQADataset(Dataset[dict[str, Any]]):
         return len(self.examples)
 
     @property
-    def columns(self) -> tuple[str, ...]:
+    def columns(self) -> list[str]:
         return self._columns
 
     @property

@@ -24,7 +24,7 @@ class Dataset(TorchDataset, Generic[T], abc.ABC):
 
     @property
     @abc.abstractmethod
-    def columns(self) -> tuple[str, ...]: ...
+    def columns(self) -> list[str]: ...
 
     @property
     @abc.abstractmethod

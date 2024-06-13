@@ -44,7 +44,7 @@ class ActivityNetQADataset(Dataset[dict[str, Any]]):
             else:
                 raise ValueError(f"Couldn't find video {q['video_name']}")
 
-        self._columns = tuple(k for k in self.examples[0].keys() if k != "video_path")
+        self._columns = [k for k in self.examples[0].keys() if k != "video_path"]
         self._id_key = "question_id"
         self._question_key = "question"
         self._answer_key = "answer"
@@ -65,7 +65,7 @@ class ActivityNetQADataset(Dataset[dict[str, Any]]):
         return len(self.examples)
 
     @property
-    def columns(self) -> tuple[str, ...]:
+    def columns(self) -> list[str]:
         return self._columns
 
     @property

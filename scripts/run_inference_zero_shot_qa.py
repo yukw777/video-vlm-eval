@@ -100,7 +100,7 @@ def run(
             ]
         data.extend(zip(*gathered_objects, gathered_gen_texts))
 
-    columns = dataset.columns + ("generated",)
+    columns = dataset.columns + ["generated"]
     if out_file_name is not None and accelerator.is_main_process:
         with open(out_file_name, "w", newline="") as f:
             writer = csv.writer(f)
