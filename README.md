@@ -29,6 +29,16 @@
 ... other arguments
 ```
 
+### MSRVTT-QA
+
+```bash
+<command> \
+--dataset video_vlm_eval.MSRVTTQADataset \
+--dataset.video_dir /path/to/videos/all \
+--dataset.annotations_file /path/to/test_qa.json \
+... other arguments
+```
+
 ## Models
 
 ### Video-ChatGPT
