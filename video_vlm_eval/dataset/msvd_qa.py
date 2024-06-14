@@ -28,7 +28,9 @@ class MSVDQADataset(Dataset[dict[str, Any]]):
         with open(annotations_file) as f:
             annotations = json.load(f)
 
-        video_dir_path = Path(video_dir)
+        msvd_vid_to_path: dict[str, Path] = {}
+        for video_path in Path(video_dir).iterdir():
+            msvd_vid_to_path[video_path.stem] = video_path
         self.examples: list[dict[str, Any]] = []
         for ann in annotations:
             # we cast video_id and id to str so it wouldn't get turned into a tensor by the default collator.
@@ -37,14 +39,7 @@ class MSVDQADataset(Dataset[dict[str, Any]]):
 
             msvd_qa_vid = ann["video_id"]
             msvd_vid = self.video_mapping[msvd_qa_vid]
-            vids = list(video_dir_path.glob(f"{msvd_vid}*"))
-            if len(vids) == 0:
-                raise ValueError(f"Couldn't find video {msvd_vid} for vid{msvd_qa_vid}")
-            elif len(vids) > 1:
-                raise ValueError(
-                    f"Multiple videos found matching {msvd_vid} for vid{msvd_qa_vid}"
-                )
-            self.examples.append({"video_path": vids[0], **ann})
+            self.examples.append({"video_path": msvd_vid_to_path[msvd_vid], **ann})
 
         self._columns = [k for k in self.examples[0].keys() if k != "video_path"]
         self._id_key = "id"

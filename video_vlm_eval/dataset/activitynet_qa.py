@@ -25,24 +25,18 @@ class ActivityNetQADataset(Dataset[dict[str, Any]]):
             gt_answers = json.load(f)
 
         # figure out the video paths
-        video_dir_paths = [Path(video_dir) for video_dir in video_dirs]
+        video_name_to_path: dict[str, Path] = {}
+        for video_dir in [Path(video_dir) for video_dir in video_dirs]:
+            for video_path in video_dir.iterdir():
+                # video_name is the stem of the video path without the "v_" prefix
+                video_name_to_path[video_path.stem[2:]] = video_path
         self.examples: list[dict[str, Any]] = []
         for q, a in zip(gt_questions, gt_answers):
-            for p in video_dir_paths:
-                vid_name = q["video_name"]
-                vids = list(p.glob(f"*{vid_name}*"))
-                if len(vids) == 0:
-                    continue
-                elif len(vids) > 1:
-                    raise ValueError(
-                        f"Multiple videos found for video {vid_name} in {p}"
-                    )
-                # we cast type to str so it wouldn't get turned into a tensor by the default collator.
-                a["type"] = str(a["type"])
-                self.examples.append({"video_path": vids[0], **q, **a})
-                break
-            else:
-                raise ValueError(f"Couldn't find video {q['video_name']}")
+            # we cast type to str so it wouldn't get turned into a tensor by the default collator.
+            a["type"] = str(a["type"])
+            self.examples.append(
+                {"video_path": video_name_to_path[q["video_name"]], **q, **a}
+            )
 
         self._columns = [k for k in self.examples[0].keys() if k != "video_path"]
         self._id_key = "question_id"
