@@ -39,6 +39,16 @@
 ... other arguments
 ```
 
+### TGIF-QA Frame
+
+```bash
+<command> \
+--dataset video_vlm_eval.TGIFQAFrameDataset \
+--dataset.video_dir /path/to/converted/videos \
+--dataset.frame_annotations_file /path/to/frameqa_question.csv \
+... other arguments
+```
+
 ## Models
 
 ### Video-ChatGPT

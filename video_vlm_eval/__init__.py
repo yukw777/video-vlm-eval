@@ -2,6 +2,7 @@ from .dataset import Dataset
 from .dataset.activitynet_qa import ActivityNetQADataset
 from .dataset.msrvtt_qa import MSRVTTQADataset
 from .dataset.msvd_qa import MSVDQADataset
+from .dataset.tgif_qa import TGIFQAFrameDataset
 from .preprocessor.prismatic import PrismaticPreprocessor
 
 __all__ = [
@@ -10,4 +11,5 @@ __all__ = [
     "MSVDQADataset",
     "PrismaticPreprocessor",
     "MSRVTTQADataset",
+    "TGIFQAFrameDataset",
 ]
