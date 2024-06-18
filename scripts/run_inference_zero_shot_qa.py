@@ -24,6 +24,7 @@ class TorchDType(enum.Enum):
 def run(
     model_name_or_path: str,
     dataset: Dataset,
+    per_device_batch_size: int = 2,
     dtype: TorchDType | None = None,
     num_dataloader_workers: int = 4,
     num_eval_steps: int | None = None,
@@ -62,7 +63,7 @@ def run(
         model,
         DataLoader(
             dataset,
-            batch_size=1,
+            batch_size=per_device_batch_size,
             num_workers=num_dataloader_workers,
             pin_memory=True,
         ),

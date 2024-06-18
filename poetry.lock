@@ -1809,7 +1809,7 @@ sagemaker = ["boto3", "sagemaker"]
 type = "git"
 url = "git@github.com:yukw777/prismatic-dev.git"
 reference = "video-chatgpt"
-resolved_reference = "c9d4ebe2a11b9865819b283b06e37756a4ff7d81"
+resolved_reference = "fc5bf1a7d62be0033dfd3378237eb20dcb6a48bf"
 
 [[package]]
 name = "prompt-toolkit"
