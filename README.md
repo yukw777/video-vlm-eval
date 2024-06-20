@@ -2,8 +2,8 @@
 
 ## Commands
 
-- `scripts/run_inference_zero_shot_qa.py`: run inference on a zero-shot qa dataset. supports distributed inference via `torchrun`.
-- `scripts/run_eval_zero_shot_qa.py`: run evaluation on the inference results on a zero-shot qa dataset.
+- `scripts/run_inference.py`: run inference on various benchmarks. supports distributed inference via `torchrun`.
+- `scripts/run_eval_video_chatgpt.py`: run Video-ChatGPT style evaluation.
 
 ## Datasets
 
@@ -49,12 +49,94 @@
 ... other arguments
 ```
 
-## Models
-
-### Video-ChatGPT
+### Video-ChatGPT Generic/Temporal
 
 ```bash
 <command> \
----model_name_or_path /path/to/video/chatgpt/output/dir \
+--dataset video_vlm_eval.VideoChatGPTGeneralDataset \
+--dataset.video_dir /path/to/Test_Videos/ \
+--dataset.annotations_file /path/to/generic/or/temporal_qa.json \
+... other arguments
+```
+
+### Video-ChatGPT Consistency
+
+```bash
+<command> \
+--dataset video_vlm_eval.VideoChatGPTConsistencyDataset \
+--dataset.video_dir /path/to/Test_Videos/ \
+--dataset.annotations_file /path/to/consistency_qa.json \
+... other arguments
+```
+
+## Tasks
+
+### Video-ChatGPT Zero-Shot QA Task
+
+```bash
+<command> \
+--task video_vlm_eval.VideoChatGPTZeroShotQATask \
+... other arguments
+```
+
+### Video-ChatGPT Correctness Task
+
+```bash
+<command> \
+--task video_vlm_eval.VideoChatGPTCorrectnessTask \
+... other arguments
+```
+
+### Video-ChatGPT Detailed Orientation Task
+
+```bash
+<command> \
+--task video_vlm_eval.VideoChatGPTDetailedOrientationTask \
+... other arguments
+```
+
+### Video-ChatGPT Context Task
+
+```bash
+<command> \
+--task video_vlm_eval.VideoChatGPTContextTask \
+... other arguments
+```
+
+### Video-ChatGPT Temporal Task
+
+```bash
+<command> \
+--task video_vlm_eval.VideoChatGPTTemporalTask \
+... other arguments
+```
+
+### Video-ChatGPT Consistency Task
+
+```bash
+<command> \
+--task video_vlm_eval.VideoChatGPTConsistencyTask \
+... other arguments
+```
+
+## Models
+
+### Prismatic Model for Zero-Shot QA
+
+```bash
+<command> \
+--model video_vlm_eval.PrismaticZeroShotQAModel \
+--model.model_name_or_path /path/to/model/output/dir \
+--model.dtype {float16, bfloat16} \
+... other arguments
+```
+
+### Prismatic Model for Video-ChatGPT Consistency
+
+```bash
+<command> \
+--model video_vlm_eval.PrismaticVideoChatGPTConsistencyModel \
+--model.model_name_or_path /path/to/model/output/dir \
+--model.dtype {float16, bfloat16} \
 ... other arguments
 ```
