@@ -12,8 +12,15 @@ from .task.video_chatgpt import (
     VideoChatGPTTask,
     VideoChatGPTZeroShotQATask,
     VideoChatGPTConsistencyTask,
+    VideoChatGPTCorrectnessTask,
+    VideoChatGPTDetailedOrientationTask,
+    VideoChatGPTContextTask,
+    VideoChatGPTTemporalTask,
 )
-from .dataset.video_chatgpt import VideoChatGPTConsistencyDataset
+from .dataset.video_chatgpt import (
+    VideoChatGPTConsistencyDataset,
+    VideoChatGPTGeneralDataset,
+)
 
 __all__ = [
     "Dataset",
@@ -28,4 +35,9 @@ __all__ = [
     "VideoChatGPTConsistencyDataset",
     "PrismaticVideoChatGPTConsistencyModel",
     "VideoChatGPTConsistencyTask",
+    "VideoChatGPTGeneralDataset",
+    "VideoChatGPTCorrectnessTask",
+    "VideoChatGPTDetailedOrientationTask",
+    "VideoChatGPTContextTask",
+    "VideoChatGPTTemporalTask",
 ]
