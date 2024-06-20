@@ -3,6 +3,7 @@
 ## Commands
 
 - `scripts/run_inference.py`: run inference on various benchmarks. supports distributed inference via `torchrun`.
+- `scripts/run_eval.py`: run various evaluations.
 - `scripts/run_eval_video_chatgpt.py`: run Video-ChatGPT style evaluation.
 
 ## Datasets
@@ -69,6 +70,17 @@
 ... other arguments
 ```
 
+### EgoSchema
+
+```bash
+<command> \
+--dataset video_vlm_eval.EgoSchemaDataset \
+--dataset.video_dir /path/to/videos \
+--dataset.question_file /path/to/questions.json \
+--dataset.answer_file /path/to/subset_answers.json \
+... other arguments
+```
+
 ## Tasks
 
 ### Video-ChatGPT Zero-Shot QA Task
@@ -119,6 +131,14 @@
 ... other arguments
 ```
 
+### Multiple Choice Task
+
+```bash
+<command> \
+--task video_vlm_eval.MultipleChoice \
+... other arguments
+```
+
 ## Models
 
 ### Prismatic Model for Zero-Shot QA
@@ -136,6 +156,16 @@
 ```bash
 <command> \
 --model video_vlm_eval.PrismaticVideoChatGPTConsistencyModel \
+--model.model_name_or_path /path/to/model/output/dir \
+--model.dtype {float16, bfloat16} \
+... other arguments
+```
+
+### Prismatic Model for EgoSchema
+
+```bash
+<command> \
+--model video_vlm_eval.PrismaticEgoSchemaModel \
 --model.model_name_or_path /path/to/model/output/dir \
 --model.dtype {float16, bfloat16} \
 ... other arguments
