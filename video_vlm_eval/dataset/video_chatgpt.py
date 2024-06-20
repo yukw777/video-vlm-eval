@@ -1,11 +1,10 @@
 import json
-from pathlib import Path
-from typing import Any, Callable
-
 from video_vlm_eval.dataset import Dataset
+from typing import Any, Callable
+from pathlib import Path
 
 
-class MSRVTTQADataset(Dataset[dict[str, Any]]):
+class VideoChatGPTConsistencyDataset(Dataset[dict[str, Any]]):
     def __init__(
         self,
         video_dir: str,
@@ -13,31 +12,22 @@ class MSRVTTQADataset(Dataset[dict[str, Any]]):
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
         """
-        :param video_dir: dir that contains MSRVTT videos
-        :param annotation: MSRVTT-QA annotation file, e.g., test_qa.json
+        :param video_dir: dir that contains Video-ChatGPT test videos
+        :param annotation: Video-ChatGPT consistency annotation file, e.g., consistency_qa.json
         """
         with open(annotations_file) as f:
             annotations = json.load(f)
 
         video_id_to_path: dict[str, Path] = {}
         for video_path in Path(video_dir).iterdir():
-            # remove "video" prefix
-            video_id_to_path[video_path.stem[5:]] = video_path
+            video_id_to_path[video_path.stem] = video_path
         self.examples: list[dict[str, Any]] = []
         for ann in annotations:
-            # we cast category_id, video_id and id to str so it wouldn't get turned into a tensor by the default collator.
-            ann["category_id"] = str(ann["category_id"])
-            ann["video_id"] = str(ann["video_id"])
-            ann["id"] = str(ann["id"])
-
             self.examples.append(
-                {"video_path": video_id_to_path[ann["video_id"]], **ann}
+                {"video_path": video_id_to_path[ann["video_name"]], **ann}
             )
 
-        self._columns = [k for k in self.examples[0].keys() if k != "video_path"]
-        self._id_key = "id"
-        self._examples_by_id = {e[self._id_key]: e for e in self.examples}
-
+        self._examples_by_id = {e[self.id_key]: e for e in self.examples}
         self.preprocessor = preprocessor
 
     def get_by_id(self, id: str) -> dict[str, Any]:
@@ -54,8 +44,8 @@ class MSRVTTQADataset(Dataset[dict[str, Any]]):
 
     @property
     def columns(self) -> list[str]:
-        return self._columns
+        return ["Q1", "Q2", "A", "video_name"]
 
     @property
     def id_key(self) -> str:
-        return self._id_key
+        return "video_name"

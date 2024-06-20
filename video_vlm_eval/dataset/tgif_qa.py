@@ -56,11 +56,3 @@ class TGIFQAFrameDataset(Dataset[dict[str, Any]]):
     @property
     def id_key(self) -> str:
         return "vid_id"
-
-    @property
-    def question_key(self) -> str:
-        return "question"
-
-    @property
-    def answer_key(self) -> str:
-        return "answer"

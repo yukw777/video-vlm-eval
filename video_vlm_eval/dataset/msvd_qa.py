@@ -43,8 +43,6 @@ class MSVDQADataset(Dataset[dict[str, Any]]):
 
         self._columns = [k for k in self.examples[0].keys() if k != "video_path"]
         self._id_key = "id"
-        self._question_key = "question"
-        self._answer_key = "answer"
         self._examples_by_id = {e[self._id_key]: e for e in self.examples}
 
         self.preprocessor = preprocessor
@@ -68,11 +66,3 @@ class MSVDQADataset(Dataset[dict[str, Any]]):
     @property
     def id_key(self) -> str:
         return self._id_key
-
-    @property
-    def question_key(self) -> str:
-        return self._question_key
-
-    @property
-    def answer_key(self) -> str:
-        return self._answer_key

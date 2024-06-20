@@ -29,11 +29,3 @@ class Dataset(TorchDataset, Generic[T], abc.ABC):
     @property
     @abc.abstractmethod
     def id_key(self) -> str: ...
-
-    @property
-    @abc.abstractmethod
-    def question_key(self) -> str: ...
-
-    @property
-    @abc.abstractmethod
-    def answer_key(self) -> str: ...
