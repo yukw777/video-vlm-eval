@@ -1,9 +1,10 @@
+import numpy as np
 from prismatic import load
 from decord import VideoReader
 
 from typing import Any
 from video_vlm_eval.model import TorchDType, Model
-from video_vlm_eval.task import ZeroShotQA
+from video_vlm_eval.task import ZeroShotQA, MultipleChoice
 from video_vlm_eval.task.video_chatgpt import VideoChatGPTConsistencyTask
 
 
@@ -75,3 +76,56 @@ class PrismaticVideoChatGPTConsistencyModel(PrismaticModel):
     @property
     def result_keys(self) -> list[str]:
         return VideoChatGPTConsistencyTask.pred_keys
+
+
+class PrismaticEgoSchemaModel(PrismaticModel):
+    """This model closely follows the official implementation of the mPLUG-Owl
+    evaluation script for EgoSchema.
+
+    More details can be found here:
+    https://github.com/egoschema/EgoSchema/blob/fd7b3572f20e3297c28243bae940d00a092642ae/benchmarking/mPLUG-Owl/run_mplug.py
+    """
+
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        question = datapoint[MultipleChoice.question_key]
+
+        preprocessed = {
+            "pixel_values": self.model.vision_backbone.vision_transform(
+                VideoReader(str(datapoint.pop("video_path")))
+            ),
+            **datapoint,
+        }
+        for k in ["option 0", "option 1", "option 2", "option 3", "option 4"]:
+            option = datapoint[k]
+            prompt_builder = self.model.get_prompt_builder()
+            prompt_builder.add_turn(
+                "human",
+                f"Given question '{question}, is answer '{option}' correct? "
+                "Do you think that the answer to the given question is correct. "
+                "Please answer yes or no.",
+            )
+            preprocessed[f"{k}_prompt"] = prompt_builder.get_prompt()
+        return preprocessed
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        # confidence level for each option (batch, num_option)
+        confidence = np.zeros((batch["pixel_values"].size(0), 5))
+        for o, k in enumerate(
+            ["option 0", "option 1", "option 2", "option 3", "option 4"]
+        ):
+            _, batch_gen_probs = self.model.generate_batch(
+                batch["pixel_values"],
+                batch[f"{k}_prompt"],
+                return_string_probabilities=["Yes", "No"],
+                **gen_config,
+            )
+            for i, gen_probs in enumerate(batch_gen_probs):
+                confidence[i][o] = gen_probs[0]  # type: ignore
+
+        batch_pred = confidence.argmax(axis=1)
+
+        return [{MultipleChoice.pred_key: pred} for pred in batch_pred.tolist()]
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [MultipleChoice.pred_key]

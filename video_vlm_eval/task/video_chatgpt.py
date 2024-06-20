@@ -18,9 +18,6 @@ class VideoChatGPTTask(abc.ABC):
     @abc.abstractmethod
     def ann_keys(self) -> list[str]: ...
 
-    @abc.abstractmethod
-    def calculate_metrics(self, anns: list[dict]) -> dict: ...
-
 
 class VideoChatGPTZeroShotQATask(ZeroShotQA, VideoChatGPTTask):
     SYSTEM_MSG = (

@@ -1802,6 +1802,7 @@ transformers = ">=4.38.1"
 wandb = "*"
 
 [package.extras]
+demo = ["gradio"]
 dev = ["black (>=24.2.0)", "gpustat", "ipython", "pre-commit", "ruff (>=0.2.2)"]
 sagemaker = ["boto3", "sagemaker"]
 
@@ -1809,7 +1810,7 @@ sagemaker = ["boto3", "sagemaker"]
 type = "git"
 url = "git@github.com:yukw777/prismatic-dev.git"
 reference = "video-chatgpt"
-resolved_reference = "fc5bf1a7d62be0033dfd3378237eb20dcb6a48bf"
+resolved_reference = "9c063a82445730834f9884d7d65a2fa61cda48b5"
 
 [[package]]
 name = "prompt-toolkit"
