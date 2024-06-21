@@ -9,10 +9,20 @@ from video_vlm_eval.task.video_chatgpt import VideoChatGPTConsistencyTask
 
 
 class PrismaticModel(Model[dict[str, Any]]):
-    def __init__(self, model_name_or_path: str, dtype: TorchDType | None) -> None:
+    def __init__(
+        self,
+        model_name_or_path: str,
+        dtype: TorchDType | None,
+        num_frame_samples: int | None = None,
+    ) -> None:
         super().__init__()
         self.model_name_or_path = model_name_or_path
-        self.model = load(model_name_or_path)
+        vision_backbone_kwargs = {}
+        if num_frame_samples is not None:
+            vision_backbone_kwargs["num_frame_samples"] = num_frame_samples
+        self.model = load(
+            model_name_or_path, vision_backbone_kwargs=vision_backbone_kwargs
+        )
         self.to(dtype.value if dtype is not None else None)
 
 
