@@ -139,6 +139,14 @@
 ... other arguments
 ```
 
+### EgoSchema Multiple Choice Task
+
+```bash
+<command> \
+--task video_vlm_eval.EgoSchemaMultipleChoice \
+... other arguments
+```
+
 ## Models
 
 ### Prismatic Model for Zero-Shot QA
