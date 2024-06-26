@@ -31,7 +31,7 @@ class ActivityNetQADataset(Dataset[dict[str, Any]]):
                 # video_name is the stem of the video path without the "v_" prefix
                 video_name_to_path[video_path.stem[2:]] = video_path
         self.examples: list[dict[str, Any]] = []
-        for q, a in zip(gt_questions, gt_answers):
+        for q, a in zip(gt_questions, gt_answers, strict=True):
             # we cast type to str so it wouldn't get turned into a tensor by the default collator.
             a["type"] = str(a["type"])
             self.examples.append(

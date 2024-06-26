@@ -72,9 +72,10 @@ def run(
             zip(
                 *gathered_objects,
                 *[
-                    [result[key] for result in task_results]
+                    [result[key] for result in gathered_task_results]
                     for key in model.result_keys
                 ],
+                strict=True,
             )
         )
 

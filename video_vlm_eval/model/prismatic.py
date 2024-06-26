@@ -80,7 +80,7 @@ class PrismaticVideoChatGPTConsistencyModel(PrismaticModel):
                 VideoChatGPTConsistencyTask.pred_keys[0]: text_1,  # type: ignore
                 VideoChatGPTConsistencyTask.pred_keys[1]: text_2,  # type: ignore
             }
-            for text_1, text_2 in zip(gen_texts_1, gen_texts_2)
+            for text_1, text_2 in zip(gen_texts_1, gen_texts_2, strict=True)
         ]
 
     @property
