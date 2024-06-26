@@ -20,6 +20,7 @@ from .task.video_chatgpt import (
     VideoChatGPTContextTask,
     VideoChatGPTTemporalTask,
 )
+from .task.egoschema import EgoSchemaMultipleChoice
 from .dataset.video_chatgpt import (
     VideoChatGPTConsistencyDataset,
     VideoChatGPTGeneralDataset,
@@ -47,4 +48,5 @@ __all__ = [
     "PrismaticEgoSchemaModel",
     "MultipleChoice",
     "Task",
+    "EgoSchemaMultipleChoice",
 ]

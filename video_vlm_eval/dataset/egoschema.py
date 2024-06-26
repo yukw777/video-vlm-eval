@@ -9,7 +9,7 @@ class EgoSchemaDataset(Dataset[dict[str, Any]]):
         self,
         video_dir: str,
         question_file: str,
-        answer_file: str,
+        answer_file: str | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
         """
@@ -19,8 +19,10 @@ class EgoSchemaDataset(Dataset[dict[str, Any]]):
         """
         with open(question_file) as f:
             questions = json.load(f)
-        with open(answer_file) as f:
-            answers = json.load(f)
+        answers = {}
+        if answer_file is not None:
+            with open(answer_file) as f:
+                answers = json.load(f)
 
         video_name_to_path: dict[str, Path] = {}
         for video_path in Path(video_dir).iterdir():
@@ -28,13 +30,10 @@ class EgoSchemaDataset(Dataset[dict[str, Any]]):
 
         self.examples: list[dict[str, Any]] = []
         for q in questions:
-            # pick questions only with answers
-            if q["q_uid"] not in answers:
-                continue
             self.examples.append(
                 {
                     "video_path": video_name_to_path[q[self.id_key]],
-                    "answer": str(answers[q["q_uid"]]),
+                    "answer": str(answers.get(q["q_uid"], "")),
                     **q,
                 }
             )
