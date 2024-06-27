@@ -14,6 +14,7 @@ prismatic = { git = "git@github.com:yukw777/prismatic-dev.git", rev = "video-cha
 decord = "^0.6.0"
 openai = "^1.33.0"
 tenacity = "^8.3.0"
+kaggle = { version = "^1.6.14", optional = true }
 
 
 [tool.poetry.group.dev.dependencies]
@@ -27,6 +28,9 @@ mypy = "^1.10.0"
 name = "pytorch-cu121"
 url = "https://download.pytorch.org/whl/cu121"
 priority = "explicit"
+
+[tool.poetry.extras]
+kaggle = ["kaggle"]
 
 [build-system]
 requires = ["poetry-core"]
