@@ -15,6 +15,9 @@ decord = "^0.6.0"
 openai = "^1.33.0"
 tenacity = "^8.3.0"
 kaggle = { version = "^1.6.14", optional = true }
+sagemaker = "^2.224.1"
+flash-attn = { version = "^2.5.9.post1", optional = true }
+setuptools = "<70.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -31,6 +34,7 @@ priority = "explicit"
 
 [tool.poetry.extras]
 kaggle = ["kaggle"]
+flash-attn = ["flash-attn"]
 
 [build-system]
 requires = ["poetry-core"]
