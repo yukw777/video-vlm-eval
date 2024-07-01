@@ -26,6 +26,7 @@ RUN --mount=type=cache,target=/root/.cache \
     cd /opt/ml/code && GIT_SSH_COMMAND="ssh -i /root/.ssh/gh_priv_key" poetry install --no-root
 
 # Manual Flash Attention 2 Installation
+# Note: Prismatic doesn't support flash attention for inference, but let's install it for future.
 RUN pip install packaging ninja
 RUN pip install flash-attn --no-build-isolation
 
