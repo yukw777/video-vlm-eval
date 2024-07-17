@@ -10,6 +10,9 @@ class VideoChatGPTTask(abc.ABC):
     @abc.abstractmethod
     def parse_openai_response(self, response_message: str) -> dict: ...
 
+    @abc.abstractmethod
+    def calculate_metrics(self, anns: list[dict]) -> dict: ...
+
     @property
     @abc.abstractmethod
     def pred_keys(self) -> list[str]: ...
