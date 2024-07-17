@@ -10,7 +10,8 @@ packages = [{ include = "video_vlm_eval" }]
 python = "^3.10"
 jsonargparse = "^4.29.0"
 torch = { version = "2.2.0+cu121", source = "pytorch-cu121" }
-prismatic = { git = "git@github.com:yukw777/prismatic-dev.git", rev = "video-chatgpt" }
+# set prismatic to optional for easier docker build cache management
+prismatic = { git = "git@github.com:yukw777/prismatic-dev.git", rev = "video-chatgpt", optional = true }
 decord = "^0.6.0"
 openai = "^1.33.0"
 tenacity = "^8.3.0"
@@ -33,6 +34,7 @@ url = "https://download.pytorch.org/whl/cu121"
 priority = "explicit"
 
 [tool.poetry.extras]
+prismatic = ["prismatic"]
 kaggle = ["kaggle"]
 flash-attn = ["flash-attn"]
 

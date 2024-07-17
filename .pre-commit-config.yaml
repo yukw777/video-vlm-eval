@@ -101,3 +101,10 @@ repos:
         # use require_serial so that script
         # is only called once per commit
         require_serial: true
+
+  # poetry export
+  - repo: https://github.com/python-poetry/poetry-plugin-export
+    rev: 1.8.0
+    hooks:
+      - id: poetry-export
+        args: ["-f", "requirements.txt", "-o", "base-requirements.txt"]
