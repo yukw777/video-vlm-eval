@@ -10,8 +10,7 @@ RUN pip install packaging ninja
 RUN pip install flash-attn==2.5.9.post1 --no-build-isolation
 
 # Manual Prismatic Installation
-RUN --mount=type=cache,target=/root/.cache \
-    --mount=type=secret,id=gh_priv_key,target=/root/.ssh/gh_priv_key \
+RUN --mount=type=secret,id=gh_priv_key,target=/root/.ssh/gh_priv_key \
     GIT_SSH_COMMAND="ssh -i /root/.ssh/gh_priv_key" pip install git+ssh://git@github.com/yukw777/prismatic-dev.git@video-chatgpt
 
 # Set Sagemaker Environment Variables =>> Define `run_inference.py` as entrypoint!
