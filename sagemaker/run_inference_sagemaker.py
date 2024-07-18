@@ -1,19 +1,15 @@
-from sagemaker.inputs import FileSystemInput
 from sagemaker.pytorch import PyTorch
 import sagemaker
-from typing import Any
 
 
 def run(
     job_name: str,
-    input_source: str,
     wandb_name: str,
     wandb_api_key: str,
     output_path: str,
+    s3_data_path: str,
+    s3_pretrained_weights_path: str,
     run_inference_args: list[tuple[str, str]],
-    lustre_file_system_id: str = "",
-    lustre_directory_path: str = "",
-    s3_input_path: str = "",
     role_arn: str = "arn:aws:iam::124224456861:role/service-role/SageMaker-SageMakerAllAccess",
     instance_count: int = 1,
     instance_type: str = "ml.g5.12xlarge",
@@ -31,23 +27,6 @@ def run(
     max_hours: int = 24,
     tags: dict[str, str] | None = None,
 ) -> None:
-    estimator_kwargs: dict[str, Any] = {}
-    if tags is not None:
-        estimator_kwargs["tags"] = [{"Key": k, "Value": v} for k, v in tags.items()]
-    if input_source == "lustre":
-        eval_fs = FileSystemInput(
-            file_system_type="FSxLustre",
-            file_system_access_mode="rw",
-            file_system_id=lustre_file_system_id,
-            directory_path=lustre_directory_path,
-        )
-    elif input_source == "s3":
-        eval_fs = s3_input_path
-        estimator_kwargs["input_mode"] = "FastFile"
-    else:
-        raise ValueError(
-            f'Only "lustre" and "s3" are supported for input_source. Got "{input_source}"'
-        )
     estimator = PyTorch(
         "scripts/run_inference.py",
         role=role_arn,
@@ -70,9 +49,17 @@ def run(
         code_location=output_path
         if not output_path.endswith("/")
         else output_path[:-1],
-        **estimator_kwargs,
+        input_mode="FastFile",
+        tags=[{"Key": k, "Value": v} for k, v in tags.items()]
+        if tags is not None
+        else None,
     )
-    estimator.fit(inputs={"training": eval_fs})
+    estimator.fit(
+        inputs={
+            "inference": s3_data_path,
+            "pretrained-weights": s3_pretrained_weights_path,
+        }
+    )
 
 
 if __name__ == "__main__":
