@@ -22,10 +22,12 @@ class OpenAIClient:
     client: OpenAI
 
     @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(10))
-    def annotate(self, request: dict) -> str:
+    def annotate(self, request: dict) -> dict:
         # Compute the correctness score
         chat_completion = self.client.chat.completions.create(**request)
-        return chat_completion.choices[0].message.content
+        return self.task.parse_openai_response(
+            chat_completion.choices[0].message.content
+        )
 
 
 def run(
@@ -54,7 +56,7 @@ def run(
         }
         for future in tqdm(as_completed(future_to_q_id), total=len(preds)):
             q_id = future_to_q_id[future]
-            ann = task.parse_openai_response(future.result())
+            ann = future.result()
             anns.append(ann)
             data.append(
                 [dataset.get_by_id(q_id)[c] for c in dataset.columns]
