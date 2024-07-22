@@ -7,8 +7,7 @@ def run(
     wandb_name: str,
     wandb_api_key: str,
     output_path: str,
-    s3_data_path: str,
-    s3_pretrained_weights_path: str,
+    s3_data_paths: list[str],
     run_inference_args: list[tuple[str, str]],
     role_arn: str = "arn:aws:iam::124224456861:role/service-role/SageMaker-SageMakerAllAccess",
     instance_count: int = 1,
@@ -56,8 +55,8 @@ def run(
     )
     estimator.fit(
         inputs={
-            "inference": s3_data_path,
-            "pretrained-weights": s3_pretrained_weights_path,
+            f"data_{i}": path if path.endswith("/") else path + "/"
+            for i, path in enumerate(s3_data_paths)
         }
     )
 
