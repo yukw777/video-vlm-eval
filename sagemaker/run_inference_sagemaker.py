@@ -55,6 +55,7 @@ def run(
     )
     estimator.fit(
         inputs={
+            # input paths must have a trailing slash
             f"data_{i}": path if path.endswith("/") else path + "/"
             for i, path in enumerate(s3_data_paths)
         }
