@@ -2134,8 +2134,8 @@ sagemaker = ["boto3", "sagemaker"]
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/prismatic-dev.git"
-reference = "video-chatgpt"
-resolved_reference = "f45d0a71f108d99899b4287d16cb7afa401d27b7"
+reference = "62d27a9f03eb2e926b9c2757e4837624f70ea77a"
+resolved_reference = "62d27a9f03eb2e926b9c2757e4837624f70ea77a"
 
 [[package]]
 name = "prompt-toolkit"
@@ -3948,4 +3948,4 @@ prismatic = ["prismatic"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "43e25d91ade9f141105cc5d0aa9a2195c67569129a7612c97ae2a1cdab4f0ff9"
+content-hash = "77b4056a7aa849d7dced105323b595bb43f9c6a4b543b83b7dd4d6c2b3a454dc"
