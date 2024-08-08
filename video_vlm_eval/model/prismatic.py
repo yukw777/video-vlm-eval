@@ -14,14 +14,23 @@ class PrismaticModel(Model[dict[str, Any]]):
         model_name_or_path: str,
         dtype: TorchDType | None,
         num_frame_samples: int | None = None,
+        rope_scaling_type: str | None = None,
+        rope_scaling_factor: float | None = None,
     ) -> None:
         super().__init__()
         self.model_name_or_path = model_name_or_path
         vision_backbone_kwargs = {}
         if num_frame_samples is not None:
             vision_backbone_kwargs["num_frame_samples"] = num_frame_samples
+        llm_backbone_kwargs: dict[str, Any] = {}
+        if rope_scaling_type is not None:
+            llm_backbone_kwargs["rope_scaling_type"] = rope_scaling_type
+        if rope_scaling_factor is not None:
+            llm_backbone_kwargs["rope_scaling_factor"] = rope_scaling_factor
         self.model = load(
-            model_name_or_path, vision_backbone_kwargs=vision_backbone_kwargs
+            model_name_or_path,
+            vision_backbone_kwargs=vision_backbone_kwargs,
+            llm_backbone_kwargs=llm_backbone_kwargs,
         )
         self.to(dtype.value if dtype is not None else None)
 

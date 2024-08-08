@@ -2134,8 +2134,8 @@ sagemaker = ["boto3", "sagemaker"]
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/prismatic-dev.git"
-reference = "58ffacabebfac7c44fe3dc373e232268d07ae992"
-resolved_reference = "58ffacabebfac7c44fe3dc373e232268d07ae992"
+reference = "418773d74452f03844de181478926c47755f6616"
+resolved_reference = "418773d74452f03844de181478926c47755f6616"
 
 [[package]]
 name = "prompt-toolkit"
@@ -3948,4 +3948,4 @@ prismatic = ["prismatic"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "da0bed8c5691f058a86792d28220ce43e74271d0677c47bc96548468fc331740"
+content-hash = "a53517bbdf286bbb0e520863d83cefb3fb130d03895067551c98583ed7140403"
