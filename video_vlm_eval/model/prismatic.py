@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 from prismatic import load
 from decord import VideoReader
 
@@ -16,6 +17,7 @@ class PrismaticModel(Model[dict[str, Any]]):
         num_frame_samples: int | None = None,
         rope_scaling_type: str | None = None,
         rope_scaling_factor: float | None = None,
+        llm_backbone_ckpt_path: str | None = None,
     ) -> None:
         super().__init__()
         self.model_name_or_path = model_name_or_path
@@ -32,6 +34,11 @@ class PrismaticModel(Model[dict[str, Any]]):
             vision_backbone_kwargs=vision_backbone_kwargs,
             llm_backbone_kwargs=llm_backbone_kwargs,
         )
+        if llm_backbone_ckpt_path is not None:
+            llm_backbone_state_dict = torch.load(llm_backbone_ckpt_path)["model"][
+                "llm_backbone"
+            ]
+            self.model.llm_backbone.load_state_dict(llm_backbone_state_dict)
         self.to(dtype.value if dtype is not None else None)
 
 
