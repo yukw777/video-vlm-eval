@@ -2118,7 +2118,7 @@ protobuf = "*"
 pytorchvideo = {git = "https://github.com/facebookresearch/pytorchvideo"}
 rich = "*"
 sentencepiece = "0.1.99"
-timm = "0.9.10"
+timm = ">=1.0.8,<1.1.0"
 tokenizers = "0.19.1"
 torch = "2.2.0"
 torchaudio = "*"
@@ -2134,8 +2134,8 @@ sagemaker = ["boto3", "sagemaker"]
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/prismatic-dev.git"
-reference = "e80918733af490647dab9e1e1d53054967c71770"
-resolved_reference = "e80918733af490647dab9e1e1d53054967c71770"
+reference = "d11403083792d9ff4fb2467ed7787d2193a12571"
+resolved_reference = "d11403083792d9ff4fb2467ed7787d2193a12571"
 
 [[package]]
 name = "prompt-toolkit"
@@ -3363,20 +3363,20 @@ files = [
 
 [[package]]
 name = "timm"
-version = "0.9.10"
+version = "1.0.8"
 description = "PyTorch Image Models"
 optional = true
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "timm-0.9.10-py3-none-any.whl", hash = "sha256:c5bdd76403ee68bf57a1aab44c117e44f378779d868976cdd820edf1d223b9f9"},
-    {file = "timm-0.9.10.tar.gz", hash = "sha256:581dacc867398327ab2f77470fae6eee09a0c5d1d838bd9bced21ce0057edfd9"},
+    {file = "timm-1.0.8-py3-none-any.whl", hash = "sha256:2e4cf9e2224616fdb08e5f7a2972bd20e05f750236ea1f8dd53f3f326ceaee83"},
+    {file = "timm-1.0.8.tar.gz", hash = "sha256:f54a579f1cc39c43d99a4b03603e39c4cee87d4f0a08aba9c22e19064b30bf95"},
 ]
 
 [package.dependencies]
-huggingface-hub = "*"
+huggingface_hub = "*"
 pyyaml = "*"
 safetensors = "*"
-torch = ">=1.7"
+torch = "*"
 torchvision = "*"
 
 [[package]]
@@ -3948,4 +3948,4 @@ prismatic = ["prismatic"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7c6a8c1c2584d593a4c3e574d791afce5ca45082495bff7b518fbbc9ce5d5982"
+content-hash = "e231cf93300757ad564d987a7b201b4306c45773044f9a48304dd43887b3d772"
