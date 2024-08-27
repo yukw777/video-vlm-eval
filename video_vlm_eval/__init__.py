@@ -3,12 +3,13 @@ from .dataset.activitynet_qa import ActivityNetQADataset
 from .dataset.msrvtt_qa import MSRVTTQADataset
 from .dataset.msvd_qa import MSVDQADataset
 from .dataset.tgif_qa import TGIFQAFrameDataset
-from .dataset.egoschema import EgoSchemaDataset
+from .dataset.egoschema import EgoSchemaDataset, EgoSchemaNeedleHaystackDataset
 from .model import Model
 from .model.prismatic import (
     PrismaticZeroShotQAModel,
     PrismaticVideoChatGPTConsistencyModel,
     PrismaticEgoSchemaModel,
+    PrismaticEgoSchemaNeedleHaystackModel,
 )
 from .task import Task, MultipleChoice
 from .task.video_chatgpt import (
@@ -38,6 +39,7 @@ __all__ = [
     "VideoChatGPTZeroShotQATask",
     "VideoChatGPTConsistencyDataset",
     "PrismaticVideoChatGPTConsistencyModel",
+    "PrismaticEgoSchemaNeedleHaystackModel",
     "VideoChatGPTConsistencyTask",
     "VideoChatGPTGeneralDataset",
     "VideoChatGPTCorrectnessTask",
@@ -49,4 +51,5 @@ __all__ = [
     "MultipleChoice",
     "Task",
     "EgoSchemaMultipleChoice",
+    "EgoSchemaNeedleHaystackDataset",
 ]

@@ -113,14 +113,17 @@ class PrismaticEgoSchemaModel(PrismaticModel):
     """
 
     def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
-        question = datapoint[MultipleChoice.question_key]
-
-        preprocessed = {
+        return {
             "pixel_values": self.model.vision_backbone.vision_transform(
                 VideoReader(str(datapoint.pop("video_path")))
             ),
             **datapoint,
+            **self._build_prompt(datapoint),
         }
+
+    def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        prompt_dict = {}
+        question = datapoint[MultipleChoice.question_key]
         for k in ["option 0", "option 1", "option 2", "option 3", "option 4"]:
             option = datapoint[k]
             prompt_builder = self.model.get_prompt_builder()
@@ -130,8 +133,8 @@ class PrismaticEgoSchemaModel(PrismaticModel):
                 "Do you think that the answer to the given question is correct. "
                 "Please answer yes or no.",
             )
-            preprocessed[f"{k}_prompt"] = prompt_builder.get_prompt()
-        return preprocessed
+            prompt_dict[f"{k}_prompt"] = prompt_builder.get_prompt()
+        return prompt_dict
 
     def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
         # confidence level for each option (batch, num_option)
@@ -155,3 +158,29 @@ class PrismaticEgoSchemaModel(PrismaticModel):
     @property
     def result_keys(self) -> list[str]:
         return [MultipleChoice.pred_key]
+
+
+class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        extract_frames = self.model.vision_backbone.vision_transform.transforms[0]  # type: ignore
+        original_num_frame_samples = extract_frames.num_frame_samples
+        video_paths = datapoint.pop("video_paths")
+        extract_frames.num_frame_samples = original_num_frame_samples // len(
+            video_paths
+        )
+        # (C, T, H, W)
+        pixel_values = torch.cat(
+            [
+                self.model.vision_backbone.vision_transform(
+                    VideoReader(str(video_path))
+                )  # type: ignore
+                for video_path in video_paths
+            ],
+            dim=1,
+        )
+        extract_frames.num_frame_samples = original_num_frame_samples
+        return {
+            "pixel_values": pixel_values,
+            **datapoint,
+            **self._build_prompt(datapoint),
+        }
