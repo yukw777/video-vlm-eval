@@ -1922,9 +1922,9 @@ files = [
 
 [package.dependencies]
 numpy = [
-    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
     {version = ">=1.22.4", markers = "python_version < \"3.11\""},
     {version = ">=1.23.2", markers = "python_version == \"3.11\""},
+    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
 ]
 python-dateutil = ">=2.8.2"
 pytz = ">=2020.1"
@@ -2225,8 +2225,8 @@ sagemaker = ["boto3", "sagemaker"]
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/prismatic-dev.git"
-reference = "93a28890c47b9d8479488b7424c97d52efd537b7"
-resolved_reference = "93a28890c47b9d8479488b7424c97d52efd537b7"
+reference = "716ddd56c85a4bf28652f054309bb81c7fba460e"
+resolved_reference = "716ddd56c85a4bf28652f054309bb81c7fba460e"
 
 [[package]]
 name = "prompt-toolkit"
@@ -2331,8 +2331,8 @@ files = [
 annotated-types = ">=0.4.0"
 pydantic-core = "2.20.1"
 typing-extensions = [
-    {version = ">=4.12.2", markers = "python_version >= \"3.13\""},
     {version = ">=4.6.1", markers = "python_version < \"3.13\""},
+    {version = ">=4.12.2", markers = "python_version >= \"3.13\""},
 ]
 
 [package.extras]
@@ -4046,4 +4046,4 @@ prismatic = ["prismatic"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "27a2b69bb55e6edf040ac67d8e19508141a996681ef9920a7f1e73fcbc33e31c"
+content-hash = "81bf4001154891888c871aaeada697dd36ac1ce51a1e615fc5fc18b1f02a7c7b"
