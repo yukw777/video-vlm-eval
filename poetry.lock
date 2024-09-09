@@ -1401,8 +1401,8 @@ webdataset = "*"
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/Koala-video-llm.git"
-reference = "cecfddfee86651523e4a3d0dac405ac164a0c86c"
-resolved_reference = "cecfddfee86651523e4a3d0dac405ac164a0c86c"
+reference = "3b8e82c0ff79087bda31d3b3aa397da7e3a32c6d"
+resolved_reference = "3b8e82c0ff79087bda31d3b3aa397da7e3a32c6d"
 
 [[package]]
 name = "markdown-it-py"
@@ -4167,4 +4167,4 @@ prismatic = ["prismatic"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "1c887b60840f78df11b3d19cec145863119906adefb72864c7cbf65a17895887"
+content-hash = "ee960936d37568a0d0bacd9ce91235a5ccf97a879fb117b0579ef3d0871acf78"

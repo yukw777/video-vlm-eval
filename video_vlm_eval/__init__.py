@@ -11,6 +11,7 @@ from .model.prismatic import (
     PrismaticEgoSchemaModel,
     PrismaticEgoSchemaNeedleHaystackModel,
 )
+from .model.koala import KoalaEgoSchemaModel
 from .task import Task, MultipleChoice
 from .task.video_chatgpt import (
     VideoChatGPTTask,
@@ -52,4 +53,5 @@ __all__ = [
     "Task",
     "EgoSchemaMultipleChoice",
     "EgoSchemaNeedleHaystackDataset",
+    "KoalaEgoSchemaModel",
 ]

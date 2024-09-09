@@ -19,7 +19,7 @@ kaggle = { version = "^1.6.14", optional = true }
 sagemaker = "^2.224.1"
 flash-attn = { version = "^2.5.9.post1", optional = true }
 setuptools = "<70.0.0"
-koala = { git = "git@github.com:yukw777/Koala-video-llm.git", rev = "cecfddfee86651523e4a3d0dac405ac164a0c86c" }
+koala = { git = "git@github.com:yukw777/Koala-video-llm.git", rev = "3b8e82c0ff79087bda31d3b3aa397da7e3a32c6d" }
 
 
 [tool.poetry.group.dev.dependencies]
