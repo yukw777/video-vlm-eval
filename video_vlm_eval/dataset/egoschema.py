@@ -72,6 +72,22 @@ class EgoSchemaDataset(Dataset[dict[str, Any]]):
         return "q_uid"
 
 
+ORDINALS = [
+    "first",
+    "second",
+    "third",
+    "fourth",
+    "fifth",
+    "sixth",
+    "seventh",
+    "eighth",
+    "ninth",
+    "tenth",
+    "eleventh",
+    "twelfth",
+]
+
+
 class EgoSchemaNeedleHaystackDataset(EgoSchemaDataset):
     def __init__(
         self,
@@ -80,12 +96,14 @@ class EgoSchemaNeedleHaystackDataset(EgoSchemaDataset):
         needle_haystack_mapping_file: str,
         answer_file: str | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+        add_scene: bool = True,
     ) -> None:
         """
         :param video_dir: dir that contains EgoSchema videos
         :param question_file: EgoSchema question file, e.g., questions.json
         :param needle_haystack_mapping_file: Needle in a haystack mapping file for videos
         :param answer_file: EgoSchema answer file, e.g., subset_answers.json
+        :param add_scene: whether to add the scene reference in the questions
         """
         with open(question_file) as f:
             questions = json.load(f)
@@ -103,13 +121,21 @@ class EgoSchemaNeedleHaystackDataset(EgoSchemaDataset):
 
         self.examples: list[dict[str, Any]] = []
         for q in questions:
+            q_uid = q[self.id_key]
+            if add_scene:
+                scene_id = needle_haystack_mapping[q_uid].index(q_uid)
+                scene_ordinal = ORDINALS[scene_id]
+                q["question"] = (
+                    f"This question is about the {scene_ordinal} scene. "
+                    + q["question"]
+                )
             self.examples.append(
                 {
                     "video_paths": [
                         video_name_to_path[vid_id]
-                        for vid_id in needle_haystack_mapping[q[self.id_key]]
+                        for vid_id in needle_haystack_mapping[q_uid]
                     ],
-                    "answer": str(answers.get(q[self.id_key], "")),
+                    "answer": str(answers.get(q_uid, "")),
                     **q,
                 }
             )
