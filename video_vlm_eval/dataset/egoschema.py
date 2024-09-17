@@ -72,22 +72,6 @@ class EgoSchemaDataset(Dataset[dict[str, Any]]):
         return "q_uid"
 
 
-ORDINALS = [
-    "first",
-    "second",
-    "third",
-    "fourth",
-    "fifth",
-    "sixth",
-    "seventh",
-    "eighth",
-    "ninth",
-    "tenth",
-    "eleventh",
-    "twelfth",
-]
-
-
 class EgoSchemaNeedleHaystackDataset(EgoSchemaDataset):
     def __init__(
         self,
@@ -124,11 +108,7 @@ class EgoSchemaNeedleHaystackDataset(EgoSchemaDataset):
             q_uid = q[self.id_key]
             if add_scene:
                 scene_id = needle_haystack_mapping[q_uid].index(q_uid)
-                scene_ordinal = ORDINALS[scene_id]
-                q["question"] = (
-                    f"This question is about the {scene_ordinal} scene. "
-                    + q["question"]
-                )
+                q["scene_id"] = scene_id
             self.examples.append(
                 {
                     "video_paths": [

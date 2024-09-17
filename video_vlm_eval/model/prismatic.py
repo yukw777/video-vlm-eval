@@ -129,9 +129,9 @@ class PrismaticEgoSchemaModel(PrismaticModel):
             prompt_builder = self.model.get_prompt_builder()
             prompt_builder.add_turn(
                 "human",
-                f"Given question '{question}, is answer '{option}' correct? "
-                "Do you think that the answer to the given question is correct. "
-                "Please answer yes or no.",
+                'The video is shot from a first-person perspective, and "c" refers to the camera wearer. '
+                f'Given the question "{question}", is the answer "{option}" correct? '
+                'Please answer only "yes" or "no".',
             )
             prompt_dict[f"{k}_prompt"] = prompt_builder.get_prompt()
         return prompt_dict
@@ -160,7 +160,41 @@ class PrismaticEgoSchemaModel(PrismaticModel):
         return [MultipleChoice.pred_key]
 
 
+ORDINALS = [
+    "first",
+    "second",
+    "third",
+    "fourth",
+    "fifth",
+    "sixth",
+    "seventh",
+    "eighth",
+    "ninth",
+    "tenth",
+    "eleventh",
+    "twelfth",
+]
+
+
 class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):
+    def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        if "scene_id" not in datapoint:
+            return super()._build_prompt(datapoint)
+        prompt_dict = {}
+        question = datapoint[MultipleChoice.question_key]
+        for k in ["option 0", "option 1", "option 2", "option 3", "option 4"]:
+            option = datapoint[k]
+            prompt_builder = self.model.get_prompt_builder()
+            prompt_builder.add_turn(
+                "human",
+                'The video is shot from a first-person perspective, and "c" refers to the camera wearer. '
+                f'Given the question about the {ORDINALS[datapoint["scene_id"]]} scene, "{question}", '
+                f'is the answer "{option}" correct? '
+                'Please answer only "yes" or "no".',
+            )
+            prompt_dict[f"{k}_prompt"] = prompt_builder.get_prompt()
+        return prompt_dict
+
     def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
         extract_frames = self.model.vision_backbone.vision_transform.transforms[0]  # type: ignore
         original_num_frame_samples = extract_frames.num_frame_samples
