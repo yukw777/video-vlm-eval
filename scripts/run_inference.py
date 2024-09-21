@@ -42,6 +42,7 @@ def run(
             batch_size=per_device_batch_size,
             num_workers=num_dataloader_workers,
             pin_memory=True,
+            collate_fn=model.collate_fn,
         ),
     )
 

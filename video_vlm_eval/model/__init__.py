@@ -1,5 +1,6 @@
 import abc
 from typing import TypeVar, Generic
+from collections.abc import Callable
 import enum
 import torch
 from torch import nn
@@ -23,3 +24,7 @@ class Model(nn.Module, Generic[T], abc.ABC):
     @property
     @abc.abstractmethod
     def result_keys(self) -> list[str]: ...
+
+    @property
+    def collate_fn(self) -> Callable[[list[T]], T] | None:
+        return None
