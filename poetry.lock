@@ -576,7 +576,7 @@ dev = ["black", "mypy", "pre-commit", "pytest", "ruff"]
 name = "einops"
 version = "0.8.0"
 description = "A new flavour of deep learning operations"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "einops-0.8.0-py3-none-any.whl", hash = "sha256:9572fb63046264a862693b0a87088af3bdc8c068fde03de63453cbbde245465f"},
@@ -631,7 +631,7 @@ typing = ["typing-extensions (>=4.8)"]
 name = "flash-attn"
 version = "2.6.3"
 description = "Flash Attention: Fast and Memory-Efficient Exact Attention"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "flash_attn-2.6.3.tar.gz", hash = "sha256:5bfae9500ad8e7d2937ebccb4906f3bc464d1bf66eedd0e4adabd520811c7b52"},
@@ -3447,7 +3447,6 @@ develop = false
 [package.dependencies]
 accelerate = "^0.34.2"
 decord = "^0.6.0"
-flash-attn = "^2.6.3"
 numpy = "^1.26.4"
 pandas = "^2.2.2"
 pillow = "^10.4.0"
@@ -3457,8 +3456,8 @@ transformers = "^4.44.2"
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/tarsier.git"
-reference = "efaa9768df892f471b667399d97b556932170743"
-resolved_reference = "efaa9768df892f471b667399d97b556932170743"
+reference = "ebc2cc86191ae27fd952b2f1d346d998b12d9620"
+resolved_reference = "ebc2cc86191ae27fd952b2f1d346d998b12d9620"
 
 [[package]]
 name = "tblib"
@@ -4071,4 +4070,4 @@ prismatic = ["prismatic"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "bf1d4f8cc2e229f434aa1b721249879f8d6ff1b150493021c65127267efc5fe1"
+content-hash = "d760412e8b43bb7f800d62567211b5f383f867e2197b5473668961bb5ca7afe2"

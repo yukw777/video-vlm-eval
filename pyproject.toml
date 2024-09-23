@@ -19,7 +19,7 @@ kaggle = { version = "^1.6.14", optional = true }
 sagemaker = "^2.224.1"
 flash-attn = { version = "^2.5.9.post1", optional = true }
 setuptools = "<70.0.0"
-tarsier = { git = "git@github.com:yukw777/tarsier.git", rev = "efaa9768df892f471b667399d97b556932170743" }
+tarsier = { git = "git@github.com:yukw777/tarsier.git", rev = "ebc2cc86191ae27fd952b2f1d346d998b12d9620" }
 
 
 [tool.poetry.group.dev.dependencies]
