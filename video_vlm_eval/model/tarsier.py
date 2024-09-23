@@ -1,6 +1,7 @@
 import torch
 from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.task import MultipleChoice
+from video_vlm_eval.model.utils import ORDINALS
 
 from tarsier.models.modeling_tarsier import TarsierForConditionalGeneration
 from tarsier.dataset.processor import Processor
@@ -31,8 +32,8 @@ class TarsierModel(Model[dict[str, Any]]):
 class TarsierEgoSchemaModel(TarsierModel):
     OPTION_MAP = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4}
 
-    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
-        prompt = (
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        return (
             'USER: <video> The video is shot from a first-person perspective and the "c" refers to camera wearer.\n'
             f"Question: {datapoint['question']}\n"
             "Options:\n"
@@ -43,8 +44,10 @@ class TarsierEgoSchemaModel(TarsierModel):
             f"(E) {datapoint['option 4']}\n"
             "ASSISTANT: Answer: ("
         )
+
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
         preprocessed = self.processor(
-            prompt,
+            self._build_prompt(datapoint),
             images=self.processor.load_images(str(datapoint.pop("video_path"))),
             edit_prompt=True,
         )
@@ -81,3 +84,37 @@ class TarsierEgoSchemaModel(TarsierModel):
     @property
     def result_keys(self) -> list[str]:
         return [MultipleChoice.pred_key]
+
+
+class TarsierEgoSchemaNeedleHaystackModel(TarsierEgoSchemaModel):
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        if "scene_id" not in datapoint:
+            return super()._build_prompt(datapoint)
+
+        return (
+            'USER: <video> The video is shot from a first-person perspective and the "c" refers to camera wearer.\n'
+            f"The following question is about the {ORDINALS[datapoint['scene_id']]} scene.\n"
+            f"Question: {datapoint['question']}\n"
+            "Options:\n"
+            f"(A) {datapoint['option 0']}\n"
+            f"(B) {datapoint['option 1']}\n"
+            f"(C) {datapoint['option 2']}\n"
+            f"(D) {datapoint['option 3']}\n"
+            f"(E) {datapoint['option 4']}\n"
+            "ASSISTANT: Answer: ("
+        )
+
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        video_paths = datapoint.pop("video_paths")
+        frames_per_video = self.processor.max_n_frames // len(video_paths)
+        images = []
+        for video_path in video_paths:
+            images.extend(
+                self.processor.load_images(str(video_path), n_frames=frames_per_video)
+            )
+        preprocessed = self.processor(
+            self._build_prompt(datapoint), images=images, edit_prompt=True
+        )
+        preprocessed["input_ids"].squeeze_(dim=0)
+        preprocessed.update(datapoint)
+        return preprocessed

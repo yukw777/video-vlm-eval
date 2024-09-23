@@ -5,6 +5,7 @@ from decord import VideoReader
 
 from typing import Any
 from video_vlm_eval.model import TorchDType, Model
+from video_vlm_eval.model.utils import ORDINALS
 from video_vlm_eval.task import ZeroShotQA, MultipleChoice
 from video_vlm_eval.task.video_chatgpt import VideoChatGPTConsistencyTask
 
@@ -158,22 +159,6 @@ class PrismaticEgoSchemaModel(PrismaticModel):
     @property
     def result_keys(self) -> list[str]:
         return [MultipleChoice.pred_key]
-
-
-ORDINALS = [
-    "first",
-    "second",
-    "third",
-    "fourth",
-    "fifth",
-    "sixth",
-    "seventh",
-    "eighth",
-    "ninth",
-    "tenth",
-    "eleventh",
-    "twelfth",
-]
 
 
 class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):

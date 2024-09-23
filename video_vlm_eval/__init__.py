@@ -11,7 +11,7 @@ from .model.prismatic import (
     PrismaticEgoSchemaModel,
     PrismaticEgoSchemaNeedleHaystackModel,
 )
-from .model.tarsier import TarsierEgoSchemaModel
+from .model.tarsier import TarsierEgoSchemaModel, TarsierEgoSchemaNeedleHaystackModel
 from .task import Task, MultipleChoice
 from .task.video_chatgpt import (
     VideoChatGPTTask,
@@ -54,4 +54,5 @@ __all__ = [
     "EgoSchemaMultipleChoice",
     "EgoSchemaNeedleHaystackDataset",
     "TarsierEgoSchemaModel",
+    "TarsierEgoSchemaNeedleHaystackModel",
 ]
