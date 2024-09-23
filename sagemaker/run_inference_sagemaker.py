@@ -1,5 +1,24 @@
+import boto3
 from sagemaker.pytorch import PyTorch
 import sagemaker
+
+
+class BotoSession(boto3.Session):
+    def __init__(
+        self,
+        aws_access_key_id: str | None = None,
+        aws_secret_access_key: str | None = None,
+        aws_session_token: str | None = None,
+        region_name: str | None = None,
+        profile_name: str | None = None,
+    ) -> None:
+        super().__init__(
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key,
+            aws_session_token=aws_session_token,
+            region_name=region_name,
+            profile_name=profile_name,
+        )
 
 
 def run(
@@ -13,18 +32,10 @@ def run(
     instance_count: int = 1,
     instance_type: str = "ml.g5.12xlarge",
     image_uri: str = "124224456861.dkr.ecr.us-east-1.amazonaws.com/peter.yu-video-vlm-eval-inference:latest",
-    subnets: tuple[str, ...] = (
-        "subnet-07bf42d7c9cb929e4",
-        "subnet-05f1115c7d6ccbd07",
-        "subnet-0e260ba29726b9fbb",
-    ),
-    security_group_ids: tuple[str, ...] = (
-        "sg-0afb9fb0e79a54061",
-        "sg-0333993fea1aeb948",
-        "sg-0c4b828f4023a04cc",
-    ),
     max_hours: int = 24,
     tags: dict[str, str] | None = None,
+    boto_session: BotoSession | None = None,
+    use_reserved_capacity: bool = False,
 ) -> None:
     estimator = PyTorch(
         "scripts/run_inference.py",
@@ -34,10 +45,12 @@ def run(
         instance_type=instance_type,
         image_uri=image_uri,
         hyperparameters=dict(run_inference_args),
-        environment={"WANDB_API_KEY": wandb_api_key, "WANDB_NAME": wandb_name},
-        sagemaker_session=sagemaker.Session(),  # type: ignore
-        subnets=subnets,
-        security_group_ids=security_group_ids,
+        environment={
+            "WANDB_API_KEY": wandb_api_key,
+            "WANDB_NAME": wandb_name,
+            "SM_USE_RESERVED_CAPACITY": "1" if use_reserved_capacity else "0",
+        },
+        sagemaker_session=sagemaker.Session(boto_session=boto_session),  # type: ignore
         keep_alive_period_in_seconds=3600,
         max_run=60 * 60 * max_hours,
         distribution={"torch_distributed": {"enabled": True}},
