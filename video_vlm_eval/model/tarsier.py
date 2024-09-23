@@ -1,7 +1,7 @@
 import torch
 from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.task import MultipleChoice
-from video_vlm_eval.model.utils import ORDINALS
+from video_vlm_eval.model.utils import ORDINALS, EGOSCHEMA_OPTION_MAP
 
 from tarsier.models.modeling_tarsier import TarsierForConditionalGeneration
 from tarsier.dataset.processor import Processor
@@ -30,8 +30,6 @@ class TarsierModel(Model[dict[str, Any]]):
 
 
 class TarsierEgoSchemaModel(TarsierModel):
-    OPTION_MAP = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4}
-
     def _build_prompt(self, datapoint: dict[str, Any]) -> str:
         return (
             'USER: <video> The video is shot from a first-person perspective and the "c" refers to camera wearer.\n'
@@ -79,7 +77,7 @@ class TarsierEgoSchemaModel(TarsierModel):
             **gen_config,
         )
         preds = self.processor.tokenizer.batch_decode(outputs[:, -1])
-        return [{MultipleChoice.pred_key: self.OPTION_MAP[pred]} for pred in preds]
+        return [{MultipleChoice.pred_key: EGOSCHEMA_OPTION_MAP[pred]} for pred in preds]
 
     @property
     def result_keys(self) -> list[str]:

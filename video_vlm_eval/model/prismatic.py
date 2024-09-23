@@ -1,11 +1,10 @@
-import numpy as np
 import torch
 from prismatic import load
 from decord import VideoReader
 
 from typing import Any
 from video_vlm_eval.model import TorchDType, Model
-from video_vlm_eval.model.utils import ORDINALS
+from video_vlm_eval.model.utils import ORDINALS, EGOSCHEMA_OPTION_MAP
 from video_vlm_eval.task import ZeroShotQA, MultipleChoice
 from video_vlm_eval.task.video_chatgpt import VideoChatGPTConsistencyTask
 
@@ -118,43 +117,30 @@ class PrismaticEgoSchemaModel(PrismaticModel):
             "pixel_values": self.model.vision_backbone.vision_transform(
                 VideoReader(str(datapoint.pop("video_path")))
             ),
+            "texts": self._build_prompt(datapoint),
             **datapoint,
-            **self._build_prompt(datapoint),
         }
 
-    def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
-        prompt_dict = {}
-        question = datapoint[MultipleChoice.question_key]
-        for k in ["option 0", "option 1", "option 2", "option 3", "option 4"]:
-            option = datapoint[k]
-            prompt_builder = self.model.get_prompt_builder()
-            prompt_builder.add_turn(
-                "human",
-                'The video is shot from a first-person perspective, and "c" refers to the camera wearer. '
-                f'Given the question "{question}", is the answer "{option}" correct? '
-                'Please answer only "yes" or "no".',
-            )
-            prompt_dict[f"{k}_prompt"] = prompt_builder.get_prompt()
-        return prompt_dict
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        prompt_builder = self.model.get_prompt_builder()
+        prompt_builder.add_turn(
+            "human",
+            'The video is shot from a first-person perspective and the "c" refers to camera wearer.\n'
+            f"Question: {datapoint['question']}\n"
+            "Options:\n"
+            f"(A) {datapoint['option 0']}\n"
+            f"(B) {datapoint['option 1']}\n"
+            f"(C) {datapoint['option 2']}\n"
+            f"(D) {datapoint['option 3']}\n"
+            f"(E) {datapoint['option 4']}\n",
+        )
+        return prompt_builder.get_prompt() + "ASSISTANT: Answer:("
 
     def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
-        # confidence level for each option (batch, num_option)
-        confidence = np.zeros((batch["pixel_values"].size(0), 5))
-        for o, k in enumerate(
-            ["option 0", "option 1", "option 2", "option 3", "option 4"]
-        ):
-            _, batch_gen_probs = self.model.generate_batch(
-                batch["pixel_values"],
-                batch[f"{k}_prompt"],
-                return_string_probabilities=["Yes", "No"],
-                **gen_config,
-            )
-            for i, gen_probs in enumerate(batch_gen_probs):
-                confidence[i][o] = gen_probs[0]  # type: ignore
-
-        batch_pred = confidence.argmax(axis=1)
-
-        return [{MultipleChoice.pred_key: pred} for pred in batch_pred.tolist()]
+        preds = self.model.generate_batch(
+            batch["pixel_values"], batch["texts"], **gen_config
+        )
+        return [{MultipleChoice.pred_key: EGOSCHEMA_OPTION_MAP[pred]} for pred in preds]  # type: ignore
 
     @property
     def result_keys(self) -> list[str]:
@@ -162,23 +148,23 @@ class PrismaticEgoSchemaModel(PrismaticModel):
 
 
 class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):
-    def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
         if "scene_id" not in datapoint:
             return super()._build_prompt(datapoint)
-        prompt_dict = {}
-        question = datapoint[MultipleChoice.question_key]
-        for k in ["option 0", "option 1", "option 2", "option 3", "option 4"]:
-            option = datapoint[k]
-            prompt_builder = self.model.get_prompt_builder()
-            prompt_builder.add_turn(
-                "human",
-                'The video is shot from a first-person perspective, and "c" refers to the camera wearer. '
-                f'Given the question about the {ORDINALS[datapoint["scene_id"]]} scene, "{question}", '
-                f'is the answer "{option}" correct? '
-                'Please answer only "yes" or "no".',
-            )
-            prompt_dict[f"{k}_prompt"] = prompt_builder.get_prompt()
-        return prompt_dict
+        prompt_builder = self.model.get_prompt_builder()
+        prompt_builder.add_turn(
+            "human",
+            'The video is shot from a first-person perspective and the "c" refers to camera wearer.\n'
+            f'Given the question about the {ORDINALS[datapoint["scene_id"]]} scene.\n'
+            f"Question: {datapoint['question']}\n"
+            "Options:\n"
+            f"(A) {datapoint['option 0']}\n"
+            f"(B) {datapoint['option 1']}\n"
+            f"(C) {datapoint['option 2']}\n"
+            f"(D) {datapoint['option 3']}\n"
+            f"(E) {datapoint['option 4']}\n",
+        )
+        return prompt_builder.get_prompt() + "ASSISTANT: Answer:("
 
     def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
         extract_frames = self.model.vision_backbone.vision_transform.transforms[0]  # type: ignore
@@ -200,6 +186,6 @@ class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):
         extract_frames.num_frame_samples = original_num_frame_samples
         return {
             "pixel_values": pixel_values,
+            "texts": self._build_prompt(datapoint),
             **datapoint,
-            **self._build_prompt(datapoint),
         }
