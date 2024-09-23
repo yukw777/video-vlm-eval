@@ -22,7 +22,6 @@ class TarsierModel(Model[dict[str, Any]]):
         self.processor.tokenizer.padding_side = "left"
         self.model = TarsierForConditionalGeneration.from_pretrained(
             model_name_or_path,
-            device_map="auto",
             torch_dtype=dtype.value if dtype is not None else None,
             attn_implementation=attn_implementation,
         )
