@@ -107,4 +107,11 @@ repos:
     rev: 1.8.0
     hooks:
       - id: poetry-export
-        args: ["-f", "requirements.txt", "-o", "base-requirements.txt"]
+        args:
+          [
+            "-f",
+            "requirements.txt",
+            "-o",
+            "base-requirements.txt",
+            "--without-hashes",
+          ]
