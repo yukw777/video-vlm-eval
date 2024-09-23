@@ -3,7 +3,8 @@ FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:2.2.0-gpu-py3
 # Install base dependencies
 RUN pip uninstall -y transformer-engine
 COPY base-requirements.txt /opt/ml/code/
-RUN cd /opt/ml/code && pip install -r base-requirements.txt
+RUN --mount=type=secret,id=gh_priv_key,target=/root/.ssh/gh_priv_key \
+    cd /opt/ml/code && GIT_SSH_COMMAND="ssh -i /root/.ssh/gh_priv_key" pip install -r base-requirements.txt
 
 # Manual Flash Attention 2 Installation
 # Note: Prismatic doesn't support flash attention for inference, but let's install it for future.
