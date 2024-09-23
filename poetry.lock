@@ -3453,11 +3453,14 @@ pillow = "^10.4.0"
 torch = "~2.4.0"
 transformers = "^4.44.2"
 
+[package.extras]
+flash-attn = ["flash-attn (>=2.6.3,<3.0.0)"]
+
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/tarsier.git"
-reference = "ebc2cc86191ae27fd952b2f1d346d998b12d9620"
-resolved_reference = "ebc2cc86191ae27fd952b2f1d346d998b12d9620"
+reference = "92a195326138c834002faf5385edec4ba4906067"
+resolved_reference = "92a195326138c834002faf5385edec4ba4906067"
 
 [[package]]
 name = "tblib"
@@ -4070,4 +4073,4 @@ prismatic = ["prismatic"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d760412e8b43bb7f800d62567211b5f383f867e2197b5473668961bb5ca7afe2"
+content-hash = "975d6507e0e4c85f23532cedce50ec2c3c794afb63fed4dcdf07d9d49027894c"

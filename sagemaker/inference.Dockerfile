@@ -7,9 +7,8 @@ RUN --mount=type=secret,id=gh_priv_key,target=/root/.ssh/gh_priv_key \
     cd /opt/ml/code && GIT_SSH_COMMAND="ssh -i /root/.ssh/gh_priv_key" pip install -r base-requirements.txt
 
 # Manual Flash Attention 2 Installation
-# Note: Prismatic doesn't support flash attention for inference, but let's install it for future.
 RUN pip install packaging ninja
-RUN pip install flash-attn==2.6.3 --no-build-isolation
+RUN pip install flash-attn==2.6.3 --no-build-isolation --no-cache-dir
 
 # Manual Prismatic Installation
 RUN --mount=type=secret,id=gh_priv_key,target=/root/.ssh/gh_priv_key \
