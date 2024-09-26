@@ -11,7 +11,7 @@ python = "^3.10"
 jsonargparse = "^4.29.0"
 torch = "~2.4.0"
 # set prismatic to optional for easier docker build cache management
-prismatic = { git = "git@github.com:yukw777/prismatic-dev.git", rev = "285e8203a2dacf600012aa58b36e658e2c466bb3", optional = true }
+prismatic = { git = "git@github.com:yukw777/prismatic-dev.git", rev = "755584609b63f25f986a7ba832e5ed9e485b4f73", optional = true }
 decord = "^0.6.0"
 openai = "^1.33.0"
 tenacity = "^8.3.0"
