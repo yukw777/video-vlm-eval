@@ -19,6 +19,7 @@ class PrismaticModel(Model[dict[str, Any]]):
         rope_scaling_type: str | None = None,
         rope_scaling_factor: float | None = None,
         llm_backbone_ckpt_path: str | None = None,
+        frames_per_seg: int | None = None,
     ) -> None:
         super().__init__()
         self.model_name_or_path = model_name_or_path
@@ -34,6 +35,7 @@ class PrismaticModel(Model[dict[str, Any]]):
             model_name_or_path,
             vision_backbone_kwargs=vision_backbone_kwargs,
             llm_backbone_kwargs=llm_backbone_kwargs,
+            frames_per_seg=frames_per_seg,
         )
         if llm_backbone_ckpt_path is not None:
             llm_backbone_state_dict = torch.load(llm_backbone_ckpt_path)["model"][
