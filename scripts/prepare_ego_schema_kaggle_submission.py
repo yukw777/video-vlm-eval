@@ -10,7 +10,7 @@ def main(pred_file: str, submission_file: str) -> None:
         writer = csv.DictWriter(f_out, ("q_uid", "answer"))
         writer.writeheader()
         for row in reader:
-            writer.writerow({"q_uid": row["q_uid"], "answer": int(row["pred"])})
+            writer.writerow({"q_uid": row["q_uid"], "answer": row["pred"]})
 
 
 if __name__ == "__main__":

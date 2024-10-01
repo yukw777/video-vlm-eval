@@ -86,7 +86,7 @@ class TarsierEgoSchemaModel(TarsierModel):
                 # Tarsier may erroneously generate numbers.
                 # The original code translates the numbers into letters.
                 # https://github.com/bytedance/tarsier/blob/9ff5567a8882cbcc81060f392bead76afb16e19d/evaluation/metrics/evaluate_qa_mc.py#L45-L47
-                pred = chr(int(decoded) + ord("A"))
+                pred = self.OPTION_MAP[chr(int(decoded) + ord("A"))]
             else:
                 # Tarsier generated an invalid answer, so just use it.
                 # This will be marked wrong during evaluation.
