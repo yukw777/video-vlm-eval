@@ -30,7 +30,7 @@ class TarsierModel(Model[dict[str, Any]]):
 
 
 class TarsierEgoSchemaModel(TarsierModel):
-    OPTION_MAP = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4}
+    OPTION_MAP = {"A": "0", "B": "1", "C": "2", "D": "3", "E": "4"}
 
     def _build_prompt(self, datapoint: dict[str, Any]) -> str:
         return (
@@ -78,8 +78,21 @@ class TarsierEgoSchemaModel(TarsierModel):
             pixel_values=batch["pixel_values"],
             **gen_config,
         )
-        preds = self.processor.tokenizer.batch_decode(outputs[:, -1])
-        return [{MultipleChoice.pred_key: self.OPTION_MAP[pred]} for pred in preds]
+        preds: list[dict] = []
+        for decoded in self.processor.tokenizer.batch_decode(outputs[:, -1]):
+            if decoded in self.OPTION_MAP:
+                pred = self.OPTION_MAP[decoded]
+            elif "1" <= decoded <= "4":
+                # Tarsier may erroneously generate numbers.
+                # The original code translates the numbers into letters.
+                # https://github.com/bytedance/tarsier/blob/9ff5567a8882cbcc81060f392bead76afb16e19d/evaluation/metrics/evaluate_qa_mc.py#L45-L47
+                pred = chr(int(decoded) + ord("A"))
+            else:
+                # Tarsier generated an invalid answer, so just use it.
+                # This will be marked wrong during evaluation.
+                pred = decoded
+            preds.append({MultipleChoice.pred_key: pred})
+        return preds
 
     @property
     def result_keys(self) -> list[str]:
