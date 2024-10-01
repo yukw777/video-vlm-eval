@@ -82,7 +82,7 @@ class TarsierEgoSchemaModel(TarsierModel):
         for decoded in self.processor.tokenizer.batch_decode(outputs[:, -1]):
             if decoded in self.OPTION_MAP:
                 pred = self.OPTION_MAP[decoded]
-            elif "1" <= decoded <= "4":
+            elif "0" <= decoded <= "4":
                 # Tarsier may erroneously generate numbers.
                 # The original code translates the numbers into letters.
                 # https://github.com/bytedance/tarsier/blob/9ff5567a8882cbcc81060f392bead76afb16e19d/evaluation/metrics/evaluate_qa_mc.py#L45-L47

@@ -10,6 +10,9 @@ def main(pred_file: str, submission_file: str) -> None:
         writer = csv.DictWriter(f_out, ("q_uid", "answer"))
         writer.writeheader()
         for row in reader:
+            if not ("0" <= row["pred"] <= "4"):
+                # it's an invalid answer so replace it ith "5" so it'd be marked incorrect.
+                row["pred"] = "5"
             writer.writerow({"q_uid": row["q_uid"], "answer": row["pred"]})
 
 
