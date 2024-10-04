@@ -16,5 +16,7 @@ class ZeroShotQA(Task):
 
 class MultipleChoice(Task):
     def calculate_metrics(self, anns: list[dict]) -> dict:
-        match_count = sum(ann[self.answer_key] == ann[self.pred_key] for ann in anns)
+        match_count = sum(
+            str(ann[self.answer_key]) == str(ann[self.pred_key]) for ann in anns
+        )
         return {"accuracy": match_count / len(anns)}
