@@ -17,7 +17,7 @@ class PrismaticModel(Model[dict[str, Any]]):
         dtype: TorchDType | None,
         num_frame_samples: int | None = None,
         rope_scaling_type: str | None = None,
-        rope_scaling_factor: float | None = None,
+        rope_scaling_factor: float = 2.0,
         llm_backbone_ckpt_path: str | None = None,
         frames_per_seg: int | None = None,
     ) -> None:
