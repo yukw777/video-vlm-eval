@@ -3,7 +3,10 @@ from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.task import MultipleChoice
 from video_vlm_eval.model.utils import ORDINALS
 
-from tarsier.models.modeling_tarsier import TarsierForConditionalGeneration
+from tarsier.models.modeling_tarsier import (
+    TarsierForConditionalGeneration,
+    LlavaConfig as TarsierLlavaConfig,
+)
 from tarsier.dataset.processor import Processor
 
 from typing import Any
@@ -17,15 +20,36 @@ class TarsierModel(Model[dict[str, Any]]):
         dtype: TorchDType | None,
         max_n_frames: int = 16,
         attn_implementation: str | None = None,
+        rope_scaling_type: str | None = None,
+        rope_scaling_factor: float = 2.0,
     ) -> None:
         super().__init__()
         self.processor = Processor(model_name_or_path, max_n_frames=max_n_frames)
         self.processor.tokenizer.padding_side = "left"
-        self.model = TarsierForConditionalGeneration.from_pretrained(
-            model_name_or_path,
-            torch_dtype=dtype.value if dtype is not None else None,
-            attn_implementation=attn_implementation,
-        )
+        if rope_scaling_type is None:
+            self.model = TarsierForConditionalGeneration.from_pretrained(
+                model_name_or_path,
+                torch_dtype=dtype.value if dtype is not None else None,
+                attn_implementation=attn_implementation,
+            )
+        else:
+            config = TarsierLlavaConfig.from_pretrained(model_name_or_path)
+            text_config = type(config.text_config)(
+                **{
+                    **config.text_config.to_dict(),
+                    "rope_scaling": {
+                        "rope_type": rope_scaling_type,
+                        "factor": rope_scaling_factor,
+                    },
+                }
+            )
+            self.model = TarsierForConditionalGeneration.from_pretrained(
+                model_name_or_path,
+                torch_dtype=dtype.value if dtype is not None else None,
+                attn_implementation=attn_implementation,
+                text_config=text_config,
+            )
+
         self.model.eval()
 
 
