@@ -27,7 +27,10 @@ def main(
             writer = csv.DictWriter(f_out, ("q_uid", "answer"))
             writer.writeheader()
             for row in df.to_dict(orient="records"):
-                pred = str(row["pred"])[0]
+                pred = str(row["pred"])
+                if not ("0" <= pred <= "4"):
+                    # it's an invalid answer so replace it ith "5" so it'd be marked incorrect.
+                    pred = "5"
                 writer.writerow({"q_uid": row["q_uid"], "answer": pred})
         kaggle.api.competition_submit(
             submission_file_name, inference_run.name, "egoschema-public"
