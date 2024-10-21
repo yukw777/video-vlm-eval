@@ -22,8 +22,8 @@ class Model(nn.Module, Generic[T], abc.ABC):
     def preprocess(self, datapoint) -> T: ...
 
     @property
-    @abc.abstractmethod
-    def result_keys(self) -> list[str]: ...
+    def result_keys(self) -> list[str]:
+        return []
 
     @property
     def collate_fn(self) -> Callable[[list[T]], T] | None:

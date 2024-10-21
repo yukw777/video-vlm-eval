@@ -6,12 +6,17 @@ from .dataset.tgif_qa import TGIFQAFrameDataset
 from .dataset.egoschema import EgoSchemaDataset, EgoSchemaNeedleHaystackDataset
 from .model import Model
 from .model.prismatic import (
+    PrismaticModel,
     PrismaticZeroShotQAModel,
     PrismaticVideoChatGPTConsistencyModel,
     PrismaticEgoSchemaModel,
     PrismaticEgoSchemaNeedleHaystackModel,
 )
-from .model.tarsier import TarsierEgoSchemaModel, TarsierEgoSchemaNeedleHaystackModel
+from .model.tarsier import (
+    TarsierEgoSchemaModel,
+    TarsierEgoSchemaNeedleHaystackModel,
+    TarsierModel,
+)
 from .task import Task, MultipleChoice
 from .task.video_chatgpt import (
     VideoChatGPTTask,
@@ -35,6 +40,7 @@ __all__ = [
     "MSRVTTQADataset",
     "TGIFQAFrameDataset",
     "Model",
+    "PrismaticModel",
     "PrismaticZeroShotQAModel",
     "VideoChatGPTTask",
     "VideoChatGPTZeroShotQATask",
@@ -53,6 +59,7 @@ __all__ = [
     "Task",
     "EgoSchemaMultipleChoice",
     "EgoSchemaNeedleHaystackDataset",
+    "TarsierModel",
     "TarsierEgoSchemaModel",
     "TarsierEgoSchemaNeedleHaystackModel",
 ]

@@ -17,7 +17,7 @@ class TarsierModel(Model[dict[str, Any]]):
     def __init__(
         self,
         model_name_or_path: str,
-        dtype: TorchDType | None,
+        dtype: TorchDType | None = None,
         max_n_frames: int = 16,
         attn_implementation: str | None = None,
         rope_scaling_type: str | None = None,
@@ -50,23 +50,12 @@ class TarsierModel(Model[dict[str, Any]]):
                 text_config=text_config,
             )
 
-        self.model.eval()
-
-
-class TarsierEgoSchemaModel(TarsierModel):
-    OPTION_MAP = {"A": "0", "B": "1", "C": "2", "D": "3", "E": "4"}
+        self.eval()
 
     def _build_prompt(self, datapoint: dict[str, Any]) -> str:
         return (
-            'USER: <video> The video is shot from a first-person perspective and the "c" refers to camera wearer.\n'
-            f"Question: {datapoint['question']}\n"
-            "Options:\n"
-            f"(A) {datapoint['option 0']}\n"
-            f"(B) {datapoint['option 1']}\n"
-            f"(C) {datapoint['option 2']}\n"
-            f"(D) {datapoint['option 3']}\n"
-            f"(E) {datapoint['option 4']}\n"
-            "ASSISTANT: Answer: ("
+            f'USER: <video> Based on the given video, generate a detailed answer for the following question: {datapoint["question"]}\n'
+            "ASSISTANT: Answer: "
         )
 
     def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
@@ -94,6 +83,35 @@ class TarsierEgoSchemaModel(TarsierModel):
             return inputs
 
         return collate
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        outputs = self.model.generate(
+            input_ids=batch["input_ids"],
+            attention_mask=batch["attention_mask"],
+            pixel_values=batch["pixel_values"],
+            **gen_config,
+        )
+        return [
+            {"answer": decoded}
+            for decoded in self.processor.tokenizer.batch_decode(outputs[:, -1])
+        ]
+
+
+class TarsierEgoSchemaModel(TarsierModel):
+    OPTION_MAP = {"A": "0", "B": "1", "C": "2", "D": "3", "E": "4"}
+
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        return (
+            'USER: <video> The video is shot from a first-person perspective and the "c" refers to camera wearer.\n'
+            f"Question: {datapoint['question']}\n"
+            "Options:\n"
+            f"(A) {datapoint['option 0']}\n"
+            f"(B) {datapoint['option 1']}\n"
+            f"(C) {datapoint['option 2']}\n"
+            f"(D) {datapoint['option 3']}\n"
+            f"(E) {datapoint['option 4']}\n"
+            "ASSISTANT: Answer: ("
+        )
 
     def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
         outputs = self.model.generate(

@@ -14,7 +14,7 @@ class PrismaticModel(Model[dict[str, Any]]):
     def __init__(
         self,
         model_name_or_path: str,
-        dtype: TorchDType | None,
+        dtype: TorchDType | None = None,
         num_frame_samples: int | None = None,
         rope_scaling_type: str | None = None,
         rope_scaling_factor: float = 2.0,
@@ -43,6 +43,22 @@ class PrismaticModel(Model[dict[str, Any]]):
             ]
             self.model.llm_backbone.load_state_dict(llm_backbone_state_dict)
         self.to(dtype.value if dtype is not None else None)
+
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        prompt_builder = self.model.get_prompt_builder()
+        prompt_builder.add_turn("human", datapoint["question"])
+        return {
+            "pixel_values": self.model.vision_backbone.vision_transform(
+                VideoReader(str(datapoint.pop("video_path")))
+            ),
+            "texts": prompt_builder.get_prompt(),
+        }
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict[str, str]]:
+        gen_texts = self.model.generate_batch(
+            batch["pixel_values"], batch["texts"], **gen_config
+        )
+        return [{"answer": text} for text in gen_texts]  # type: ignore
 
 
 class PrismaticZeroShotQAModel(PrismaticModel):
