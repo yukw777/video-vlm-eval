@@ -11,4 +11,8 @@ ORDINALS = [
     "tenth",
     "eleventh",
     "twelfth",
+    "thirteenth",
+    "fourteenth",
+    "fifteenth",
+    "sixteenth",
 ]
