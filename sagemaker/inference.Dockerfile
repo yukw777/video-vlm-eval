@@ -12,7 +12,7 @@ RUN pip install flash-attn==2.6.3 --no-build-isolation --no-cache-dir
 
 # Manual Prismatic Installation
 RUN --mount=type=secret,id=gh_priv_key,target=/root/.ssh/gh_priv_key \
-    GIT_SSH_COMMAND="ssh -i /root/.ssh/gh_priv_key" pip install git+ssh://git@github.com/yukw777/prismatic-dev.git@5ba48e8316fcd68f1fc431ba3b847492d2265178
+    GIT_SSH_COMMAND="ssh -i /root/.ssh/gh_priv_key" pip install git+ssh://git@github.com/yukw777/prismatic-dev.git@714cb14ffd33ef8b218f9f9201b1ef56d3cb3031
 
 # Set Sagemaker Environment Variables =>> Define `run_inference.py` as entrypoint!
 ENV SAGEMAKER_SUBMIT_DIRECTORY=/opt/ml/code
