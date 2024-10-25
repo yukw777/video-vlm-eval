@@ -4,6 +4,8 @@ from prismatic import load
 from decord import VideoReader
 
 from typing import Any
+
+import torch.distributed
 from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.model.utils import ORDINALS
 from video_vlm_eval.task import ZeroShotQA, MultipleChoice
@@ -31,12 +33,34 @@ class PrismaticModel(Model[dict[str, Any]]):
             llm_backbone_kwargs["rope_scaling_type"] = rope_scaling_type
         if rope_scaling_factor is not None:
             llm_backbone_kwargs["rope_scaling_factor"] = rope_scaling_factor
-        self.model = load(
-            model_name_or_path,
-            vision_backbone_kwargs=vision_backbone_kwargs,
-            llm_backbone_kwargs=llm_backbone_kwargs,
-            frames_per_seg=frames_per_seg,
-        )
+        if torch.distributed.is_initialized():
+            # timm has a race condition where if multiple processes try to
+            # create the same model at the same time, it fails, so in the
+            # torch distributed setting, let's have the rank 0 process
+            # create the model first, and have others go after.
+            rank = torch.distributed.get_rank()
+            if rank == 0:
+                self.model = load(
+                    model_name_or_path,
+                    vision_backbone_kwargs=vision_backbone_kwargs,
+                    llm_backbone_kwargs=llm_backbone_kwargs,
+                    frames_per_seg=frames_per_seg,
+                )
+            torch.distributed.barrier()
+            if rank != 0:
+                self.model = load(
+                    model_name_or_path,
+                    vision_backbone_kwargs=vision_backbone_kwargs,
+                    llm_backbone_kwargs=llm_backbone_kwargs,
+                    frames_per_seg=frames_per_seg,
+                )
+        else:
+            self.model = load(
+                model_name_or_path,
+                vision_backbone_kwargs=vision_backbone_kwargs,
+                llm_backbone_kwargs=llm_backbone_kwargs,
+                frames_per_seg=frames_per_seg,
+            )
         if llm_backbone_ckpt_path is not None:
             llm_backbone_state_dict = torch.load(llm_backbone_ckpt_path)["model"][
                 "llm_backbone"
