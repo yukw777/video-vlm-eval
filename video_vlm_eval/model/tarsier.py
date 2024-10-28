@@ -1,6 +1,6 @@
 import torch
 from video_vlm_eval.model import TorchDType, Model
-from video_vlm_eval.task import MultipleChoice
+from video_vlm_eval.task import MultipleChoice, ZeroShotQA
 from video_vlm_eval.model.utils import ORDINALS
 
 from tarsier.models.modeling_tarsier import (
@@ -93,8 +93,22 @@ class TarsierModel(Model[dict[str, Any]]):
         )
         return [
             {"answer": decoded}
-            for decoded in self.processor.tokenizer.batch_decode(outputs[:, -1])
+            for decoded in self.processor.tokenizer.batch_decode(
+                outputs[:, batch["input_ids"].size(1) :], skip_special_tokens=True
+            )
         ]
+
+
+class TarsierZeroShotQAModel(TarsierModel):
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict[str, str]]:
+        return [
+            {ZeroShotQA.pred_key: decoded["answer"]}
+            for decoded in super().perform(batch, **gen_config)
+        ]
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [ZeroShotQA.pred_key]
 
 
 class TarsierEgoSchemaModel(TarsierModel):

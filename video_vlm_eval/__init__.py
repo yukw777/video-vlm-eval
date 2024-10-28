@@ -16,6 +16,7 @@ from .model.tarsier import (
     TarsierEgoSchemaModel,
     TarsierEgoSchemaNeedleHaystackModel,
     TarsierModel,
+    TarsierZeroShotQAModel,
 )
 from .task import Task, MultipleChoice
 from .task.video_chatgpt import (
@@ -62,4 +63,5 @@ __all__ = [
     "TarsierModel",
     "TarsierEgoSchemaModel",
     "TarsierEgoSchemaNeedleHaystackModel",
+    "TarsierZeroShotQAModel",
 ]
