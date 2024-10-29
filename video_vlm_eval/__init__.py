@@ -11,6 +11,7 @@ from .model.prismatic import (
     PrismaticVideoChatGPTConsistencyModel,
     PrismaticEgoSchemaModel,
     PrismaticEgoSchemaNeedleHaystackModel,
+    PrismaticDirectAnswerEgoSchemaModel,
 )
 from .model.tarsier import (
     TarsierEgoSchemaModel,
@@ -56,6 +57,7 @@ __all__ = [
     "VideoChatGPTTemporalTask",
     "EgoSchemaDataset",
     "PrismaticEgoSchemaModel",
+    "PrismaticDirectAnswerEgoSchemaModel",
     "MultipleChoice",
     "Task",
     "EgoSchemaMultipleChoice",

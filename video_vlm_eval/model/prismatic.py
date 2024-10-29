@@ -203,6 +203,53 @@ class PrismaticEgoSchemaModel(PrismaticModel):
         return [MultipleChoice.pred_key]
 
 
+class PrismaticDirectAnswerEgoSchemaModel(PrismaticModel):
+    OPTION_MAP = {"A": "0", "B": "1", "C": "2", "D": "3", "E": "4"}
+
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "pixel_values": self.model.vision_backbone.vision_transform(
+                VideoReader(str(datapoint.pop("video_path")))
+            ),
+            "texts": (
+                'USER: The video is shot from a first-person perspective and the "c" refers to camera wearer.\n'
+                f"Question: {datapoint['question']}\n"
+                "Options:\n"
+                f"(A) {datapoint['option 0']}\n"
+                f"(B) {datapoint['option 1']}\n"
+                f"(C) {datapoint['option 2']}\n"
+                f"(D) {datapoint['option 3']}\n"
+                f"(E) {datapoint['option 4']}\n"
+                "ASSISTANT: Answer: ("
+            ),
+            **datapoint,
+        }
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict[str, str]]:
+        gen_texts = self.model.generate_batch(
+            batch["pixel_values"], batch["texts"], **gen_config
+        )
+        preds: list[dict] = []
+        for text in gen_texts:
+            if text in self.OPTION_MAP:
+                pred = self.OPTION_MAP[text]  # type: ignore
+            elif "0" <= text <= "4":  # type: ignore
+                # The model may erroneously generate numbers.
+                # Tarsier's code translates the numbers into letters.
+                # https://github.com/bytedance/tarsier/blob/9ff5567a8882cbcc81060f392bead76afb16e19d/evaluation/metrics/evaluate_qa_mc.py#L45-L47
+                pred = self.OPTION_MAP[chr(int(text) + ord("A"))]  # type: ignore
+            else:
+                # The model generated an invalid answer, so just use it.
+                # This will be marked wrong during evaluation.
+                pred = text  # type: ignore
+            preds.append({MultipleChoice.pred_key: pred})
+        return preds
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [MultipleChoice.pred_key]
+
+
 class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):
     def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
         if "scene_id" not in datapoint:
