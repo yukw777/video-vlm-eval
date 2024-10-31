@@ -36,7 +36,16 @@ def run(
     tags: dict[str, str] | None = None,
     boto_session: BotoSession | None = None,
     use_reserved_capacity: bool = False,
+    s3_hf_home: str | None = None,
 ) -> None:
+    env_vars = {
+        "WANDB_API_KEY": wandb_api_key,
+        "WANDB_NAME": wandb_name,
+        "SM_USE_RESERVED_CAPACITY": "1" if use_reserved_capacity else "0",
+    }
+    if s3_hf_home is not None:
+        s3_data_paths.append(s3_hf_home)
+        env_vars["HF_HOME"] = f"/opt/ml/input/data/data_{len(s3_data_paths) -1}/"
     estimator = PyTorch(
         "scripts/run_inference.py",
         role=role_arn,
@@ -45,11 +54,7 @@ def run(
         instance_type=instance_type,
         image_uri=image_uri,
         hyperparameters=dict(run_inference_args),
-        environment={
-            "WANDB_API_KEY": wandb_api_key,
-            "WANDB_NAME": wandb_name,
-            "SM_USE_RESERVED_CAPACITY": "1" if use_reserved_capacity else "0",
-        },
+        environment=env_vars,
         sagemaker_session=sagemaker.Session(boto_session=boto_session),  # type: ignore
         keep_alive_period_in_seconds=3600,
         max_run=60 * 60 * max_hours,
