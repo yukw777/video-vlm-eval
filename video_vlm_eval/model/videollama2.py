@@ -1,6 +1,8 @@
+import torch
 from transformers import AutoTokenizer, AutoConfig
 from video_vlm_eval.model import TorchDType, Model
-from video_vlm_eval.task import ZeroShotQA
+from video_vlm_eval.task import ZeroShotQA, MultipleChoice
+from video_vlm_eval.model.utils import ORDINALS
 from videollama2.mm_utils import (
     tokenizer_multimodal_token,
     KeywordsStoppingCriteria,
@@ -13,6 +15,8 @@ from videollama2.constants import DEFAULT_VIDEO_TOKEN, NUM_FRAMES
 
 from typing import Any
 from functools import partial
+from copy import deepcopy
+import re
 
 
 class VideoLlama2Model(Model[dict[str, Any]]):
@@ -52,16 +56,15 @@ class VideoLlama2Model(Model[dict[str, Any]]):
             self.to(dtype=self.dtype.value)
 
         if num_frames is None:
-            num_frames = (
+            self.num_frames = (
                 self.model.config.num_frames
                 if hasattr(self.model.config, "num_frames")
                 else NUM_FRAMES
             )
+        else:
+            self.num_frames = num_frames
         self.processor = partial(
-            process_video,
-            processor=vision_tower.image_processor,
-            aspect_ratio=None,
-            num_frames=num_frames,
+            process_video, processor=vision_tower.image_processor, aspect_ratio=None
         )
 
         self.eval()
@@ -94,7 +97,9 @@ class VideoLlama2Model(Model[dict[str, Any]]):
         )
 
     def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
-        datapoint["pixel_values"] = self.processor(str(datapoint.pop("video_path")))
+        datapoint["pixel_values"] = self.processor(
+            str(datapoint.pop("video_path")), num_frames=self.num_frames
+        )
         if self.dtype is not None:
             datapoint["pixel_values"] = datapoint["pixel_values"].to(self.dtype.value)
         datapoint["input_ids"] = tokenizer_multimodal_token(
@@ -142,3 +147,88 @@ class VideoLlama2ZeroShotQAModel(VideoLlama2Model):
     @property
     def result_keys(self) -> list[str]:
         return [ZeroShotQA.pred_key]
+
+
+class VideoLlama2EgoSchemaModel(VideoLlama2Model):
+    OPTION_MAP = {"A": "0", "B": "1", "C": "2", "D": "3", "E": "4"}
+
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        datapoint_copy = deepcopy(datapoint)
+        datapoint_copy["question"] = (
+            "Select the best answer to the following multiple-choice question based on the video.\n"
+            f"{datapoint['question']}\n"
+            "Options:\n"
+            f"(A) {datapoint['option 0']}\n"
+            f"(B) {datapoint['option 1']}\n"
+            f"(C) {datapoint['option 2']}\n"
+            f"(D) {datapoint['option 3']}\n"
+            f"(E) {datapoint['option 4']}\n"
+            "Answer with the option's letter from the given choices directly and only give the best option. "
+            "The best answer is: "
+        )
+        return super()._build_prompt(datapoint_copy)
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        outputs = super().perform(batch, **gen_config)
+        preds: list[dict] = []
+        for output in outputs:
+            answer = output["answer"]
+            answer = answer.replace("answer", "")
+            answer = answer.replace("Answer", "")
+            pred_answer = re.findall("[\(\ ]*[A-E][\)\ ]*", answer)
+            try:
+                assert len(pred_answer) >= 1
+                pred = pred_answer[0].strip()
+                pred = pred.strip("()")
+            except Exception:
+                # VideoLLaMA 2 generated an invalid answer, so set it to C.
+                # https://github.com/DAMO-NLP-SG/VideoLLaMA2/blob/e99445860638d1e99a8a060068a0fa31f0f2b4da/videollama2/eval/inference_video_mcqa_egoschema.py#L100
+                pred = "C"
+            preds.append({MultipleChoice.pred_key: self.OPTION_MAP[pred]})
+        return preds
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [MultipleChoice.pred_key]
+
+
+class VideoLlama2EgoSchemaNeedleHaystackModel(VideoLlama2EgoSchemaModel):
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        if "scene_id" not in datapoint:
+            return super()._build_prompt(datapoint)
+
+        datapoint_copy = deepcopy(datapoint)
+        datapoint_copy["question"] = (
+            f"Select the best answer to the following multiple-choice question based on the {ORDINALS[datapoint['scene_id']]} scene of the video.\n"
+            f"{datapoint['question']}\n"
+            "Options:\n"
+            f"(A) {datapoint['option 0']}\n"
+            f"(B) {datapoint['option 1']}\n"
+            f"(C) {datapoint['option 2']}\n"
+            f"(D) {datapoint['option 3']}\n"
+            f"(E) {datapoint['option 4']}\n"
+            "Answer with the option's letter from the given choices directly and only give the best option. "
+            "The best answer is: "
+        )
+        return super(VideoLlama2EgoSchemaModel, self)._build_prompt(datapoint_copy)
+
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        video_paths = datapoint.pop("video_paths")
+        frames_per_video = self.num_frames // len(video_paths)
+        frames = [
+            self.processor(str(video_path), num_frames=frames_per_video)
+            for video_path in video_paths
+        ]
+        datapoint["pixel_values"] = torch.cat(frames)
+        if self.dtype is not None:
+            datapoint["pixel_values"] = datapoint["pixel_values"].to(self.dtype.value)
+        datapoint["input_ids"] = tokenizer_multimodal_token(
+            self._build_prompt(datapoint),
+            self.tokenizer,
+            DEFAULT_VIDEO_TOKEN,
+            return_tensors="pt",
+        ).unsqueeze(0)
+        datapoint["attention_mask"] = (
+            datapoint["input_ids"].ne(self.tokenizer.pad_token_id).long()
+        )
+        return datapoint

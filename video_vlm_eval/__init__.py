@@ -34,7 +34,12 @@ from .dataset.video_chatgpt import (
     VideoChatGPTConsistencyDataset,
     VideoChatGPTGeneralDataset,
 )
-from .model.videollama2 import VideoLlama2Model, VideoLlama2ZeroShotQAModel
+from .model.videollama2 import (
+    VideoLlama2Model,
+    VideoLlama2ZeroShotQAModel,
+    VideoLlama2EgoSchemaModel,
+    VideoLlama2EgoSchemaNeedleHaystackModel,
+)
 
 __all__ = [
     "Dataset",
@@ -69,4 +74,6 @@ __all__ = [
     "TarsierZeroShotQAModel",
     "VideoLlama2Model",
     "VideoLlama2ZeroShotQAModel",
+    "VideoLlama2EgoSchemaModel",
+    "VideoLlama2EgoSchemaNeedleHaystackModel",
 ]
