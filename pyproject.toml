@@ -20,6 +20,7 @@ sagemaker = "^2.224.1"
 flash-attn = { version = "^2.5.9.post1", optional = true }
 setuptools = "<70.0.0"
 tarsier = { git = "git@github.com:yukw777/tarsier.git", rev = "92a195326138c834002faf5385edec4ba4906067" }
+videollama2 = { git = "git@github.com:yukw777/VideoLLaMA2.git", rev = "4c8be00b9906d64e9870993fc462ade87cbeaef9" }
 
 
 [tool.poetry.group.dev.dependencies]
