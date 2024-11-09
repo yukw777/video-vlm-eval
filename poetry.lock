@@ -2898,8 +2898,8 @@ sagemaker = ["boto3", "sagemaker"]
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/prismatic-dev.git"
-reference = "a9ea3d416482cb1418737db163f317bca1f6dba7"
-resolved_reference = "a9ea3d416482cb1418737db163f317bca1f6dba7"
+reference = "6f35b8c96bcd389c80f2fe6369250192c45fea53"
+resolved_reference = "6f35b8c96bcd389c80f2fe6369250192c45fea53"
 
 [[package]]
 name = "proglog"
@@ -5169,4 +5169,4 @@ prismatic = ["prismatic"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "f467707014d457a81c1c7634e59dfd37cd50d74f5bcb21975ba6a2fec705ec0b"
+content-hash = "a1e09d349de5f4490a083797fd45287a4368d95607a86312cedb83d6c2ef0d54"
