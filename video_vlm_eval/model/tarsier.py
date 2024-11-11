@@ -2,6 +2,7 @@ import torch
 from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.task import MultipleChoice, ZeroShotQA
 from video_vlm_eval.model.utils import ORDINALS
+from video_vlm_eval.task.video_chatgpt import VideoChatGPTConsistencyTask
 
 from tarsier.models.modeling_tarsier import (
     TarsierForConditionalGeneration,
@@ -109,6 +110,80 @@ class TarsierZeroShotQAModel(TarsierModel):
     @property
     def result_keys(self) -> list[str]:
         return [ZeroShotQA.pred_key]
+
+
+class TarsierVideoChatGPTConsistencyModel(TarsierModel):
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        preprocessed_1 = self.processor(
+            super()._build_prompt(
+                {"question": datapoint[VideoChatGPTConsistencyTask.question_keys[0]]}
+            ),
+            images=self.processor.load_images(str(datapoint.pop("video_path"))),
+            edit_prompt=True,
+        )
+        preprocessed_2 = self.processor(
+            super()._build_prompt(
+                {"question": datapoint[VideoChatGPTConsistencyTask.question_keys[1]]},
+            ),
+            edit_prompt=True,
+        )
+        return {
+            "pixel_values": preprocessed_1["pixel_values"],
+            "input_ids_1": preprocessed_1["input_ids"].squeeze(0),
+            "input_ids_2": preprocessed_2["input_ids"].squeeze(0),
+            **datapoint,
+        }
+
+    @property
+    def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+        def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
+            pixel_values = torch.cat([d.pop("pixel_values") for d in datapoints])
+            padded_1 = self.processor.tokenizer.pad(
+                [{"input_ids": d.pop("input_ids_1")} for d in datapoints]
+            )
+            padded_2 = self.processor.tokenizer.pad(
+                [{"input_ids": d.pop("input_ids_2")} for d in datapoints]
+            )
+            inputs: dict[str, Any] = {
+                k: [d[k] for d in datapoints] for k in datapoints[0].keys()
+            }
+            inputs["input_ids_1"] = padded_1["input_ids"]
+            inputs["attention_mask_1"] = padded_1["attention_mask"]
+            inputs["input_ids_2"] = padded_2["input_ids"]
+            inputs["attention_mask_2"] = padded_2["attention_mask"]
+            inputs["pixel_values"] = pixel_values
+            return inputs
+
+        return collate
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict[str, str]]:
+        outputs_1 = super().perform(
+            {
+                "pixel_values": batch["pixel_values"],
+                "input_ids": batch["input_ids_1"],
+                "attention_mask": batch["attention_mask_1"],
+            },
+            **gen_config,
+        )
+        outputs_2 = super().perform(
+            {
+                "pixel_values": batch["pixel_values"],
+                "input_ids": batch["input_ids_2"],
+                "attention_mask": batch["attention_mask_2"],
+            },
+            **gen_config,
+        )
+        return [
+            {
+                VideoChatGPTConsistencyTask.pred_keys[0]: output_1["answer"],
+                VideoChatGPTConsistencyTask.pred_keys[1]: output_2["answer"],
+            }
+            for output_1, output_2 in zip(outputs_1, outputs_2, strict=True)
+        ]
+
+    @property
+    def result_keys(self) -> list[str]:
+        return VideoChatGPTConsistencyTask.pred_keys
 
 
 class TarsierEgoSchemaModel(TarsierModel):
