@@ -7,8 +7,8 @@ from pathlib import Path
 class VideoChatGPTGeneralDataset(Dataset[dict[str, Any]]):
     def __init__(
         self,
-        video_dir: str,
         annotations_file: str,
+        video_dir: str | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
         """
@@ -23,19 +23,20 @@ class VideoChatGPTGeneralDataset(Dataset[dict[str, Any]]):
             ann["id"] = str(i)
 
         video_name_to_path: dict[str, Path] = {}
-        for video_path in Path(video_dir).iterdir():
-            video_name_to_path[video_path.stem] = video_path
+        if video_dir is not None:
+            for video_path in Path(video_dir).iterdir():
+                video_name_to_path[video_path.stem] = video_path
         self.examples: list[dict[str, Any]] = []
         for i, ann in enumerate(annotations):
-            self.examples.append(
-                {
-                    "id": ann["id"],
-                    "video_path": video_name_to_path[ann["video_name"]],
-                    "question": ann["Q"],
-                    "answer": ann["A"],
-                    "video_name": ann["video_name"],
-                }
-            )
+            example = {
+                "id": ann["id"],
+                "question": ann["Q"],
+                "answer": ann["A"],
+                "video_name": ann["video_name"],
+            }
+            if video_dir is not None:
+                example["video_path"] = video_name_to_path[ann["video_name"]]
+            self.examples.append(example)
 
         self._examples_by_id = {e[self.id_key]: e for e in self.examples}
         self.preprocessor = preprocessor
@@ -64,8 +65,8 @@ class VideoChatGPTGeneralDataset(Dataset[dict[str, Any]]):
 class VideoChatGPTConsistencyDataset(Dataset[dict[str, Any]]):
     def __init__(
         self,
-        video_dir: str,
         annotations_file: str,
+        video_dir: str | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
         """
@@ -79,13 +80,17 @@ class VideoChatGPTConsistencyDataset(Dataset[dict[str, Any]]):
             ann["id"] = str(i)
 
         video_name_to_path: dict[str, Path] = {}
-        for video_path in Path(video_dir).iterdir():
-            video_name_to_path[video_path.stem] = video_path
+        if video_dir is not None:
+            for video_path in Path(video_dir).iterdir():
+                video_name_to_path[video_path.stem] = video_path
         self.examples: list[dict[str, Any]] = []
         for ann in annotations:
-            self.examples.append(
-                {"video_path": video_name_to_path[ann["video_name"]], **ann}
-            )
+            if video_dir is not None:
+                self.examples.append(
+                    {"video_path": video_name_to_path[ann["video_name"]], **ann}
+                )
+            else:
+                self.examples.append({**ann})
 
         self._examples_by_id = {e[self.id_key]: e for e in self.examples}
         self.preprocessor = preprocessor
