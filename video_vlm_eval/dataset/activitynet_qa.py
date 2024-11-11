@@ -8,9 +8,9 @@ from video_vlm_eval.dataset import Dataset
 class ActivityNetQADataset(Dataset[dict[str, Any]]):
     def __init__(
         self,
-        video_dirs: list[str],
         gt_file_question: str,
         gt_file_answer: str,
+        video_dirs: list[str] | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
         """
@@ -26,17 +26,21 @@ class ActivityNetQADataset(Dataset[dict[str, Any]]):
 
         # figure out the video paths
         video_name_to_path: dict[str, Path] = {}
-        for video_dir in [Path(video_dir) for video_dir in video_dirs]:
-            for video_path in video_dir.iterdir():
-                # video_name is the stem of the video path without the "v_" prefix
-                video_name_to_path[video_path.stem[2:]] = video_path
+        if video_dirs is not None:
+            for video_dir in [Path(video_dir) for video_dir in video_dirs]:
+                for video_path in video_dir.iterdir():
+                    # video_name is the stem of the video path without the "v_" prefix
+                    video_name_to_path[video_path.stem[2:]] = video_path
         self.examples: list[dict[str, Any]] = []
         for q, a in zip(gt_questions, gt_answers, strict=True):
             # we cast type to str so it wouldn't get turned into a tensor by the default collator.
             a["type"] = str(a["type"])
-            self.examples.append(
-                {"video_path": video_name_to_path[q["video_name"]], **q, **a}
-            )
+            if video_dirs is not None:
+                self.examples.append(
+                    {"video_path": video_name_to_path[q["video_name"]], **q, **a}
+                )
+            else:
+                self.examples.append({**q, **a})
 
         self._columns = [k for k in self.examples[0].keys() if k != "video_path"]
         self._id_key = "question_id"

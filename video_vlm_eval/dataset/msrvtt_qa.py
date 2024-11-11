@@ -8,8 +8,8 @@ from video_vlm_eval.dataset import Dataset
 class MSRVTTQADataset(Dataset[dict[str, Any]]):
     def __init__(
         self,
-        video_dir: str,
         annotations_file: str,
+        video_dir: str | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
         """
@@ -20,9 +20,10 @@ class MSRVTTQADataset(Dataset[dict[str, Any]]):
             annotations = json.load(f)
 
         video_id_to_path: dict[str, Path] = {}
-        for video_path in Path(video_dir).iterdir():
-            # remove "video" prefix
-            video_id_to_path[video_path.stem[5:]] = video_path
+        if video_dir is not None:
+            for video_path in Path(video_dir).iterdir():
+                # remove "video" prefix
+                video_id_to_path[video_path.stem[5:]] = video_path
         self.examples: list[dict[str, Any]] = []
         for ann in annotations:
             # we cast category_id, video_id and id to str so it wouldn't get turned into a tensor by the default collator.
@@ -30,9 +31,12 @@ class MSRVTTQADataset(Dataset[dict[str, Any]]):
             ann["video_id"] = str(ann["video_id"])
             ann["id"] = str(ann["id"])
 
-            self.examples.append(
-                {"video_path": video_id_to_path[ann["video_id"]], **ann}
-            )
+            if video_dir is not None:
+                self.examples.append(
+                    {"video_path": video_id_to_path[ann["video_id"]], **ann}
+                )
+            else:
+                self.examples.append({**ann})
 
         self._columns = [k for k in self.examples[0].keys() if k != "video_path"]
         self._id_key = "id"

@@ -8,8 +8,8 @@ from video_vlm_eval.dataset import Dataset
 class TGIFQAFrameDataset(Dataset[dict[str, Any]]):
     def __init__(
         self,
-        video_dir: str,
         frame_annotation_file: str,
+        video_dir: str | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
         """Note that this dataset is only for the "Frame" annotations from
@@ -23,16 +23,20 @@ class TGIFQAFrameDataset(Dataset[dict[str, Any]]):
         :param frame_annotation_file: TGIF-QA Frame annotations file
         """
         gif_name_to_path: dict[str, Path] = {}
-        for video_path in Path(video_dir).iterdir():
-            gif_name_to_path[video_path.stem] = video_path
+        if video_dir is not None:
+            for video_path in Path(video_dir).iterdir():
+                gif_name_to_path[video_path.stem] = video_path
 
         self.examples: list[dict[str, Any]] = []
         with open(frame_annotation_file, newline="") as f:
             reader = csv.DictReader(f, delimiter="\t")
             for ann in reader:
-                self.examples.append(
-                    {"video_path": gif_name_to_path[ann["gif_name"]], **ann}
-                )
+                if video_dir is not None:
+                    self.examples.append(
+                        {"video_path": gif_name_to_path[ann["gif_name"]], **ann}
+                    )
+                else:
+                    self.examples.append({**ann})
         self._examples_by_id = {e[self.id_key]: e for e in self.examples}
 
         self.preprocessor = preprocessor
