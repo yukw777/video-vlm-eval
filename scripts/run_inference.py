@@ -5,7 +5,7 @@ from accelerate import Accelerator
 from accelerate.utils import gather_object, set_seed, tqdm
 from jsonargparse import CLI
 from torch.nn.parallel import DistributedDataParallel
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset
 
 from video_vlm_eval import Dataset, Model
 
@@ -18,6 +18,7 @@ def run(
     dataset: Dataset,
     per_device_batch_size: int = 2,
     num_dataloader_workers: int = 4,
+    start_idx: int | None = None,
     num_eval_steps: int | None = None,
     gen_config: dict | None = None,
     wandb_project: str | None = None,
@@ -35,6 +36,9 @@ def run(
         accelerator = Accelerator()
 
     dataset.set_preprocessor(model.preprocess)
+    dataset_columns = dataset.columns
+    if start_idx is not None:
+        dataset = Subset(dataset, range(start_idx, len(dataset)))  # type: ignore
     model, dataloader = accelerator.prepare(
         model,
         DataLoader(
@@ -52,7 +56,7 @@ def run(
         if num_eval_steps is not None and i == num_eval_steps:
             break
         gathered_objects: list[list] = []
-        for column in dataset.columns:
+        for column in dataset_columns:
             gathered_objects.append(gather_object(batch[column]))
         task_results = model.perform(batch, **gen_config)
         gathered_task_results = gather_object(task_results)
@@ -80,16 +84,16 @@ def run(
             )
         )
 
-    columns = dataset.columns + model.result_keys
+    out_columns = dataset_columns + model.result_keys
     if out_file_name is not None and accelerator.is_main_process:
         with open(out_file_name, "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(columns)
+            writer.writerow(out_columns)
             writer.writerows(data)
 
     if wandb_project is not None and accelerator.is_main_process:
         accelerator.get_tracker("wandb").log_table(
-            "inference", columns=columns, data=data
+            "inference", columns=out_columns, data=data
         )
 
     accelerator.end_training()
