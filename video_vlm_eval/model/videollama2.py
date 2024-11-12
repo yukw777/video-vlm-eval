@@ -15,7 +15,6 @@ from videollama2.constants import DEFAULT_VIDEO_TOKEN, NUM_FRAMES
 
 from typing import Any
 from functools import partial
-from copy import deepcopy
 import re
 
 
@@ -153,20 +152,22 @@ class VideoLlama2EgoSchemaModel(VideoLlama2Model):
     OPTION_MAP = {"A": "0", "B": "1", "C": "2", "D": "3", "E": "4"}
 
     def _build_prompt(self, datapoint: dict[str, Any]) -> str:
-        datapoint_copy = deepcopy(datapoint)
-        datapoint_copy["question"] = (
-            "Select the best answer to the following multiple-choice question based on the video.\n"
-            f"{datapoint['question']}\n"
-            "Options:\n"
-            f"(A) {datapoint['option 0']}\n"
-            f"(B) {datapoint['option 1']}\n"
-            f"(C) {datapoint['option 2']}\n"
-            f"(D) {datapoint['option 3']}\n"
-            f"(E) {datapoint['option 4']}\n"
-            "Answer with the option's letter from the given choices directly and only give the best option. "
-            "The best answer is: "
+        return super()._build_prompt(
+            {
+                "question": (
+                    "Select the best answer to the following multiple-choice question based on the video.\n"
+                    f"{datapoint['question']}\n"
+                    "Options:\n"
+                    f"(A) {datapoint['option 0']}\n"
+                    f"(B) {datapoint['option 1']}\n"
+                    f"(C) {datapoint['option 2']}\n"
+                    f"(D) {datapoint['option 3']}\n"
+                    f"(E) {datapoint['option 4']}\n"
+                    "Answer with the option's letter from the given choices directly and only give the best option. "
+                    "The best answer is: "
+                )
+            }
         )
-        return super()._build_prompt(datapoint_copy)
 
     def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
         outputs = super().perform(batch, **gen_config)
@@ -197,20 +198,22 @@ class VideoLlama2EgoSchemaNeedleHaystackModel(VideoLlama2EgoSchemaModel):
         if "scene_id" not in datapoint:
             return super()._build_prompt(datapoint)
 
-        datapoint_copy = deepcopy(datapoint)
-        datapoint_copy["question"] = (
-            f"Select the best answer to the following multiple-choice question based on the {ORDINALS[datapoint['scene_id']]} scene of the video.\n"
-            f"{datapoint['question']}\n"
-            "Options:\n"
-            f"(A) {datapoint['option 0']}\n"
-            f"(B) {datapoint['option 1']}\n"
-            f"(C) {datapoint['option 2']}\n"
-            f"(D) {datapoint['option 3']}\n"
-            f"(E) {datapoint['option 4']}\n"
-            "Answer with the option's letter from the given choices directly and only give the best option. "
-            "The best answer is: "
+        return super(VideoLlama2EgoSchemaModel, self)._build_prompt(
+            {
+                "question": (
+                    f"Select the best answer to the following multiple-choice question based on the {ORDINALS[datapoint['scene_id']]} scene of the video.\n"
+                    f"{datapoint['question']}\n"
+                    "Options:\n"
+                    f"(A) {datapoint['option 0']}\n"
+                    f"(B) {datapoint['option 1']}\n"
+                    f"(C) {datapoint['option 2']}\n"
+                    f"(D) {datapoint['option 3']}\n"
+                    f"(E) {datapoint['option 4']}\n"
+                    "Answer with the option's letter from the given choices directly and only give the best option. "
+                    "The best answer is: "
+                )
+            }
         )
-        return super(VideoLlama2EgoSchemaModel, self)._build_prompt(datapoint_copy)
 
     def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
         video_paths = datapoint.pop("video_paths")
