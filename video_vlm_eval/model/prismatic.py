@@ -3,9 +3,10 @@ import torch
 from prismatic import load
 from decord import VideoReader
 
-from typing import Any
+from typing import Any, Callable
 
 import torch.distributed
+from torch.utils.data import default_collate
 from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.model.utils import ORDINALS
 from video_vlm_eval.task import ZeroShotQA, MultipleChoice
@@ -292,3 +293,55 @@ class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):
             **datapoint,
             **self._build_prompt(datapoint),
         }
+
+
+class PrismaticMLVUModel(PrismaticEgoSchemaModel):
+    def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        prompt_dict = {}
+        question = datapoint[MultipleChoice.question_key]
+        for i, cand in enumerate(datapoint["candidates"]):
+            prompt_builder = self.model.get_prompt_builder()
+            prompt_builder.add_turn(
+                "human",
+                f'Given the question "{question}", is the answer "{cand}" correct? '
+                'Please answer only "yes" or "no".',
+            )
+            prompt_dict[f"candidate_{i}_prompt"] = prompt_builder.get_prompt()
+        return prompt_dict
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        # confidence level for each option (batch, num_option)
+        confidence = np.zeros((batch["pixel_values"].size(0), 5))
+        for i in range(len(batch["candidates"][0])):
+            _, batch_gen_probs = self.model.generate_batch(
+                batch["pixel_values"],
+                batch[f"candidate_{i}_prompt"],
+                return_string_probabilities=["Yes", "No"],
+                **gen_config,
+            )
+            for j, gen_probs in enumerate(batch_gen_probs):
+                confidence[j][i] = gen_probs[0]  # type: ignore
+
+        batch_pred = confidence.argmax(axis=1)
+
+        return [
+            {MultipleChoice.pred_key: cands[pred]}
+            for cands, pred in zip(
+                batch["candidates"], batch_pred.tolist(), strict=True
+            )
+        ]
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [MultipleChoice.pred_key]
+
+    @property
+    def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+        def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
+            # the default collator transposes lists of lists, so let's collate "candidates" manually
+            batch_candidates = [datapoint.pop("candidates") for datapoint in datapoints]
+            collated = default_collate(datapoints)
+            collated["candidates"] = batch_candidates
+            return collated
+
+        return collate
