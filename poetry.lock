@@ -2158,6 +2158,17 @@ polars = ["polars (>=0.20.3)"]
 pyarrow = ["pyarrow (>=11.0.0)"]
 
 [[package]]
+name = "nest-asyncio"
+version = "1.6.0"
+description = "Patch asyncio to allow nested event loops"
+optional = true
+python-versions = ">=3.5"
+files = [
+    {file = "nest_asyncio-1.6.0-py3-none-any.whl", hash = "sha256:87af6efd6b5e897c81050477ef65c62e2b2f35d51703cae01aff2905b1852e1c"},
+    {file = "nest_asyncio-1.6.0.tar.gz", hash = "sha256:6f172d5449aca15afd6c646851f4e31e02c598d553a667e38cafa997cfec55fe"},
+]
+
+[[package]]
 name = "networkx"
 version = "3.3"
 description = "Python package for creating and manipulating graphs and networks"
@@ -5168,9 +5179,9 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 flash-attn = ["flash-attn"]
 kaggle = ["kaggle"]
 prismatic = ["prismatic"]
-sagemaker = ["sagemaker"]
+sagemaker = ["nest-asyncio", "sagemaker"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7c89cb134f3da14b3d8da9fe2fb816cfa6c88c2eb1e13ace9314427717882f18"
+content-hash = "ea7395dc6cb39d6a0e155e6de3c3518bdca8151f446de5a7d08d9861100a114b"

@@ -1,0 +1,4708 @@
+{
+  "documentation": "<p>AWS Batch makes it easier than ever to run batch computing workloads on the AWS cloud. Batch computing is a common way for developers, scientists and engineers to access large amounts of compute resources, and AWS Batch removes the undifferentiated heavy lifting of configuring and managing the required infrastructure. It also makes it easy for administrators, developers and independent software vendors to provide valuable, time-saving application templates for their users. AWS Batch will be familiar to users of traditional batch computing software and can efficiently provision resources in response to jobs submitted in order to eliminate capacity constraints, reduce compute costs, and deliver results faster than ever.</p> <p>As a fully-managed service, AWS Batch enables developers, scientists, and engineers to easily and efficiently run batch computing workloads of any scale. AWS Batch automatically provisions compute resources and optimizes the workload distribution based on the quantity and scale of the workloads. With AWS Batch, there is no need to install or manage batch computing software, allowing you to focus on analyzing results and solving problems. AWS Batch plans, schedules, and executes your batch computing workloads across the full range of AWS compute services, such as Amazon EC2, Amazon EC2 Spot, and AWS Lambda. AWS Batch reduces operational complexities, saving time and reducing costs, making it easy for developers, scientists, and engineers to run their batch jobs in the AWS cloud.</p>",
+  "metadata": {
+    "apiVersion": "2016-08-10",
+    "awsFasPolicyPath": "/policies/AuthRuntime/authNPolicy/batch-frontend.2022-05-25-18-35-54",
+    "awsProductName": "AWSBatch",
+    "endpointPrefix": "batch",
+    "protocol": "rest-json",
+    "protocols": [
+      "rest-json"
+    ],
+    "ripServiceName": "batch",
+    "serviceAbbreviation": "AWS Batch",
+    "serviceFullName": "AWS Batch",
+    "serviceId": "Batch",
+    "signatureVersion": "v4",
+    "signingName": "batch",
+    "uid": "batch-2016-08-10"
+  },
+  "operations": {
+    "CancelJob": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/canceljob"
+      },
+      "input": {
+        "shape": "CancelJobRequest"
+      },
+      "name": "CancelJob",
+      "output": {
+        "shape": "CancelJobResponse"
+      }
+    },
+    "CreateComputeEnvironment": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/createcomputeenvironment"
+      },
+      "input": {
+        "shape": "CreateComputeEnvironmentRequest"
+      },
+      "name": "CreateComputeEnvironment",
+      "output": {
+        "shape": "CreateComputeEnvironmentResponse"
+      }
+    },
+    "CreateJobQueue": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/createjobqueue"
+      },
+      "input": {
+        "shape": "CreateJobQueueRequest"
+      },
+      "name": "CreateJobQueue",
+      "output": {
+        "shape": "CreateJobQueueResponse"
+      }
+    },
+    "CreateSchedulingPolicy": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/createschedulingpolicy"
+      },
+      "input": {
+        "shape": "CreateSchedulingPolicyRequest"
+      },
+      "name": "CreateSchedulingPolicy",
+      "output": {
+        "shape": "CreateSchedulingPolicyResponse"
+      }
+    },
+    "CreateServiceEnvironment": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/createserviceenvironment"
+      },
+      "input": {
+        "shape": "CreateServiceEnvironmentRequest"
+      },
+      "internalonly": true,
+      "name": "CreateServiceEnvironment",
+      "output": {
+        "shape": "CreateServiceEnvironmentResponse"
+      }
+    },
+    "DeleteComputeEnvironment": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/deletecomputeenvironment"
+      },
+      "input": {
+        "shape": "DeleteComputeEnvironmentRequest"
+      },
+      "name": "DeleteComputeEnvironment",
+      "output": {
+        "shape": "DeleteComputeEnvironmentResponse"
+      }
+    },
+    "DeleteJobQueue": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/deletejobqueue"
+      },
+      "input": {
+        "shape": "DeleteJobQueueRequest"
+      },
+      "name": "DeleteJobQueue",
+      "output": {
+        "shape": "DeleteJobQueueResponse"
+      }
+    },
+    "DeleteSchedulingPolicy": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/deleteschedulingpolicy"
+      },
+      "input": {
+        "shape": "DeleteSchedulingPolicyRequest"
+      },
+      "name": "DeleteSchedulingPolicy",
+      "output": {
+        "shape": "DeleteSchedulingPolicyResponse"
+      }
+    },
+    "DeleteServiceEnvironment": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/deleteserviceenvironment"
+      },
+      "input": {
+        "shape": "DeleteServiceEnvironmentRequest"
+      },
+      "internalonly": true,
+      "name": "DeleteServiceEnvironment",
+      "output": {
+        "shape": "DeleteServiceEnvironmentResponse"
+      }
+    },
+    "DeregisterJobDefinition": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/deregisterjobdefinition"
+      },
+      "input": {
+        "shape": "DeregisterJobDefinitionRequest"
+      },
+      "name": "DeregisterJobDefinition",
+      "output": {
+        "shape": "DeregisterJobDefinitionResponse"
+      }
+    },
+    "DescribeComputeEnvironments": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/describecomputeenvironments"
+      },
+      "input": {
+        "shape": "DescribeComputeEnvironmentsRequest"
+      },
+      "name": "DescribeComputeEnvironments",
+      "output": {
+        "shape": "DescribeComputeEnvironmentsResponse"
+      }
+    },
+    "DescribeJobDefinitions": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/describejobdefinitions"
+      },
+      "input": {
+        "shape": "DescribeJobDefinitionsRequest"
+      },
+      "name": "DescribeJobDefinitions",
+      "output": {
+        "shape": "DescribeJobDefinitionsResponse"
+      }
+    },
+    "DescribeJobQueues": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/describejobqueues"
+      },
+      "input": {
+        "shape": "DescribeJobQueuesRequest"
+      },
+      "name": "DescribeJobQueues",
+      "output": {
+        "shape": "DescribeJobQueuesResponse"
+      }
+    },
+    "DescribeJobs": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/describejobs"
+      },
+      "input": {
+        "shape": "DescribeJobsRequest"
+      },
+      "name": "DescribeJobs",
+      "output": {
+        "shape": "DescribeJobsResponse"
+      }
+    },
+    "DescribeSchedulingPolicies": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/describeschedulingpolicies"
+      },
+      "input": {
+        "shape": "DescribeSchedulingPoliciesRequest"
+      },
+      "name": "DescribeSchedulingPolicies",
+      "output": {
+        "shape": "DescribeSchedulingPoliciesResponse"
+      }
+    },
+    "DescribeServiceEnvironments": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/describeserviceenvironments"
+      },
+      "input": {
+        "shape": "DescribeServiceEnvironmentsRequest"
+      },
+      "internalonly": true,
+      "name": "DescribeServiceEnvironments",
+      "output": {
+        "shape": "DescribeServiceEnvironmentsResponse"
+      }
+    },
+    "DescribeServiceJob": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/describeservicejob"
+      },
+      "input": {
+        "shape": "DescribeServiceJobRequest"
+      },
+      "internalonly": true,
+      "name": "DescribeServiceJob",
+      "output": {
+        "shape": "DescribeServiceJobResponse"
+      }
+    },
+    "GetJobQueueSnapshot": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/getjobqueuesnapshot"
+      },
+      "input": {
+        "shape": "GetJobQueueSnapshotRequest"
+      },
+      "internalonly": true,
+      "name": "GetJobQueueSnapshot",
+      "output": {
+        "shape": "GetJobQueueSnapshotResponse"
+      }
+    },
+    "ListJobs": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/listjobs"
+      },
+      "input": {
+        "shape": "ListJobsRequest"
+      },
+      "name": "ListJobs",
+      "output": {
+        "shape": "ListJobsResponse"
+      }
+    },
+    "ListSchedulingPolicies": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/listschedulingpolicies"
+      },
+      "input": {
+        "shape": "ListSchedulingPoliciesRequest"
+      },
+      "name": "ListSchedulingPolicies",
+      "output": {
+        "shape": "ListSchedulingPoliciesResponse"
+      }
+    },
+    "ListServiceJobs": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/listservicejobs"
+      },
+      "input": {
+        "shape": "ListServiceJobsRequest"
+      },
+      "internalonly": true,
+      "name": "ListServiceJobs",
+      "output": {
+        "shape": "ListServiceJobsResponse"
+      }
+    },
+    "ListTagsForResource": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "GET",
+        "requestUri": "/v1/tags/{resourceArn}"
+      },
+      "input": {
+        "shape": "ListTagsForResourceRequest"
+      },
+      "name": "ListTagsForResource",
+      "output": {
+        "shape": "ListTagsForResourceResponse"
+      }
+    },
+    "RegisterJobDefinition": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/registerjobdefinition"
+      },
+      "input": {
+        "shape": "RegisterJobDefinitionRequest"
+      },
+      "name": "RegisterJobDefinition",
+      "output": {
+        "shape": "RegisterJobDefinitionResponse"
+      }
+    },
+    "SubmitJob": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/submitjob"
+      },
+      "input": {
+        "shape": "SubmitJobRequest"
+      },
+      "name": "SubmitJob",
+      "output": {
+        "shape": "SubmitJobResponse"
+      }
+    },
+    "SubmitServiceJob": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/submitservicejob"
+      },
+      "input": {
+        "shape": "SubmitServiceJobRequest"
+      },
+      "internalonly": true,
+      "name": "SubmitServiceJob",
+      "output": {
+        "shape": "SubmitServiceJobResponse"
+      }
+    },
+    "TagResource": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/tags/{resourceArn}"
+      },
+      "input": {
+        "shape": "TagResourceRequest"
+      },
+      "name": "TagResource",
+      "output": {
+        "shape": "TagResourceResponse"
+      }
+    },
+    "TerminateJob": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/terminatejob"
+      },
+      "input": {
+        "shape": "TerminateJobRequest"
+      },
+      "name": "TerminateJob",
+      "output": {
+        "shape": "TerminateJobResponse"
+      }
+    },
+    "TerminateServiceJob": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/terminateservicejob"
+      },
+      "input": {
+        "shape": "TerminateServiceJobRequest"
+      },
+      "internalonly": true,
+      "name": "TerminateServiceJob",
+      "output": {
+        "shape": "TerminateServiceJobResponse"
+      }
+    },
+    "UntagResource": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/v1/tags/{resourceArn}"
+      },
+      "input": {
+        "shape": "UntagResourceRequest"
+      },
+      "name": "UntagResource",
+      "output": {
+        "shape": "UntagResourceResponse"
+      }
+    },
+    "UpdateComputeEnvironment": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/updatecomputeenvironment"
+      },
+      "input": {
+        "shape": "UpdateComputeEnvironmentRequest"
+      },
+      "name": "UpdateComputeEnvironment",
+      "output": {
+        "shape": "UpdateComputeEnvironmentResponse"
+      }
+    },
+    "UpdateJobQueue": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/updatejobqueue"
+      },
+      "input": {
+        "shape": "UpdateJobQueueRequest"
+      },
+      "name": "UpdateJobQueue",
+      "output": {
+        "shape": "UpdateJobQueueResponse"
+      }
+    },
+    "UpdateSchedulingPolicy": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/updateschedulingpolicy"
+      },
+      "input": {
+        "shape": "UpdateSchedulingPolicyRequest"
+      },
+      "name": "UpdateSchedulingPolicy",
+      "output": {
+        "shape": "UpdateSchedulingPolicyResponse"
+      }
+    },
+    "UpdateServiceEnvironment": {
+      "errors": [
+        {
+          "shape": "ClientException"
+        },
+        {
+          "shape": "ServerException"
+        }
+      ],
+      "http": {
+        "method": "POST",
+        "requestUri": "/v1/updateserviceenvironment"
+      },
+      "input": {
+        "shape": "UpdateServiceEnvironmentRequest"
+      },
+      "internalonly": true,
+      "name": "UpdateServiceEnvironment",
+      "output": {
+        "shape": "UpdateServiceEnvironmentResponse"
+      }
+    }
+  },
+  "shapes": {
+    "ArrayJobDependency": {
+      "enum": [
+        "N_TO_N",
+        "SEQUENTIAL"
+      ],
+      "type": "string"
+    },
+    "ArrayJobStatusSummary": {
+      "key": {
+        "shape": "String"
+      },
+      "type": "map",
+      "value": {
+        "shape": "Integer"
+      }
+    },
+    "ArrayProperties": {
+      "members": {
+        "size": {
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "ArrayPropertiesDetail": {
+      "members": {
+        "index": {
+          "shape": "Integer"
+        },
+        "size": {
+          "shape": "Integer"
+        },
+        "statusSummary": {
+          "shape": "ArrayJobStatusSummary"
+        }
+      },
+      "type": "structure"
+    },
+    "ArrayPropertiesSummary": {
+      "members": {
+        "index": {
+          "shape": "Integer"
+        },
+        "size": {
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "AssignPublicIp": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "type": "string"
+    },
+    "AttemptContainerDetail": {
+      "members": {
+        "containerInstanceArn": {
+          "shape": "String"
+        },
+        "exitCode": {
+          "shape": "Integer"
+        },
+        "logStreamName": {
+          "shape": "String"
+        },
+        "networkInterfaces": {
+          "shape": "NetworkInterfaceList"
+        },
+        "reason": {
+          "shape": "String"
+        },
+        "taskArn": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "AttemptDetail": {
+      "members": {
+        "container": {
+          "shape": "AttemptContainerDetail"
+        },
+        "startedAt": {
+          "shape": "Long"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "stoppedAt": {
+          "shape": "Long"
+        },
+        "taskProperties": {
+          "internalonly": true,
+          "shape": "ListAttemptEcsTaskDetails"
+        }
+      },
+      "type": "structure"
+    },
+    "AttemptDetails": {
+      "member": {
+        "shape": "AttemptDetail"
+      },
+      "type": "list"
+    },
+    "AttemptEcsTaskDetails": {
+      "members": {
+        "containerInstanceArn": {
+          "shape": "String"
+        },
+        "containers": {
+          "shape": "ListAttemptTaskContainerDetails"
+        },
+        "taskArn": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "AttemptTaskContainerDetails": {
+      "members": {
+        "exitCode": {
+          "shape": "Integer"
+        },
+        "logStreamName": {
+          "shape": "String"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "networkInterfaces": {
+          "shape": "NetworkInterfaceList"
+        },
+        "reason": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "Boolean": {
+      "type": "boolean"
+    },
+    "CEState": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "type": "string"
+    },
+    "CEStatus": {
+      "enum": [
+        "CREATING",
+        "UPDATING",
+        "DELETING",
+        "DELETED",
+        "VALID",
+        "INVALID"
+      ],
+      "type": "string"
+    },
+    "CEType": {
+      "enum": [
+        "MANAGED",
+        "UNMANAGED"
+      ],
+      "type": "string"
+    },
+    "CRAllocationStrategy": {
+      "enum": [
+        "BEST_FIT",
+        "BEST_FIT_PROGRESSIVE",
+        "SPOT_CAPACITY_OPTIMIZED",
+        "SPOT_PRICE_CAPACITY_OPTIMIZED"
+      ],
+      "type": "string"
+    },
+    "CRType": {
+      "enum": [
+        "EC2",
+        "SPOT",
+        "FARGATE",
+        "FARGATE_SPOT"
+      ],
+      "type": "string"
+    },
+    "CRUpdateAllocationStrategy": {
+      "enum": [
+        "BEST_FIT_PROGRESSIVE",
+        "SPOT_CAPACITY_OPTIMIZED",
+        "SPOT_PRICE_CAPACITY_OPTIMIZED"
+      ],
+      "type": "string"
+    },
+    "CancelJobRequest": {
+      "members": {
+        "jobId": {
+          "shape": "String"
+        },
+        "reason": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobId",
+        "reason"
+      ],
+      "type": "structure"
+    },
+    "CancelJobResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "CapacityLimit": {
+      "internalonly": true,
+      "members": {
+        "capacityUnit": {
+          "shape": "String"
+        },
+        "maxCapacity": {
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "CapacityLimits": {
+      "internalonly": true,
+      "member": {
+        "shape": "CapacityLimit"
+      },
+      "type": "list"
+    },
+    "ClientException": {
+      "error": {
+        "httpStatusCode": 400
+      },
+      "exception": true,
+      "members": {
+        "message": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "ClientRequestToken": {
+      "max": 64,
+      "min": 1,
+      "type": "string"
+    },
+    "ComputeEnvironmentDetail": {
+      "members": {
+        "computeEnvironmentArn": {
+          "shape": "String"
+        },
+        "computeEnvironmentName": {
+          "shape": "String"
+        },
+        "computeResources": {
+          "shape": "ComputeResource"
+        },
+        "containerOrchestrationType": {
+          "shape": "OrchestrationType"
+        },
+        "ecsClusterArn": {
+          "shape": "String"
+        },
+        "eksConfiguration": {
+          "shape": "EksConfiguration"
+        },
+        "serviceRole": {
+          "shape": "String"
+        },
+        "state": {
+          "shape": "CEState"
+        },
+        "status": {
+          "shape": "CEStatus"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        },
+        "type": {
+          "shape": "CEType"
+        },
+        "unmanagedvCpus": {
+          "shape": "Integer"
+        },
+        "updatePolicy": {
+          "shape": "UpdatePolicy"
+        },
+        "uuid": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "computeEnvironmentName",
+        "computeEnvironmentArn"
+      ],
+      "type": "structure"
+    },
+    "ComputeEnvironmentDetailList": {
+      "member": {
+        "shape": "ComputeEnvironmentDetail"
+      },
+      "type": "list"
+    },
+    "ComputeEnvironmentOrder": {
+      "members": {
+        "computeEnvironment": {
+          "shape": "String"
+        },
+        "order": {
+          "shape": "Integer"
+        }
+      },
+      "required": [
+        "order",
+        "computeEnvironment"
+      ],
+      "type": "structure"
+    },
+    "ComputeEnvironmentOrders": {
+      "member": {
+        "shape": "ComputeEnvironmentOrder"
+      },
+      "type": "list"
+    },
+    "ComputeResource": {
+      "members": {
+        "allocationStrategy": {
+          "shape": "CRAllocationStrategy"
+        },
+        "bidPercentage": {
+          "shape": "Integer"
+        },
+        "desiredvCpus": {
+          "shape": "Integer"
+        },
+        "ec2Configuration": {
+          "shape": "Ec2ConfigurationList"
+        },
+        "ec2KeyPair": {
+          "shape": "String"
+        },
+        "imageId": {
+          "deprecated": true,
+          "deprecatedMessage": "This field is deprecated, use ec2Configuration[].imageIdOverride instead.",
+          "shape": "String"
+        },
+        "instanceRole": {
+          "shape": "String"
+        },
+        "instanceTypes": {
+          "shape": "StringList"
+        },
+        "launchTemplate": {
+          "shape": "LaunchTemplateSpecification"
+        },
+        "maxvCpus": {
+          "shape": "Integer"
+        },
+        "minvCpus": {
+          "shape": "Integer"
+        },
+        "placementGroup": {
+          "shape": "String"
+        },
+        "securityGroupIds": {
+          "shape": "StringList"
+        },
+        "spotIamFleetRole": {
+          "shape": "String"
+        },
+        "subnets": {
+          "shape": "StringList"
+        },
+        "tags": {
+          "shape": "TagsMap"
+        },
+        "type": {
+          "shape": "CRType"
+        }
+      },
+      "required": [
+        "type",
+        "maxvCpus",
+        "subnets"
+      ],
+      "type": "structure"
+    },
+    "ComputeResourceUpdate": {
+      "members": {
+        "allocationStrategy": {
+          "shape": "CRUpdateAllocationStrategy"
+        },
+        "bidPercentage": {
+          "shape": "Integer"
+        },
+        "desiredvCpus": {
+          "shape": "Integer"
+        },
+        "ec2Configuration": {
+          "shape": "Ec2ConfigurationList"
+        },
+        "ec2KeyPair": {
+          "shape": "String"
+        },
+        "imageId": {
+          "shape": "String"
+        },
+        "instanceRole": {
+          "shape": "String"
+        },
+        "instanceTypes": {
+          "shape": "StringList"
+        },
+        "launchTemplate": {
+          "shape": "LaunchTemplateSpecification"
+        },
+        "maxvCpus": {
+          "shape": "Integer"
+        },
+        "minvCpus": {
+          "shape": "Integer"
+        },
+        "placementGroup": {
+          "shape": "String"
+        },
+        "securityGroupIds": {
+          "shape": "StringList"
+        },
+        "subnets": {
+          "shape": "StringList"
+        },
+        "tags": {
+          "shape": "TagsMap"
+        },
+        "type": {
+          "shape": "CRType"
+        },
+        "updateToLatestImageVersion": {
+          "shape": "Boolean"
+        }
+      },
+      "type": "structure"
+    },
+    "ContainerDetail": {
+      "members": {
+        "command": {
+          "shape": "StringList"
+        },
+        "containerInstanceArn": {
+          "shape": "String"
+        },
+        "environment": {
+          "shape": "EnvironmentVariables"
+        },
+        "ephemeralStorage": {
+          "shape": "EphemeralStorage"
+        },
+        "executionRoleArn": {
+          "shape": "String"
+        },
+        "exitCode": {
+          "shape": "Integer"
+        },
+        "fargatePlatformConfiguration": {
+          "shape": "FargatePlatformConfiguration"
+        },
+        "image": {
+          "shape": "String"
+        },
+        "instanceType": {
+          "shape": "String"
+        },
+        "jobRoleArn": {
+          "shape": "String"
+        },
+        "linuxParameters": {
+          "shape": "LinuxParameters"
+        },
+        "logConfiguration": {
+          "shape": "LogConfiguration"
+        },
+        "logStreamName": {
+          "shape": "String"
+        },
+        "memory": {
+          "shape": "Integer"
+        },
+        "mountPoints": {
+          "shape": "MountPoints"
+        },
+        "networkConfiguration": {
+          "shape": "NetworkConfiguration"
+        },
+        "networkInterfaces": {
+          "shape": "NetworkInterfaceList"
+        },
+        "privileged": {
+          "shape": "Boolean"
+        },
+        "readonlyRootFilesystem": {
+          "shape": "Boolean"
+        },
+        "reason": {
+          "shape": "String"
+        },
+        "repositoryCredentials": {
+          "shape": "RepositoryCredentials"
+        },
+        "resourceRequirements": {
+          "shape": "ResourceRequirements"
+        },
+        "runtimePlatform": {
+          "shape": "RuntimePlatform"
+        },
+        "secrets": {
+          "shape": "SecretList"
+        },
+        "taskArn": {
+          "shape": "String"
+        },
+        "ulimits": {
+          "shape": "Ulimits"
+        },
+        "user": {
+          "shape": "String"
+        },
+        "vcpus": {
+          "shape": "Integer"
+        },
+        "volumes": {
+          "shape": "Volumes"
+        }
+      },
+      "type": "structure"
+    },
+    "ContainerOverrides": {
+      "members": {
+        "command": {
+          "shape": "StringList"
+        },
+        "environment": {
+          "shape": "EnvironmentVariables"
+        },
+        "instanceType": {
+          "shape": "String"
+        },
+        "memory": {
+          "deprecated": true,
+          "deprecatedMessage": "This field is deprecated, use resourceRequirements instead.",
+          "shape": "Integer"
+        },
+        "resourceRequirements": {
+          "shape": "ResourceRequirements"
+        },
+        "vcpus": {
+          "deprecated": true,
+          "deprecatedMessage": "This field is deprecated, use resourceRequirements instead.",
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "ContainerProperties": {
+      "members": {
+        "command": {
+          "shape": "StringList"
+        },
+        "environment": {
+          "shape": "EnvironmentVariables"
+        },
+        "ephemeralStorage": {
+          "shape": "EphemeralStorage"
+        },
+        "executionRoleArn": {
+          "shape": "String"
+        },
+        "fargatePlatformConfiguration": {
+          "shape": "FargatePlatformConfiguration"
+        },
+        "image": {
+          "shape": "String"
+        },
+        "instanceType": {
+          "shape": "String"
+        },
+        "jobRoleArn": {
+          "shape": "String"
+        },
+        "linuxParameters": {
+          "shape": "LinuxParameters"
+        },
+        "logConfiguration": {
+          "shape": "LogConfiguration"
+        },
+        "memory": {
+          "deprecated": true,
+          "deprecatedMessage": "This field is deprecated, use resourceRequirements instead.",
+          "shape": "Integer"
+        },
+        "mountPoints": {
+          "shape": "MountPoints"
+        },
+        "networkConfiguration": {
+          "shape": "NetworkConfiguration"
+        },
+        "privileged": {
+          "shape": "Boolean"
+        },
+        "readonlyRootFilesystem": {
+          "shape": "Boolean"
+        },
+        "repositoryCredentials": {
+          "shape": "RepositoryCredentials"
+        },
+        "resourceRequirements": {
+          "shape": "ResourceRequirements"
+        },
+        "runtimePlatform": {
+          "shape": "RuntimePlatform"
+        },
+        "secrets": {
+          "shape": "SecretList"
+        },
+        "ulimits": {
+          "shape": "Ulimits"
+        },
+        "user": {
+          "shape": "String"
+        },
+        "vcpus": {
+          "deprecated": true,
+          "deprecatedMessage": "This field is deprecated, use resourceRequirements instead.",
+          "shape": "Integer"
+        },
+        "volumes": {
+          "shape": "Volumes"
+        }
+      },
+      "type": "structure"
+    },
+    "ContainerSummary": {
+      "members": {
+        "exitCode": {
+          "shape": "Integer"
+        },
+        "reason": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "CreateComputeEnvironmentRequest": {
+      "members": {
+        "computeEnvironmentName": {
+          "shape": "String"
+        },
+        "computeResources": {
+          "shape": "ComputeResource"
+        },
+        "eksConfiguration": {
+          "shape": "EksConfiguration"
+        },
+        "serviceRole": {
+          "shape": "String"
+        },
+        "state": {
+          "shape": "CEState"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        },
+        "type": {
+          "shape": "CEType"
+        },
+        "unmanagedvCpus": {
+          "shape": "Integer"
+        }
+      },
+      "required": [
+        "computeEnvironmentName",
+        "type"
+      ],
+      "type": "structure"
+    },
+    "CreateComputeEnvironmentResponse": {
+      "members": {
+        "computeEnvironmentArn": {
+          "shape": "String"
+        },
+        "computeEnvironmentName": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "CreateJobQueueRequest": {
+      "members": {
+        "computeEnvironmentOrder": {
+          "shape": "ComputeEnvironmentOrders"
+        },
+        "jobQueueName": {
+          "shape": "String"
+        },
+        "jobQueueType": {
+          "internalonly": true,
+          "shape": "JobQueueType"
+        },
+        "jobStateTimeLimitActions": {
+          "shape": "JobStateTimeLimitActions"
+        },
+        "priority": {
+          "shape": "Integer"
+        },
+        "schedulingPolicyArn": {
+          "shape": "String"
+        },
+        "serviceEnvironmentOrder": {
+          "internalonly": true,
+          "shape": "ServiceEnvironmentOrders"
+        },
+        "state": {
+          "shape": "JQState"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        }
+      },
+      "required": [
+        "jobQueueName",
+        "priority"
+      ],
+      "type": "structure"
+    },
+    "CreateJobQueueResponse": {
+      "members": {
+        "jobQueueArn": {
+          "shape": "String"
+        },
+        "jobQueueName": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobQueueName",
+        "jobQueueArn"
+      ],
+      "type": "structure"
+    },
+    "CreateSchedulingPolicyRequest": {
+      "members": {
+        "fairsharePolicy": {
+          "shape": "FairsharePolicy"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "structure"
+    },
+    "CreateSchedulingPolicyResponse": {
+      "members": {
+        "arn": {
+          "shape": "String"
+        },
+        "name": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "name",
+        "arn"
+      ],
+      "type": "structure"
+    },
+    "CreateServiceEnvironmentRequest": {
+      "members": {
+        "capacityLimits": {
+          "shape": "CapacityLimits"
+        },
+        "serviceEnvironmentName": {
+          "shape": "String"
+        },
+        "serviceEnvironmentType": {
+          "shape": "ServiceEnvironmentType"
+        },
+        "state": {
+          "shape": "ServiceEnvironmentState"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        }
+      },
+      "required": [
+        "serviceEnvironmentName",
+        "serviceEnvironmentType",
+        "capacityLimits"
+      ],
+      "type": "structure"
+    },
+    "CreateServiceEnvironmentResponse": {
+      "members": {
+        "serviceEnvironmentArn": {
+          "shape": "String"
+        },
+        "serviceEnvironmentName": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "serviceEnvironmentName",
+        "serviceEnvironmentArn"
+      ],
+      "type": "structure"
+    },
+    "DeleteComputeEnvironmentRequest": {
+      "members": {
+        "computeEnvironment": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "computeEnvironment"
+      ],
+      "type": "structure"
+    },
+    "DeleteComputeEnvironmentResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "DeleteJobQueueRequest": {
+      "members": {
+        "jobQueue": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobQueue"
+      ],
+      "type": "structure"
+    },
+    "DeleteJobQueueResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "DeleteSchedulingPolicyRequest": {
+      "members": {
+        "arn": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "arn"
+      ],
+      "type": "structure"
+    },
+    "DeleteSchedulingPolicyResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "DeleteServiceEnvironmentRequest": {
+      "members": {
+        "serviceEnvironment": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "serviceEnvironment"
+      ],
+      "type": "structure"
+    },
+    "DeleteServiceEnvironmentResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "DeregisterJobDefinitionRequest": {
+      "members": {
+        "jobDefinition": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobDefinition"
+      ],
+      "type": "structure"
+    },
+    "DeregisterJobDefinitionResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "DescribeComputeEnvironmentsRequest": {
+      "members": {
+        "computeEnvironments": {
+          "shape": "StringList"
+        },
+        "maxResults": {
+          "shape": "Integer"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeComputeEnvironmentsResponse": {
+      "members": {
+        "computeEnvironments": {
+          "shape": "ComputeEnvironmentDetailList"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeJobDefinitionsRequest": {
+      "members": {
+        "jobDefinitionName": {
+          "shape": "String"
+        },
+        "jobDefinitions": {
+          "shape": "StringList"
+        },
+        "maxResults": {
+          "shape": "Integer"
+        },
+        "nextToken": {
+          "shape": "String"
+        },
+        "status": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeJobDefinitionsResponse": {
+      "members": {
+        "jobDefinitions": {
+          "shape": "JobDefinitionList"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeJobQueuesRequest": {
+      "members": {
+        "jobQueues": {
+          "shape": "StringList"
+        },
+        "maxResults": {
+          "shape": "Integer"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeJobQueuesResponse": {
+      "members": {
+        "jobQueues": {
+          "shape": "JobQueueDetailList"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeJobsRequest": {
+      "members": {
+        "jobs": {
+          "shape": "StringList"
+        }
+      },
+      "required": [
+        "jobs"
+      ],
+      "type": "structure"
+    },
+    "DescribeJobsResponse": {
+      "members": {
+        "jobs": {
+          "shape": "JobDetailList"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeSchedulingPoliciesRequest": {
+      "members": {
+        "arns": {
+          "shape": "StringList"
+        }
+      },
+      "required": [
+        "arns"
+      ],
+      "type": "structure"
+    },
+    "DescribeSchedulingPoliciesResponse": {
+      "members": {
+        "schedulingPolicies": {
+          "shape": "SchedulingPolicyDetailList"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeServiceEnvironmentsRequest": {
+      "members": {
+        "maxResults": {
+          "shape": "Integer"
+        },
+        "nextToken": {
+          "shape": "String"
+        },
+        "serviceEnvironments": {
+          "shape": "StringList"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeServiceEnvironmentsResponse": {
+      "members": {
+        "nextToken": {
+          "shape": "String"
+        },
+        "serviceEnvironments": {
+          "shape": "ServiceEnvironmentDetailList"
+        }
+      },
+      "type": "structure"
+    },
+    "DescribeServiceJobRequest": {
+      "members": {
+        "jobId": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobId"
+      ],
+      "type": "structure"
+    },
+    "DescribeServiceJobResponse": {
+      "members": {
+        "attempts": {
+          "shape": "ServiceJobAttemptDetails"
+        },
+        "createdAt": {
+          "shape": "Long"
+        },
+        "isTerminated": {
+          "shape": "Boolean"
+        },
+        "jobArn": {
+          "shape": "String"
+        },
+        "jobId": {
+          "shape": "String"
+        },
+        "jobName": {
+          "shape": "String"
+        },
+        "jobQueue": {
+          "shape": "String"
+        },
+        "latestAttempt": {
+          "shape": "LatestServiceJobAttempt"
+        },
+        "retryStrategy": {
+          "shape": "ServiceJobRetryStrategy"
+        },
+        "schedulingPriority": {
+          "shape": "Integer"
+        },
+        "serviceJobType": {
+          "shape": "ServiceJobType"
+        },
+        "serviceRequestPayload": {
+          "shape": "String"
+        },
+        "shareIdentifier": {
+          "shape": "String"
+        },
+        "startedAt": {
+          "shape": "Long"
+        },
+        "status": {
+          "shape": "ServiceJobStatus"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "stoppedAt": {
+          "shape": "Long"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        },
+        "timeoutConfig": {
+          "shape": "ServiceJobTimeout"
+        }
+      },
+      "required": [
+        "jobId",
+        "jobName",
+        "jobQueue",
+        "serviceJobType",
+        "startedAt",
+        "status"
+      ],
+      "type": "structure"
+    },
+    "Device": {
+      "members": {
+        "containerPath": {
+          "shape": "String"
+        },
+        "hostPath": {
+          "shape": "String"
+        },
+        "permissions": {
+          "shape": "DeviceCgroupPermissions"
+        }
+      },
+      "required": [
+        "hostPath"
+      ],
+      "type": "structure"
+    },
+    "DeviceCgroupPermission": {
+      "enum": [
+        "READ",
+        "WRITE",
+        "MKNOD"
+      ],
+      "type": "string"
+    },
+    "DeviceCgroupPermissions": {
+      "member": {
+        "shape": "DeviceCgroupPermission"
+      },
+      "type": "list"
+    },
+    "DevicesList": {
+      "member": {
+        "shape": "Device"
+      },
+      "type": "list"
+    },
+    "EFSAuthorizationConfig": {
+      "members": {
+        "accessPointId": {
+          "shape": "String"
+        },
+        "iam": {
+          "shape": "EFSAuthorizationConfigIAM"
+        }
+      },
+      "type": "structure"
+    },
+    "EFSAuthorizationConfigIAM": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "type": "string"
+    },
+    "EFSTransitEncryption": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "type": "string"
+    },
+    "EFSVolumeConfiguration": {
+      "members": {
+        "authorizationConfig": {
+          "shape": "EFSAuthorizationConfig"
+        },
+        "fileSystemId": {
+          "shape": "String"
+        },
+        "rootDirectory": {
+          "shape": "String"
+        },
+        "transitEncryption": {
+          "shape": "EFSTransitEncryption"
+        },
+        "transitEncryptionPort": {
+          "shape": "Integer"
+        }
+      },
+      "required": [
+        "fileSystemId"
+      ],
+      "type": "structure"
+    },
+    "Ec2Configuration": {
+      "members": {
+        "imageIdOverride": {
+          "shape": "ImageIdOverride"
+        },
+        "imageKubernetesVersion": {
+          "shape": "KubernetesVersion"
+        },
+        "imageType": {
+          "shape": "ImageType"
+        }
+      },
+      "required": [
+        "imageType"
+      ],
+      "type": "structure"
+    },
+    "Ec2ConfigurationList": {
+      "member": {
+        "shape": "Ec2Configuration"
+      },
+      "type": "list"
+    },
+    "EcsProperties": {
+      "members": {
+        "taskProperties": {
+          "shape": "ListEcsTaskProperties"
+        }
+      },
+      "required": [
+        "taskProperties"
+      ],
+      "type": "structure"
+    },
+    "EcsPropertiesDetail": {
+      "members": {
+        "taskProperties": {
+          "shape": "ListEcsTaskDetails"
+        }
+      },
+      "type": "structure"
+    },
+    "EcsPropertiesOverride": {
+      "members": {
+        "taskProperties": {
+          "shape": "ListTaskPropertiesOverride"
+        }
+      },
+      "type": "structure"
+    },
+    "EcsTaskDetails": {
+      "members": {
+        "containerInstanceArn": {
+          "shape": "String"
+        },
+        "containers": {
+          "shape": "ListTaskContainerDetails"
+        },
+        "ephemeralStorage": {
+          "shape": "EphemeralStorage"
+        },
+        "executionRoleArn": {
+          "shape": "String"
+        },
+        "ipcMode": {
+          "shape": "String"
+        },
+        "networkConfiguration": {
+          "shape": "NetworkConfiguration"
+        },
+        "pidMode": {
+          "shape": "String"
+        },
+        "platformVersion": {
+          "shape": "String"
+        },
+        "runtimePlatform": {
+          "shape": "RuntimePlatform"
+        },
+        "taskArn": {
+          "shape": "String"
+        },
+        "taskRoleArn": {
+          "shape": "String"
+        },
+        "volumes": {
+          "shape": "Volumes"
+        }
+      },
+      "type": "structure"
+    },
+    "EcsTaskProperties": {
+      "members": {
+        "containers": {
+          "shape": "ListTaskContainerProperties"
+        },
+        "ephemeralStorage": {
+          "shape": "EphemeralStorage"
+        },
+        "executionRoleArn": {
+          "shape": "String"
+        },
+        "ipcMode": {
+          "shape": "String"
+        },
+        "networkConfiguration": {
+          "shape": "NetworkConfiguration"
+        },
+        "pidMode": {
+          "shape": "String"
+        },
+        "platformVersion": {
+          "shape": "String"
+        },
+        "runtimePlatform": {
+          "shape": "RuntimePlatform"
+        },
+        "taskRoleArn": {
+          "shape": "String"
+        },
+        "volumes": {
+          "shape": "Volumes"
+        }
+      },
+      "required": [
+        "containers"
+      ],
+      "type": "structure"
+    },
+    "EksAttemptContainerDetail": {
+      "members": {
+        "exitCode": {
+          "shape": "Integer"
+        },
+        "reason": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "EksAttemptContainerDetails": {
+      "member": {
+        "shape": "EksAttemptContainerDetail"
+      },
+      "type": "list"
+    },
+    "EksAttemptDetail": {
+      "members": {
+        "containers": {
+          "shape": "EksAttemptContainerDetails"
+        },
+        "initContainers": {
+          "shape": "EksAttemptContainerDetails"
+        },
+        "nodeName": {
+          "shape": "String"
+        },
+        "podName": {
+          "shape": "String"
+        },
+        "startedAt": {
+          "shape": "Long"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "stoppedAt": {
+          "shape": "Long"
+        }
+      },
+      "type": "structure"
+    },
+    "EksAttemptDetails": {
+      "member": {
+        "shape": "EksAttemptDetail"
+      },
+      "type": "list"
+    },
+    "EksConfiguration": {
+      "members": {
+        "eksClusterArn": {
+          "shape": "String"
+        },
+        "kubernetesNamespace": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "eksClusterArn",
+        "kubernetesNamespace"
+      ],
+      "type": "structure"
+    },
+    "EksContainer": {
+      "members": {
+        "args": {
+          "shape": "StringList"
+        },
+        "command": {
+          "shape": "StringList"
+        },
+        "env": {
+          "shape": "EksContainerEnvironmentVariables"
+        },
+        "image": {
+          "shape": "String"
+        },
+        "imagePullPolicy": {
+          "shape": "String"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "resources": {
+          "shape": "EksContainerResourceRequirements"
+        },
+        "securityContext": {
+          "shape": "EksContainerSecurityContext"
+        },
+        "volumeMounts": {
+          "shape": "EksContainerVolumeMounts"
+        }
+      },
+      "required": [
+        "image"
+      ],
+      "type": "structure"
+    },
+    "EksContainerDetail": {
+      "members": {
+        "args": {
+          "shape": "StringList"
+        },
+        "command": {
+          "shape": "StringList"
+        },
+        "env": {
+          "shape": "EksContainerEnvironmentVariables"
+        },
+        "exitCode": {
+          "shape": "Integer"
+        },
+        "image": {
+          "shape": "String"
+        },
+        "imagePullPolicy": {
+          "shape": "String"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "reason": {
+          "shape": "String"
+        },
+        "resources": {
+          "shape": "EksContainerResourceRequirements"
+        },
+        "securityContext": {
+          "shape": "EksContainerSecurityContext"
+        },
+        "volumeMounts": {
+          "shape": "EksContainerVolumeMounts"
+        }
+      },
+      "type": "structure"
+    },
+    "EksContainerDetails": {
+      "member": {
+        "shape": "EksContainerDetail"
+      },
+      "type": "list"
+    },
+    "EksContainerEnvironmentVariable": {
+      "members": {
+        "name": {
+          "shape": "String"
+        },
+        "value": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "structure"
+    },
+    "EksContainerEnvironmentVariables": {
+      "member": {
+        "shape": "EksContainerEnvironmentVariable"
+      },
+      "type": "list"
+    },
+    "EksContainerOverride": {
+      "members": {
+        "args": {
+          "shape": "StringList"
+        },
+        "command": {
+          "shape": "StringList"
+        },
+        "env": {
+          "shape": "EksContainerEnvironmentVariables"
+        },
+        "image": {
+          "shape": "String"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "resources": {
+          "shape": "EksContainerResourceRequirements"
+        }
+      },
+      "type": "structure"
+    },
+    "EksContainerOverrideList": {
+      "member": {
+        "shape": "EksContainerOverride"
+      },
+      "type": "list"
+    },
+    "EksContainerResourceRequirements": {
+      "members": {
+        "limits": {
+          "shape": "EksLimits"
+        },
+        "requests": {
+          "shape": "EksRequests"
+        }
+      },
+      "type": "structure"
+    },
+    "EksContainerSecurityContext": {
+      "members": {
+        "allowPrivilegeEscalation": {
+          "shape": "Boolean"
+        },
+        "privileged": {
+          "shape": "Boolean"
+        },
+        "readOnlyRootFilesystem": {
+          "shape": "Boolean"
+        },
+        "runAsGroup": {
+          "shape": "Long"
+        },
+        "runAsNonRoot": {
+          "shape": "Boolean"
+        },
+        "runAsUser": {
+          "shape": "Long"
+        }
+      },
+      "type": "structure"
+    },
+    "EksContainerVolumeMount": {
+      "members": {
+        "mountPath": {
+          "shape": "String"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "readOnly": {
+          "shape": "Boolean"
+        }
+      },
+      "type": "structure"
+    },
+    "EksContainerVolumeMounts": {
+      "member": {
+        "shape": "EksContainerVolumeMount"
+      },
+      "type": "list"
+    },
+    "EksContainers": {
+      "member": {
+        "shape": "EksContainer"
+      },
+      "type": "list"
+    },
+    "EksEmptyDir": {
+      "members": {
+        "medium": {
+          "shape": "String"
+        },
+        "sizeLimit": {
+          "shape": "Quantity"
+        }
+      },
+      "type": "structure"
+    },
+    "EksHostPath": {
+      "members": {
+        "path": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "EksLabelsMap": {
+      "key": {
+        "shape": "String"
+      },
+      "type": "map",
+      "value": {
+        "shape": "String"
+      }
+    },
+    "EksLimits": {
+      "key": {
+        "shape": "String"
+      },
+      "type": "map",
+      "value": {
+        "shape": "Quantity"
+      }
+    },
+    "EksMetadata": {
+      "members": {
+        "labels": {
+          "shape": "EksLabelsMap"
+        }
+      },
+      "type": "structure"
+    },
+    "EksPodProperties": {
+      "members": {
+        "containers": {
+          "shape": "EksContainers"
+        },
+        "dnsPolicy": {
+          "shape": "String"
+        },
+        "hostNetwork": {
+          "shape": "Boolean"
+        },
+        "imagePullSecrets": {
+          "shape": "ImagePullSecrets"
+        },
+        "initContainers": {
+          "shape": "EksContainers"
+        },
+        "metadata": {
+          "shape": "EksMetadata"
+        },
+        "serviceAccountName": {
+          "shape": "String"
+        },
+        "shareProcessNamespace": {
+          "shape": "Boolean"
+        },
+        "volumes": {
+          "shape": "EksVolumes"
+        }
+      },
+      "type": "structure"
+    },
+    "EksPodPropertiesDetail": {
+      "members": {
+        "containers": {
+          "shape": "EksContainerDetails"
+        },
+        "dnsPolicy": {
+          "shape": "String"
+        },
+        "hostNetwork": {
+          "shape": "Boolean"
+        },
+        "imagePullSecrets": {
+          "shape": "ImagePullSecrets"
+        },
+        "initContainers": {
+          "shape": "EksContainerDetails"
+        },
+        "metadata": {
+          "shape": "EksMetadata"
+        },
+        "nodeName": {
+          "shape": "String"
+        },
+        "podName": {
+          "shape": "String"
+        },
+        "serviceAccountName": {
+          "shape": "String"
+        },
+        "shareProcessNamespace": {
+          "shape": "Boolean"
+        },
+        "volumes": {
+          "shape": "EksVolumes"
+        }
+      },
+      "type": "structure"
+    },
+    "EksPodPropertiesOverride": {
+      "members": {
+        "containers": {
+          "shape": "EksContainerOverrideList"
+        },
+        "initContainers": {
+          "shape": "EksContainerOverrideList"
+        },
+        "metadata": {
+          "shape": "EksMetadata"
+        }
+      },
+      "type": "structure"
+    },
+    "EksProperties": {
+      "members": {
+        "podProperties": {
+          "shape": "EksPodProperties"
+        }
+      },
+      "type": "structure"
+    },
+    "EksPropertiesDetail": {
+      "members": {
+        "podProperties": {
+          "shape": "EksPodPropertiesDetail"
+        }
+      },
+      "type": "structure"
+    },
+    "EksPropertiesOverride": {
+      "members": {
+        "podProperties": {
+          "shape": "EksPodPropertiesOverride"
+        }
+      },
+      "type": "structure"
+    },
+    "EksRequests": {
+      "key": {
+        "shape": "String"
+      },
+      "type": "map",
+      "value": {
+        "shape": "Quantity"
+      }
+    },
+    "EksSecret": {
+      "members": {
+        "optional": {
+          "shape": "Boolean"
+        },
+        "secretName": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "secretName"
+      ],
+      "type": "structure"
+    },
+    "EksVolume": {
+      "members": {
+        "emptyDir": {
+          "shape": "EksEmptyDir"
+        },
+        "hostPath": {
+          "shape": "EksHostPath"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "secret": {
+          "shape": "EksSecret"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "structure"
+    },
+    "EksVolumes": {
+      "member": {
+        "shape": "EksVolume"
+      },
+      "type": "list"
+    },
+    "EnvironmentVariables": {
+      "member": {
+        "shape": "KeyValuePair"
+      },
+      "type": "list"
+    },
+    "EphemeralStorage": {
+      "members": {
+        "sizeInGiB": {
+          "shape": "Integer"
+        }
+      },
+      "required": [
+        "sizeInGiB"
+      ],
+      "type": "structure"
+    },
+    "EvaluateOnExit": {
+      "members": {
+        "action": {
+          "shape": "RetryAction"
+        },
+        "onExitCode": {
+          "shape": "String"
+        },
+        "onReason": {
+          "shape": "String"
+        },
+        "onStatusReason": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "structure"
+    },
+    "EvaluateOnExitList": {
+      "member": {
+        "shape": "EvaluateOnExit"
+      },
+      "type": "list"
+    },
+    "FairsharePolicy": {
+      "members": {
+        "computeReservation": {
+          "shape": "Integer"
+        },
+        "shareDecaySeconds": {
+          "shape": "Integer"
+        },
+        "shareDistribution": {
+          "shape": "ShareAttributesList"
+        }
+      },
+      "type": "structure"
+    },
+    "FargatePlatformConfiguration": {
+      "members": {
+        "platformVersion": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "Float": {
+      "type": "float"
+    },
+    "FrontOfQueueDetail": {
+      "members": {
+        "jobs": {
+          "shape": "FrontOfQueueJobSummaryList"
+        },
+        "lastUpdatedAt": {
+          "shape": "Long"
+        }
+      },
+      "type": "structure"
+    },
+    "FrontOfQueueJobSummary": {
+      "members": {
+        "earliestTimeAtPosition": {
+          "shape": "Long"
+        },
+        "jobArn": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "FrontOfQueueJobSummaryList": {
+      "member": {
+        "shape": "FrontOfQueueJobSummary"
+      },
+      "type": "list"
+    },
+    "GetJobQueueSnapshotRequest": {
+      "members": {
+        "jobQueue": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "GetJobQueueSnapshotResponse": {
+      "members": {
+        "frontOfQueue": {
+          "shape": "FrontOfQueueDetail"
+        }
+      },
+      "type": "structure"
+    },
+    "Host": {
+      "members": {
+        "sourcePath": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "ImageIdOverride": {
+      "max": 256,
+      "min": 1,
+      "type": "string"
+    },
+    "ImagePullSecret": {
+      "members": {
+        "name": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "structure"
+    },
+    "ImagePullSecrets": {
+      "member": {
+        "shape": "ImagePullSecret"
+      },
+      "type": "list"
+    },
+    "ImageType": {
+      "max": 256,
+      "min": 1,
+      "type": "string"
+    },
+    "Integer": {
+      "type": "integer"
+    },
+    "JQState": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "type": "string"
+    },
+    "JQStatus": {
+      "enum": [
+        "CREATING",
+        "UPDATING",
+        "DELETING",
+        "DELETED",
+        "VALID",
+        "INVALID"
+      ],
+      "type": "string"
+    },
+    "JobDefinition": {
+      "members": {
+        "containerOrchestrationType": {
+          "shape": "OrchestrationType"
+        },
+        "containerProperties": {
+          "shape": "ContainerProperties"
+        },
+        "ecsProperties": {
+          "shape": "EcsProperties"
+        },
+        "eksProperties": {
+          "shape": "EksProperties"
+        },
+        "jobDefinitionArn": {
+          "shape": "String"
+        },
+        "jobDefinitionName": {
+          "shape": "String"
+        },
+        "nodeProperties": {
+          "shape": "NodeProperties"
+        },
+        "parameters": {
+          "shape": "ParametersMap"
+        },
+        "platformCapabilities": {
+          "shape": "PlatformCapabilityList"
+        },
+        "propagateTags": {
+          "shape": "Boolean"
+        },
+        "retryStrategy": {
+          "shape": "RetryStrategy"
+        },
+        "revision": {
+          "shape": "Integer"
+        },
+        "schedulingPriority": {
+          "shape": "Integer"
+        },
+        "status": {
+          "shape": "String"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        },
+        "timeout": {
+          "shape": "JobTimeout"
+        },
+        "type": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobDefinitionName",
+        "jobDefinitionArn",
+        "revision",
+        "type"
+      ],
+      "type": "structure"
+    },
+    "JobDefinitionList": {
+      "member": {
+        "shape": "JobDefinition"
+      },
+      "type": "list"
+    },
+    "JobDefinitionType": {
+      "enum": [
+        "container",
+        "multinode"
+      ],
+      "type": "string"
+    },
+    "JobDependency": {
+      "members": {
+        "jobId": {
+          "shape": "String"
+        },
+        "type": {
+          "shape": "ArrayJobDependency"
+        }
+      },
+      "type": "structure"
+    },
+    "JobDependencyList": {
+      "member": {
+        "shape": "JobDependency"
+      },
+      "type": "list"
+    },
+    "JobDetail": {
+      "members": {
+        "arrayProperties": {
+          "shape": "ArrayPropertiesDetail"
+        },
+        "attempts": {
+          "shape": "AttemptDetails"
+        },
+        "container": {
+          "shape": "ContainerDetail"
+        },
+        "createdAt": {
+          "shape": "Long"
+        },
+        "dependsOn": {
+          "shape": "JobDependencyList"
+        },
+        "ecsProperties": {
+          "shape": "EcsPropertiesDetail"
+        },
+        "eksAttempts": {
+          "shape": "EksAttemptDetails"
+        },
+        "eksProperties": {
+          "shape": "EksPropertiesDetail"
+        },
+        "isCancelled": {
+          "shape": "Boolean"
+        },
+        "isTerminated": {
+          "shape": "Boolean"
+        },
+        "jobArn": {
+          "shape": "String"
+        },
+        "jobDefinition": {
+          "shape": "String"
+        },
+        "jobId": {
+          "shape": "String"
+        },
+        "jobName": {
+          "shape": "String"
+        },
+        "jobQueue": {
+          "shape": "String"
+        },
+        "nodeDetails": {
+          "shape": "NodeDetails"
+        },
+        "nodeProperties": {
+          "shape": "NodeProperties"
+        },
+        "parameters": {
+          "shape": "ParametersMap"
+        },
+        "platformCapabilities": {
+          "shape": "PlatformCapabilityList"
+        },
+        "propagateTags": {
+          "shape": "Boolean"
+        },
+        "retryStrategy": {
+          "shape": "RetryStrategy"
+        },
+        "schedulingPriority": {
+          "shape": "Integer"
+        },
+        "shareIdentifier": {
+          "shape": "String"
+        },
+        "startedAt": {
+          "shape": "Long"
+        },
+        "status": {
+          "shape": "JobStatus"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "stoppedAt": {
+          "shape": "Long"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        },
+        "timeout": {
+          "shape": "JobTimeout"
+        }
+      },
+      "required": [
+        "jobName",
+        "jobId",
+        "jobQueue",
+        "status",
+        "startedAt",
+        "jobDefinition"
+      ],
+      "type": "structure"
+    },
+    "JobDetailList": {
+      "member": {
+        "shape": "JobDetail"
+      },
+      "type": "list"
+    },
+    "JobExecutionTimeoutMinutes": {
+      "max": 360,
+      "min": 1,
+      "type": "long"
+    },
+    "JobQueueDetail": {
+      "members": {
+        "computeEnvironmentOrder": {
+          "shape": "ComputeEnvironmentOrders"
+        },
+        "jobQueueArn": {
+          "shape": "String"
+        },
+        "jobQueueName": {
+          "shape": "String"
+        },
+        "jobQueueType": {
+          "internalonly": true,
+          "shape": "JobQueueType"
+        },
+        "jobStateTimeLimitActions": {
+          "shape": "JobStateTimeLimitActions"
+        },
+        "priority": {
+          "shape": "Integer"
+        },
+        "schedulingPolicyArn": {
+          "shape": "String"
+        },
+        "serviceEnvironmentOrder": {
+          "internalonly": true,
+          "shape": "ServiceEnvironmentOrders"
+        },
+        "state": {
+          "shape": "JQState"
+        },
+        "status": {
+          "shape": "JQStatus"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        }
+      },
+      "required": [
+        "jobQueueName",
+        "jobQueueArn",
+        "state",
+        "priority",
+        "computeEnvironmentOrder"
+      ],
+      "type": "structure"
+    },
+    "JobQueueDetailList": {
+      "member": {
+        "shape": "JobQueueDetail"
+      },
+      "type": "list"
+    },
+    "JobQueueType": {
+      "enum": [
+        "EKS",
+        "ECS",
+        "ECS_FARGATE",
+        "SAGEMAKER_TRAINING"
+      ],
+      "internalonly": true,
+      "type": "string"
+    },
+    "JobStateTimeLimitAction": {
+      "members": {
+        "action": {
+          "shape": "JobStateTimeLimitActionsAction"
+        },
+        "maxTimeSeconds": {
+          "shape": "Integer"
+        },
+        "reason": {
+          "shape": "String"
+        },
+        "state": {
+          "shape": "JobStateTimeLimitActionsState"
+        }
+      },
+      "required": [
+        "reason",
+        "state",
+        "maxTimeSeconds",
+        "action"
+      ],
+      "type": "structure"
+    },
+    "JobStateTimeLimitActions": {
+      "member": {
+        "shape": "JobStateTimeLimitAction"
+      },
+      "type": "list"
+    },
+    "JobStateTimeLimitActionsAction": {
+      "enum": [
+        "CANCEL",
+        "TERMINATE"
+      ],
+      "type": "string"
+    },
+    "JobStateTimeLimitActionsState": {
+      "enum": [
+        "RUNNABLE"
+      ],
+      "type": "string"
+    },
+    "JobStatus": {
+      "enum": [
+        "SUBMITTED",
+        "PENDING",
+        "RUNNABLE",
+        "STARTING",
+        "RUNNING",
+        "SUCCEEDED",
+        "FAILED"
+      ],
+      "type": "string"
+    },
+    "JobSummary": {
+      "members": {
+        "arrayProperties": {
+          "shape": "ArrayPropertiesSummary"
+        },
+        "container": {
+          "shape": "ContainerSummary"
+        },
+        "createdAt": {
+          "shape": "Long"
+        },
+        "jobArn": {
+          "shape": "String"
+        },
+        "jobDefinition": {
+          "shape": "String"
+        },
+        "jobId": {
+          "shape": "String"
+        },
+        "jobName": {
+          "shape": "String"
+        },
+        "nodeProperties": {
+          "shape": "NodePropertiesSummary"
+        },
+        "startedAt": {
+          "shape": "Long"
+        },
+        "status": {
+          "shape": "JobStatus"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "stoppedAt": {
+          "shape": "Long"
+        }
+      },
+      "required": [
+        "jobId",
+        "jobName"
+      ],
+      "type": "structure"
+    },
+    "JobSummaryList": {
+      "member": {
+        "shape": "JobSummary"
+      },
+      "type": "list"
+    },
+    "JobTimeout": {
+      "members": {
+        "attemptDurationSeconds": {
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "KeyValuePair": {
+      "members": {
+        "name": {
+          "shape": "String"
+        },
+        "value": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "KeyValuesPair": {
+      "members": {
+        "name": {
+          "shape": "String"
+        },
+        "values": {
+          "shape": "StringList"
+        }
+      },
+      "type": "structure"
+    },
+    "KubernetesVersion": {
+      "max": 256,
+      "min": 1,
+      "type": "string"
+    },
+    "LatestServiceJobAttempt": {
+      "internalonly": true,
+      "members": {
+        "serviceResourceId": {
+          "shape": "ServiceResourceId"
+        }
+      },
+      "type": "structure"
+    },
+    "LaunchTemplateSpecification": {
+      "members": {
+        "launchTemplateId": {
+          "shape": "String"
+        },
+        "launchTemplateName": {
+          "shape": "String"
+        },
+        "version": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "LinuxParameters": {
+      "members": {
+        "devices": {
+          "shape": "DevicesList"
+        },
+        "initProcessEnabled": {
+          "shape": "Boolean"
+        },
+        "maxSwap": {
+          "shape": "Integer"
+        },
+        "sharedMemorySize": {
+          "shape": "Integer"
+        },
+        "swappiness": {
+          "shape": "Integer"
+        },
+        "tmpfs": {
+          "shape": "TmpfsList"
+        }
+      },
+      "type": "structure"
+    },
+    "ListAttemptEcsTaskDetails": {
+      "member": {
+        "shape": "AttemptEcsTaskDetails"
+      },
+      "type": "list"
+    },
+    "ListAttemptTaskContainerDetails": {
+      "member": {
+        "shape": "AttemptTaskContainerDetails"
+      },
+      "type": "list"
+    },
+    "ListEcsTaskDetails": {
+      "member": {
+        "shape": "EcsTaskDetails"
+      },
+      "type": "list"
+    },
+    "ListEcsTaskProperties": {
+      "member": {
+        "shape": "EcsTaskProperties"
+      },
+      "type": "list"
+    },
+    "ListJobsFilterList": {
+      "member": {
+        "shape": "KeyValuesPair"
+      },
+      "type": "list"
+    },
+    "ListJobsRequest": {
+      "members": {
+        "arrayJobId": {
+          "shape": "String"
+        },
+        "filters": {
+          "shape": "ListJobsFilterList"
+        },
+        "jobQueue": {
+          "shape": "String"
+        },
+        "jobStatus": {
+          "shape": "JobStatus"
+        },
+        "maxResults": {
+          "shape": "Integer"
+        },
+        "multiNodeJobId": {
+          "shape": "String"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "ListJobsResponse": {
+      "members": {
+        "jobSummaryList": {
+          "shape": "JobSummaryList"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobSummaryList"
+      ],
+      "type": "structure"
+    },
+    "ListSchedulingPoliciesRequest": {
+      "members": {
+        "maxResults": {
+          "shape": "Integer"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "ListSchedulingPoliciesResponse": {
+      "members": {
+        "nextToken": {
+          "shape": "String"
+        },
+        "schedulingPolicies": {
+          "shape": "SchedulingPolicyListingDetailList"
+        }
+      },
+      "type": "structure"
+    },
+    "ListServiceJobsRequest": {
+      "members": {
+        "filters": {
+          "shape": "ListJobsFilterList"
+        },
+        "jobQueue": {
+          "shape": "String"
+        },
+        "jobStatus": {
+          "shape": "ServiceJobStatus"
+        },
+        "maxResults": {
+          "shape": "Integer"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "ListServiceJobsResponse": {
+      "members": {
+        "jobSummaryList": {
+          "shape": "ServiceJobSummaryList"
+        },
+        "nextToken": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobSummaryList"
+      ],
+      "type": "structure"
+    },
+    "ListTagsForResourceRequest": {
+      "members": {
+        "resourceArn": {
+          "location": "uri",
+          "locationName": "resourceArn",
+          "shape": "String"
+        }
+      },
+      "required": [
+        "resourceArn"
+      ],
+      "type": "structure"
+    },
+    "ListTagsForResourceResponse": {
+      "members": {
+        "tags": {
+          "shape": "TagrisTagsMap"
+        }
+      },
+      "type": "structure"
+    },
+    "ListTaskContainerDetails": {
+      "member": {
+        "shape": "TaskContainerDetails"
+      },
+      "type": "list"
+    },
+    "ListTaskContainerOverrides": {
+      "member": {
+        "shape": "TaskContainerOverrides"
+      },
+      "type": "list"
+    },
+    "ListTaskContainerProperties": {
+      "member": {
+        "shape": "TaskContainerProperties"
+      },
+      "type": "list"
+    },
+    "ListTaskPropertiesOverride": {
+      "member": {
+        "shape": "TaskPropertiesOverride"
+      },
+      "type": "list"
+    },
+    "LogConfiguration": {
+      "members": {
+        "logDriver": {
+          "shape": "LogDriver"
+        },
+        "options": {
+          "shape": "LogConfigurationOptionsMap"
+        },
+        "secretOptions": {
+          "shape": "SecretList"
+        }
+      },
+      "required": [
+        "logDriver"
+      ],
+      "type": "structure"
+    },
+    "LogConfigurationOptionsMap": {
+      "key": {
+        "shape": "String"
+      },
+      "type": "map",
+      "value": {
+        "shape": "String"
+      }
+    },
+    "LogDriver": {
+      "enum": [
+        "json-file",
+        "syslog",
+        "journald",
+        "gelf",
+        "fluentd",
+        "awslogs",
+        "splunk"
+      ],
+      "type": "string"
+    },
+    "Long": {
+      "type": "long"
+    },
+    "MountPoint": {
+      "members": {
+        "containerPath": {
+          "shape": "String"
+        },
+        "readOnly": {
+          "shape": "Boolean"
+        },
+        "sourceVolume": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "MountPoints": {
+      "member": {
+        "shape": "MountPoint"
+      },
+      "type": "list"
+    },
+    "NetworkConfiguration": {
+      "members": {
+        "assignPublicIp": {
+          "shape": "AssignPublicIp"
+        }
+      },
+      "type": "structure"
+    },
+    "NetworkInterface": {
+      "members": {
+        "attachmentId": {
+          "shape": "String"
+        },
+        "ipv6Address": {
+          "shape": "String"
+        },
+        "privateIpv4Address": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "NetworkInterfaceList": {
+      "member": {
+        "shape": "NetworkInterface"
+      },
+      "type": "list"
+    },
+    "NodeDetails": {
+      "members": {
+        "isMainNode": {
+          "shape": "Boolean"
+        },
+        "nodeIndex": {
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "NodeOverrides": {
+      "members": {
+        "nodePropertyOverrides": {
+          "shape": "NodePropertyOverrides"
+        },
+        "numNodes": {
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "NodeProperties": {
+      "members": {
+        "mainNode": {
+          "shape": "Integer"
+        },
+        "nodeRangeProperties": {
+          "shape": "NodeRangeProperties"
+        },
+        "numNodes": {
+          "shape": "Integer"
+        }
+      },
+      "required": [
+        "numNodes",
+        "mainNode",
+        "nodeRangeProperties"
+      ],
+      "type": "structure"
+    },
+    "NodePropertiesSummary": {
+      "members": {
+        "isMainNode": {
+          "shape": "Boolean"
+        },
+        "nodeIndex": {
+          "shape": "Integer"
+        },
+        "numNodes": {
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "NodePropertyOverride": {
+      "members": {
+        "containerOverrides": {
+          "shape": "ContainerOverrides"
+        },
+        "ecsPropertiesOverride": {
+          "shape": "EcsPropertiesOverride"
+        },
+        "instanceTypes": {
+          "shape": "StringList"
+        },
+        "targetNodes": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "targetNodes"
+      ],
+      "type": "structure"
+    },
+    "NodePropertyOverrides": {
+      "member": {
+        "shape": "NodePropertyOverride"
+      },
+      "type": "list"
+    },
+    "NodeRangeProperties": {
+      "member": {
+        "shape": "NodeRangeProperty"
+      },
+      "type": "list"
+    },
+    "NodeRangeProperty": {
+      "members": {
+        "container": {
+          "shape": "ContainerProperties"
+        },
+        "ecsProperties": {
+          "shape": "EcsProperties"
+        },
+        "instanceTypes": {
+          "shape": "StringList"
+        },
+        "targetNodes": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "targetNodes"
+      ],
+      "type": "structure"
+    },
+    "OrchestrationType": {
+      "enum": [
+        "ECS",
+        "EKS"
+      ],
+      "type": "string"
+    },
+    "ParametersMap": {
+      "key": {
+        "shape": "String"
+      },
+      "type": "map",
+      "value": {
+        "shape": "String"
+      }
+    },
+    "PlatformCapability": {
+      "enum": [
+        "EC2",
+        "FARGATE"
+      ],
+      "type": "string"
+    },
+    "PlatformCapabilityList": {
+      "member": {
+        "shape": "PlatformCapability"
+      },
+      "type": "list"
+    },
+    "Quantity": {
+      "max": 256,
+      "min": 1,
+      "type": "string"
+    },
+    "RegisterJobDefinitionRequest": {
+      "members": {
+        "containerProperties": {
+          "shape": "ContainerProperties"
+        },
+        "ecsProperties": {
+          "shape": "EcsProperties"
+        },
+        "eksProperties": {
+          "shape": "EksProperties"
+        },
+        "jobDefinitionName": {
+          "shape": "String"
+        },
+        "nodeProperties": {
+          "shape": "NodeProperties"
+        },
+        "parameters": {
+          "shape": "ParametersMap"
+        },
+        "platformCapabilities": {
+          "shape": "PlatformCapabilityList"
+        },
+        "propagateTags": {
+          "shape": "Boolean"
+        },
+        "retryStrategy": {
+          "shape": "RetryStrategy"
+        },
+        "schedulingPriority": {
+          "shape": "Integer"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        },
+        "timeout": {
+          "shape": "JobTimeout"
+        },
+        "type": {
+          "shape": "JobDefinitionType"
+        }
+      },
+      "required": [
+        "jobDefinitionName",
+        "type"
+      ],
+      "type": "structure"
+    },
+    "RegisterJobDefinitionResponse": {
+      "members": {
+        "jobDefinitionArn": {
+          "shape": "String"
+        },
+        "jobDefinitionName": {
+          "shape": "String"
+        },
+        "revision": {
+          "shape": "Integer"
+        }
+      },
+      "required": [
+        "jobDefinitionName",
+        "jobDefinitionArn",
+        "revision"
+      ],
+      "type": "structure"
+    },
+    "RepositoryCredentials": {
+      "members": {
+        "credentialsParameter": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "credentialsParameter"
+      ],
+      "type": "structure"
+    },
+    "ResourceRequirement": {
+      "members": {
+        "type": {
+          "shape": "ResourceType"
+        },
+        "value": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "value",
+        "type"
+      ],
+      "type": "structure"
+    },
+    "ResourceRequirements": {
+      "member": {
+        "shape": "ResourceRequirement"
+      },
+      "type": "list"
+    },
+    "ResourceType": {
+      "enum": [
+        "GPU",
+        "VCPU",
+        "MEMORY"
+      ],
+      "type": "string"
+    },
+    "RetryAction": {
+      "enum": [
+        "RETRY",
+        "EXIT"
+      ],
+      "type": "string"
+    },
+    "RetryStrategy": {
+      "members": {
+        "attempts": {
+          "shape": "Integer"
+        },
+        "evaluateOnExit": {
+          "shape": "EvaluateOnExitList"
+        }
+      },
+      "type": "structure"
+    },
+    "RuntimePlatform": {
+      "members": {
+        "cpuArchitecture": {
+          "shape": "String"
+        },
+        "operatingSystemFamily": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "SchedulingPolicyDetail": {
+      "members": {
+        "arn": {
+          "shape": "String"
+        },
+        "fairsharePolicy": {
+          "shape": "FairsharePolicy"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        }
+      },
+      "required": [
+        "name",
+        "arn"
+      ],
+      "type": "structure"
+    },
+    "SchedulingPolicyDetailList": {
+      "member": {
+        "shape": "SchedulingPolicyDetail"
+      },
+      "type": "list"
+    },
+    "SchedulingPolicyListingDetail": {
+      "members": {
+        "arn": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "arn"
+      ],
+      "type": "structure"
+    },
+    "SchedulingPolicyListingDetailList": {
+      "member": {
+        "shape": "SchedulingPolicyListingDetail"
+      },
+      "type": "list"
+    },
+    "Secret": {
+      "members": {
+        "name": {
+          "shape": "String"
+        },
+        "valueFrom": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "name",
+        "valueFrom"
+      ],
+      "type": "structure"
+    },
+    "SecretList": {
+      "member": {
+        "shape": "Secret"
+      },
+      "type": "list"
+    },
+    "SensitiveString": {
+      "sensitive": true,
+      "type": "string"
+    },
+    "ServerException": {
+      "error": {
+        "httpStatusCode": 500
+      },
+      "exception": true,
+      "fault": true,
+      "members": {
+        "message": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "ServiceEnvironmentDetail": {
+      "internalonly": true,
+      "members": {
+        "capacityLimits": {
+          "shape": "CapacityLimits"
+        },
+        "serviceEnvironmentArn": {
+          "shape": "String"
+        },
+        "serviceEnvironmentName": {
+          "shape": "String"
+        },
+        "serviceEnvironmentType": {
+          "shape": "ServiceEnvironmentType"
+        },
+        "state": {
+          "shape": "ServiceEnvironmentState"
+        },
+        "status": {
+          "shape": "ServiceEnvironmentStatus"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        }
+      },
+      "required": [
+        "serviceEnvironmentName",
+        "serviceEnvironmentArn",
+        "serviceEnvironmentType",
+        "capacityLimits"
+      ],
+      "type": "structure"
+    },
+    "ServiceEnvironmentDetailList": {
+      "internalonly": true,
+      "member": {
+        "shape": "ServiceEnvironmentDetail"
+      },
+      "type": "list"
+    },
+    "ServiceEnvironmentOrder": {
+      "internalonly": true,
+      "members": {
+        "order": {
+          "shape": "Integer"
+        },
+        "serviceEnvironment": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "order",
+        "serviceEnvironment"
+      ],
+      "type": "structure"
+    },
+    "ServiceEnvironmentOrders": {
+      "internalonly": true,
+      "member": {
+        "shape": "ServiceEnvironmentOrder"
+      },
+      "type": "list"
+    },
+    "ServiceEnvironmentState": {
+      "enum": [
+        "ENABLED",
+        "DISABLED"
+      ],
+      "internalonly": true,
+      "type": "string"
+    },
+    "ServiceEnvironmentStatus": {
+      "enum": [
+        "CREATING",
+        "UPDATING",
+        "DELETING",
+        "DELETED",
+        "VALID",
+        "INVALID"
+      ],
+      "internalonly": true,
+      "type": "string"
+    },
+    "ServiceEnvironmentType": {
+      "enum": [
+        "SAGEMAKER_TRAINING"
+      ],
+      "internalonly": true,
+      "type": "string"
+    },
+    "ServiceJobAttemptDetail": {
+      "internalonly": true,
+      "members": {
+        "serviceResourceId": {
+          "shape": "ServiceResourceId"
+        },
+        "startedAt": {
+          "shape": "Long"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "stoppedAt": {
+          "shape": "Long"
+        }
+      },
+      "type": "structure"
+    },
+    "ServiceJobAttemptDetails": {
+      "internalonly": true,
+      "member": {
+        "shape": "ServiceJobAttemptDetail"
+      },
+      "type": "list"
+    },
+    "ServiceJobEvaluateOnExit": {
+      "internalonly": true,
+      "members": {
+        "action": {
+          "shape": "ServiceJobRetryAction"
+        },
+        "onStatusReason": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "ServiceJobEvaluateOnExitList": {
+      "internalonly": true,
+      "member": {
+        "shape": "ServiceJobEvaluateOnExit"
+      },
+      "type": "list"
+    },
+    "ServiceJobRetryAction": {
+      "enum": [
+        "RETRY",
+        "EXIT"
+      ],
+      "type": "string"
+    },
+    "ServiceJobRetryStrategy": {
+      "internalonly": true,
+      "members": {
+        "attempts": {
+          "shape": "Integer"
+        },
+        "evaluateOnExit": {
+          "shape": "ServiceJobEvaluateOnExitList"
+        }
+      },
+      "required": [
+        "attempts"
+      ],
+      "type": "structure"
+    },
+    "ServiceJobStatus": {
+      "enum": [
+        "SUBMITTED",
+        "PENDING",
+        "RUNNABLE",
+        "SCHEDULED",
+        "STARTING",
+        "RUNNING",
+        "SUCCEEDED",
+        "FAILED"
+      ],
+      "internalonly": true,
+      "type": "string"
+    },
+    "ServiceJobSummary": {
+      "internalonly": true,
+      "members": {
+        "createdAt": {
+          "shape": "Long"
+        },
+        "jobArn": {
+          "shape": "String"
+        },
+        "jobId": {
+          "shape": "String"
+        },
+        "jobName": {
+          "shape": "String"
+        },
+        "latestAttempt": {
+          "shape": "LatestServiceJobAttempt"
+        },
+        "serviceJobType": {
+          "shape": "ServiceJobType"
+        },
+        "shareIdentifier": {
+          "shape": "String"
+        },
+        "startedAt": {
+          "shape": "Long"
+        },
+        "status": {
+          "shape": "ServiceJobStatus"
+        },
+        "statusReason": {
+          "shape": "String"
+        },
+        "stoppedAt": {
+          "shape": "Long"
+        }
+      },
+      "required": [
+        "jobId",
+        "jobName",
+        "serviceJobType"
+      ],
+      "type": "structure"
+    },
+    "ServiceJobSummaryList": {
+      "internalonly": true,
+      "member": {
+        "shape": "ServiceJobSummary"
+      },
+      "type": "list"
+    },
+    "ServiceJobTimeout": {
+      "internalonly": true,
+      "members": {
+        "attemptDurationSeconds": {
+          "shape": "Integer"
+        }
+      },
+      "type": "structure"
+    },
+    "ServiceJobType": {
+      "enum": [
+        "SAGEMAKER_TRAINING"
+      ],
+      "internalonly": true,
+      "type": "string"
+    },
+    "ServiceResourceId": {
+      "internalonly": true,
+      "members": {
+        "name": {
+          "shape": "ServiceResourceIdName"
+        },
+        "value": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "type": "structure"
+    },
+    "ServiceResourceIdName": {
+      "enum": [
+        "TrainingJobArn"
+      ],
+      "internalonly": true,
+      "type": "string"
+    },
+    "ShareAttributes": {
+      "members": {
+        "shareIdentifier": {
+          "shape": "String"
+        },
+        "weightFactor": {
+          "shape": "Float"
+        }
+      },
+      "required": [
+        "shareIdentifier"
+      ],
+      "type": "structure"
+    },
+    "ShareAttributesList": {
+      "member": {
+        "shape": "ShareAttributes"
+      },
+      "type": "list"
+    },
+    "String": {
+      "type": "string"
+    },
+    "StringList": {
+      "member": {
+        "shape": "String"
+      },
+      "type": "list"
+    },
+    "SubmitJobRequest": {
+      "members": {
+        "arrayProperties": {
+          "shape": "ArrayProperties"
+        },
+        "containerOverrides": {
+          "shape": "ContainerOverrides"
+        },
+        "dependsOn": {
+          "shape": "JobDependencyList"
+        },
+        "ecsPropertiesOverride": {
+          "shape": "EcsPropertiesOverride"
+        },
+        "eksPropertiesOverride": {
+          "shape": "EksPropertiesOverride"
+        },
+        "jobDefinition": {
+          "shape": "String"
+        },
+        "jobName": {
+          "shape": "String"
+        },
+        "jobQueue": {
+          "shape": "String"
+        },
+        "nodeOverrides": {
+          "shape": "NodeOverrides"
+        },
+        "parameters": {
+          "shape": "ParametersMap"
+        },
+        "propagateTags": {
+          "shape": "Boolean"
+        },
+        "retryStrategy": {
+          "shape": "RetryStrategy"
+        },
+        "schedulingPriorityOverride": {
+          "shape": "Integer"
+        },
+        "shareIdentifier": {
+          "shape": "String"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        },
+        "timeout": {
+          "shape": "JobTimeout"
+        }
+      },
+      "required": [
+        "jobName",
+        "jobQueue",
+        "jobDefinition"
+      ],
+      "type": "structure"
+    },
+    "SubmitJobResponse": {
+      "members": {
+        "jobArn": {
+          "shape": "String"
+        },
+        "jobId": {
+          "shape": "String"
+        },
+        "jobName": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobName",
+        "jobId"
+      ],
+      "type": "structure"
+    },
+    "SubmitServiceJobRequest": {
+      "members": {
+        "clientToken": {
+          "idempotencyToken": true,
+          "shape": "ClientRequestToken"
+        },
+        "jobName": {
+          "shape": "String"
+        },
+        "jobQueue": {
+          "shape": "String"
+        },
+        "retryStrategy": {
+          "shape": "ServiceJobRetryStrategy"
+        },
+        "schedulingPriority": {
+          "shape": "Integer"
+        },
+        "serviceJobType": {
+          "shape": "ServiceJobType"
+        },
+        "serviceRequestPayload": {
+          "shape": "String"
+        },
+        "shareIdentifier": {
+          "shape": "String"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        },
+        "timeoutConfig": {
+          "shape": "ServiceJobTimeout"
+        }
+      },
+      "required": [
+        "jobName",
+        "jobQueue",
+        "serviceRequestPayload",
+        "serviceJobType"
+      ],
+      "type": "structure"
+    },
+    "SubmitServiceJobResponse": {
+      "members": {
+        "jobArn": {
+          "shape": "String"
+        },
+        "jobId": {
+          "shape": "String"
+        },
+        "jobName": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobName",
+        "jobId"
+      ],
+      "type": "structure"
+    },
+    "TagKey": {
+      "max": 128,
+      "min": 1,
+      "type": "string"
+    },
+    "TagKeysList": {
+      "max": 50,
+      "member": {
+        "shape": "TagKey"
+      },
+      "min": 1,
+      "type": "list"
+    },
+    "TagResourceRequest": {
+      "members": {
+        "resourceArn": {
+          "location": "uri",
+          "locationName": "resourceArn",
+          "shape": "String"
+        },
+        "tags": {
+          "shape": "TagrisTagsMap"
+        }
+      },
+      "required": [
+        "resourceArn",
+        "tags"
+      ],
+      "type": "structure"
+    },
+    "TagResourceResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "TagValue": {
+      "max": 256,
+      "type": "string"
+    },
+    "TagrisTagsMap": {
+      "key": {
+        "shape": "TagKey"
+      },
+      "max": 50,
+      "min": 1,
+      "type": "map",
+      "value": {
+        "shape": "TagValue"
+      }
+    },
+    "TagsMap": {
+      "key": {
+        "shape": "String"
+      },
+      "type": "map",
+      "value": {
+        "shape": "String"
+      }
+    },
+    "TaskContainerDependency": {
+      "members": {
+        "condition": {
+          "shape": "String"
+        },
+        "containerName": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "TaskContainerDependencyList": {
+      "member": {
+        "shape": "TaskContainerDependency"
+      },
+      "type": "list"
+    },
+    "TaskContainerDetails": {
+      "members": {
+        "command": {
+          "shape": "StringList"
+        },
+        "dependsOn": {
+          "shape": "TaskContainerDependencyList"
+        },
+        "environment": {
+          "shape": "EnvironmentVariables"
+        },
+        "essential": {
+          "shape": "Boolean"
+        },
+        "exitCode": {
+          "shape": "Integer"
+        },
+        "image": {
+          "shape": "String"
+        },
+        "linuxParameters": {
+          "shape": "LinuxParameters"
+        },
+        "logConfiguration": {
+          "shape": "LogConfiguration"
+        },
+        "logStreamName": {
+          "shape": "String"
+        },
+        "mountPoints": {
+          "shape": "MountPoints"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "networkInterfaces": {
+          "shape": "NetworkInterfaceList"
+        },
+        "privileged": {
+          "shape": "Boolean"
+        },
+        "readonlyRootFilesystem": {
+          "shape": "Boolean"
+        },
+        "reason": {
+          "shape": "String"
+        },
+        "repositoryCredentials": {
+          "shape": "RepositoryCredentials"
+        },
+        "resourceRequirements": {
+          "shape": "ResourceRequirements"
+        },
+        "secrets": {
+          "shape": "SecretList"
+        },
+        "ulimits": {
+          "shape": "Ulimits"
+        },
+        "user": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "TaskContainerOverrides": {
+      "members": {
+        "command": {
+          "shape": "StringList"
+        },
+        "environment": {
+          "shape": "EnvironmentVariables"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "resourceRequirements": {
+          "shape": "ResourceRequirements"
+        }
+      },
+      "type": "structure"
+    },
+    "TaskContainerProperties": {
+      "members": {
+        "command": {
+          "shape": "StringList"
+        },
+        "dependsOn": {
+          "shape": "TaskContainerDependencyList"
+        },
+        "environment": {
+          "shape": "EnvironmentVariables"
+        },
+        "essential": {
+          "shape": "Boolean"
+        },
+        "image": {
+          "shape": "String"
+        },
+        "linuxParameters": {
+          "shape": "LinuxParameters"
+        },
+        "logConfiguration": {
+          "shape": "LogConfiguration"
+        },
+        "mountPoints": {
+          "shape": "MountPoints"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "privileged": {
+          "shape": "Boolean"
+        },
+        "readonlyRootFilesystem": {
+          "shape": "Boolean"
+        },
+        "repositoryCredentials": {
+          "shape": "RepositoryCredentials"
+        },
+        "resourceRequirements": {
+          "shape": "ResourceRequirements"
+        },
+        "secrets": {
+          "shape": "SecretList"
+        },
+        "ulimits": {
+          "shape": "Ulimits"
+        },
+        "user": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "image"
+      ],
+      "type": "structure"
+    },
+    "TaskPropertiesOverride": {
+      "members": {
+        "containers": {
+          "shape": "ListTaskContainerOverrides"
+        }
+      },
+      "type": "structure"
+    },
+    "TerminateJobRequest": {
+      "members": {
+        "jobId": {
+          "shape": "String"
+        },
+        "reason": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobId",
+        "reason"
+      ],
+      "type": "structure"
+    },
+    "TerminateJobResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "TerminateServiceJobRequest": {
+      "members": {
+        "jobId": {
+          "shape": "String"
+        },
+        "reason": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "jobId",
+        "reason"
+      ],
+      "type": "structure"
+    },
+    "TerminateServiceJobResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "Tmpfs": {
+      "members": {
+        "containerPath": {
+          "shape": "String"
+        },
+        "mountOptions": {
+          "shape": "StringList"
+        },
+        "size": {
+          "shape": "Integer"
+        }
+      },
+      "required": [
+        "containerPath",
+        "size"
+      ],
+      "type": "structure"
+    },
+    "TmpfsList": {
+      "member": {
+        "shape": "Tmpfs"
+      },
+      "type": "list"
+    },
+    "Ulimit": {
+      "members": {
+        "hardLimit": {
+          "shape": "Integer"
+        },
+        "name": {
+          "shape": "String"
+        },
+        "softLimit": {
+          "shape": "Integer"
+        }
+      },
+      "required": [
+        "hardLimit",
+        "name",
+        "softLimit"
+      ],
+      "type": "structure"
+    },
+    "Ulimits": {
+      "member": {
+        "shape": "Ulimit"
+      },
+      "type": "list"
+    },
+    "UntagResourceRequest": {
+      "members": {
+        "resourceArn": {
+          "location": "uri",
+          "locationName": "resourceArn",
+          "shape": "String"
+        },
+        "tagKeys": {
+          "location": "querystring",
+          "locationName": "tagKeys",
+          "shape": "TagKeysList"
+        }
+      },
+      "required": [
+        "resourceArn",
+        "tagKeys"
+      ],
+      "type": "structure"
+    },
+    "UntagResourceResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "UpdateComputeEnvironmentRequest": {
+      "members": {
+        "computeEnvironment": {
+          "shape": "String"
+        },
+        "computeResources": {
+          "shape": "ComputeResourceUpdate"
+        },
+        "serviceRole": {
+          "shape": "String"
+        },
+        "state": {
+          "shape": "CEState"
+        },
+        "unmanagedvCpus": {
+          "shape": "Integer"
+        },
+        "updatePolicy": {
+          "shape": "UpdatePolicy"
+        }
+      },
+      "required": [
+        "computeEnvironment"
+      ],
+      "type": "structure"
+    },
+    "UpdateComputeEnvironmentResponse": {
+      "members": {
+        "computeEnvironmentArn": {
+          "shape": "String"
+        },
+        "computeEnvironmentName": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "UpdateJobQueueRequest": {
+      "members": {
+        "computeEnvironmentOrder": {
+          "shape": "ComputeEnvironmentOrders"
+        },
+        "jobQueue": {
+          "shape": "String"
+        },
+        "jobStateTimeLimitActions": {
+          "shape": "JobStateTimeLimitActions"
+        },
+        "priority": {
+          "shape": "Integer"
+        },
+        "schedulingPolicyArn": {
+          "shape": "String"
+        },
+        "serviceEnvironmentOrder": {
+          "internalonly": true,
+          "shape": "ServiceEnvironmentOrders"
+        },
+        "state": {
+          "shape": "JQState"
+        }
+      },
+      "required": [
+        "jobQueue"
+      ],
+      "type": "structure"
+    },
+    "UpdateJobQueueResponse": {
+      "members": {
+        "jobQueueArn": {
+          "shape": "String"
+        },
+        "jobQueueName": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "UpdatePolicy": {
+      "members": {
+        "jobExecutionTimeoutMinutes": {
+          "shape": "JobExecutionTimeoutMinutes"
+        },
+        "terminateJobsOnUpdate": {
+          "shape": "Boolean"
+        }
+      },
+      "type": "structure"
+    },
+    "UpdateSchedulingPolicyRequest": {
+      "members": {
+        "arn": {
+          "shape": "String"
+        },
+        "fairsharePolicy": {
+          "shape": "FairsharePolicy"
+        }
+      },
+      "required": [
+        "arn"
+      ],
+      "type": "structure"
+    },
+    "UpdateSchedulingPolicyResponse": {
+      "members": {},
+      "type": "structure"
+    },
+    "UpdateServiceEnvironmentRequest": {
+      "members": {
+        "capacityLimits": {
+          "shape": "CapacityLimits"
+        },
+        "serviceEnvironment": {
+          "shape": "String"
+        },
+        "state": {
+          "shape": "ServiceEnvironmentState"
+        }
+      },
+      "required": [
+        "serviceEnvironment"
+      ],
+      "type": "structure"
+    },
+    "UpdateServiceEnvironmentResponse": {
+      "members": {
+        "serviceEnvironmentArn": {
+          "shape": "String"
+        },
+        "serviceEnvironmentName": {
+          "shape": "String"
+        }
+      },
+      "required": [
+        "serviceEnvironmentName",
+        "serviceEnvironmentArn"
+      ],
+      "type": "structure"
+    },
+    "Volume": {
+      "members": {
+        "efsVolumeConfiguration": {
+          "shape": "EFSVolumeConfiguration"
+        },
+        "host": {
+          "shape": "Host"
+        },
+        "name": {
+          "shape": "String"
+        }
+      },
+      "type": "structure"
+    },
+    "Volumes": {
+      "member": {
+        "shape": "Volume"
+      },
+      "type": "list"
+    },
+    "arnType": {
+      "max": 2048,
+      "min": 20,
+      "type": "string"
+    },
+    "booleanType": {
+      "type": "boolean"
+    },
+    "deletionStatus": {
+      "enum": [
+        "SUCCEEDED",
+        "FAILED"
+      ],
+      "type": "string"
+    },
+    "errorMessage": {
+      "type": "string"
+    },
+    "longType": {
+      "type": "long"
+    },
+    "stringListType": {
+      "member": {
+        "shape": "stringType"
+      },
+      "type": "list"
+    },
+    "stringType": {
+      "type": "string"
+    }
+  },
+  "version": "2.0"
+}

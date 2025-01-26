@@ -84,7 +84,7 @@ def run(
     }
     if use_queue:
         queue = Queue(
-            f'video-vlm-eval-{instance_type.split(".")[1]}-{sagemaker_session.boto_region_name}'
+            f'fss-{instance_type.replace(".", "-")}-{sagemaker_session.boto_region_name}'
         )
         print(f"Starting training job on queue {queue.queue_name}")
         queued_job = queue.submit(

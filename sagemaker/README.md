@@ -7,3 +7,8 @@
 # The key will not be saved with the image as we use the Docker secret functionality.
 sudo docker build --secret id=gh_priv_key,src=/path/to/your/private/key -f sagemaker/inference.Dockerfile -t 124224456861.dkr.ecr.us-east-1.amazonaws.com/peter.yu-video-vlm-eval-inference .
 ```
+
+## Using SageMaker Job Queues
+
+- Follow the instructions from [here](https://github.com/TRI-ML/sm-batch-getting-started).
+- Make sure to set `AWS_DEFAULT_REGION` appropriately.
