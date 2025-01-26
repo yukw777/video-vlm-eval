@@ -16,7 +16,7 @@ decord = "^0.6.0"
 openai = "^1.33.0"
 tenacity = "^8.3.0"
 kaggle = { version = "^1.6.14", optional = true }
-sagemaker = "^2.224.1"
+sagemaker = { path = "vendor/sagemaker-2.226.2.dev0.tar.gz", optional = true }
 flash-attn = { version = "^2.5.9.post1", optional = true }
 setuptools = "<70.0.0"
 tarsier = { git = "git@github.com:yukw777/tarsier.git", rev = "92a195326138c834002faf5385edec4ba4906067" }
@@ -39,6 +39,7 @@ priority = "explicit"
 prismatic = ["prismatic"]
 kaggle = ["kaggle"]
 flash-attn = ["flash-attn"]
+sagemaker = ["sagemaker"]
 
 [build-system]
 requires = ["poetry-core"]

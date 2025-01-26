@@ -245,7 +245,7 @@ css = ["tinycss2 (>=1.1.0,<1.3)"]
 name = "boto3"
 version = "1.34.161"
 description = "The AWS SDK for Python"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "boto3-1.34.161-py3-none-any.whl", hash = "sha256:4ef285334a0edc3047e27a04caf00f7742e32c0f03a361101e768014ac5709dd"},
@@ -264,7 +264,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 name = "botocore"
 version = "1.34.161"
 description = "Low-level, data-driven core of boto 3."
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "botocore-1.34.161-py3-none-any.whl", hash = "sha256:6c606d2da6f62fde06880aff1190566af208875c29938b6b68741e607817975a"},
@@ -418,7 +418,7 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 name = "cloudpickle"
 version = "2.2.1"
 description = "Extended pickling support for Python objects"
-optional = false
+optional = true
 python-versions = ">=3.6"
 files = [
     {file = "cloudpickle-2.2.1-py3-none-any.whl", hash = "sha256:61f594d1f4c295fa5cd9014ceb3a1fc4a70b0de1164b94fbc2d854ccba056f9f"},
@@ -581,7 +581,7 @@ triton = ["triton (==2.1.0)"]
 name = "dill"
 version = "0.3.8"
 description = "serialize all of Python"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "dill-0.3.8-py3-none-any.whl", hash = "sha256:c36ca9ffb54365bdd2f8eb3eff7d2a21237f8452b57ace88b1ac615b7e815bd7"},
@@ -618,7 +618,7 @@ files = [
 name = "docker"
 version = "7.1.0"
 description = "A Python library for the Docker Engine API."
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "docker-7.1.0-py3-none-any.whl", hash = "sha256:c96b93b7f0a746f9e77d325bcfb87422a3d8bd4f03136ae8a85b37f1898d5fc0"},
@@ -948,7 +948,7 @@ test = ["coverage[toml]", "ddt (>=1.1.1,!=1.4.3)", "mock", "mypy", "pre-commit",
 name = "google-pasta"
 version = "0.2.0"
 description = "pasta is an AST-based Python refactoring library"
-optional = false
+optional = true
 python-versions = "*"
 files = [
     {file = "google-pasta-0.2.0.tar.gz", hash = "sha256:c9f2c8dfc8f96d0d5808299920721be30c9eec37f2389f28904f454565c8a16e"},
@@ -1268,7 +1268,7 @@ setuptools = "*"
 name = "importlib-metadata"
 version = "6.11.0"
 description = "Read metadata from Python packages"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "importlib_metadata-6.11.0-py3-none-any.whl", hash = "sha256:f0afba6205ad8f8947c7d338b5342d5db2afbfd82f9cbef7879a9539cc12eb9b"},
@@ -1468,7 +1468,7 @@ files = [
 name = "jmespath"
 version = "1.0.1"
 description = "JSON Matching Expressions"
-optional = false
+optional = true
 python-versions = ">=3.7"
 files = [
     {file = "jmespath-1.0.1-py3-none-any.whl", hash = "sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980"},
@@ -2060,7 +2060,7 @@ files = [
 name = "multiprocess"
 version = "0.70.16"
 description = "better multiprocessing and multithreading in Python"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "multiprocess-0.70.16-pp310-pypy310_pp73-macosx_10_13_x86_64.whl", hash = "sha256:476887be10e2f59ff183c006af746cb6f1fd0eadcfd4ef49e605cbe2659920ee"},
@@ -2634,7 +2634,7 @@ testing = ["docopt", "pytest"]
 name = "pathos"
 version = "0.3.2"
 description = "parallel graph management and execution in heterogeneous computing"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "pathos-0.3.2-py3-none-any.whl", hash = "sha256:d669275e6eb4b3fbcd2846d7a6d1bba315fe23add0c614445ba1408d8b38bafe"},
@@ -2824,7 +2824,7 @@ tests = ["pytest (>=5.4.1)", "pytest-cov (>=2.8.1)", "pytest-mypy (>=0.8.0)", "p
 name = "pox"
 version = "0.3.4"
 description = "utilities for filesystem exploration and automated builds"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "pox-0.3.4-py3-none-any.whl", hash = "sha256:651b8ae8a7b341b7bfd267f67f63106daeb9805f1ac11f323d5280d2da93fdb6"},
@@ -2835,7 +2835,7 @@ files = [
 name = "ppft"
 version = "1.7.6.8"
 description = "distributed and parallel Python"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "ppft-1.7.6.8-py3-none-any.whl", hash = "sha256:de2dd4b1b080923dd9627fbdea52649fd741c752fce4f3cf37e26f785df23d9b"},
@@ -3271,7 +3271,7 @@ files = [
 name = "pywin32"
 version = "306"
 description = "Python for Window Extensions"
-optional = false
+optional = true
 python-versions = "*"
 files = [
     {file = "pywin32-306-cp310-cp310-win32.whl", hash = "sha256:06d3420a5155ba65f0b72f2699b5bacf3109f36acbe8923765c22938a69dfc8d"},
@@ -3653,7 +3653,7 @@ files = [
 name = "s3transfer"
 version = "0.10.2"
 description = "An Amazon S3 Transfer Manager"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "s3transfer-0.10.2-py3-none-any.whl", hash = "sha256:eca1c20de70a39daee580aef4986996620f365c4e0fda6a86100231d62f1bf69"},
@@ -3800,13 +3800,12 @@ torch = ["safetensors[numpy]", "torch (>=1.10)"]
 
 [[package]]
 name = "sagemaker"
-version = "2.229.0"
-description = ""
-optional = false
-python-versions = "*"
+version = "2.226.2.dev0"
+description = "Open source library for training and deploying models on Amazon SageMaker."
+optional = true
+python-versions = ">= 3.8"
 files = [
-    {file = "sagemaker-2.229.0-py3-none-any.whl", hash = "sha256:e37d781bc2f2bf7d21099a6c7f02cefe000aebacf5b3d5c0635e520a4f8b86ae"},
-    {file = "sagemaker-2.229.0.tar.gz", hash = "sha256:46dfd700dc81c0e662672785c264610dbffba1a47ff549dd3c6a86f748355961"},
+    {file = "sagemaker-2.226.2.dev0.tar.gz", hash = "sha256:d80c855af6e9a2eab2137d76f9942747921970dda4aa336714d0b6f7a75a485c"},
 ]
 
 [package.dependencies]
@@ -3827,24 +3826,28 @@ psutil = "*"
 PyYAML = ">=6.0,<7.0"
 requests = "*"
 schema = "*"
-smdebug-rulesconfig = "1.0.1"
+smdebug_rulesconfig = "1.0.1"
 tblib = ">=1.7.0,<4"
 tqdm = "*"
 urllib3 = ">=1.26.8,<3.0.0"
 
 [package.extras]
-all = ["PyYAML (>=5.4.1,<7)", "accelerate (>=0.24.1,<=0.27.0)", "docker (>=5.0.2,<8.0.0)", "pyspark (==3.3.1)", "sagemaker-feature-store-pyspark-3.3", "sagemaker-schema-inference-artifacts (>=0.0.5)", "scipy (==1.10.1)", "urllib3 (>=1.26.8,<3.0.0)"]
+all = ["PyYAML (>=5.4.1,<7)", "accelerate (>=0.24.1,<=0.27.0)", "docker (>=5.0.2,<8.0.0)", "pyspark (==3.3.1)", "sagemaker-feature-store-pyspark-3.3", "sagemaker_schema_inference_artifacts (>=0.0.5)", "scipy (==1.10.1)", "urllib3 (>=1.26.8,<3.0.0)"]
 feature-processor = ["pyspark (==3.3.1)", "sagemaker-feature-store-pyspark-3.3"]
-huggingface = ["accelerate (>=0.24.1,<=0.27.0)", "sagemaker-schema-inference-artifacts (>=0.0.5)"]
+huggingface = ["accelerate (>=0.24.1,<=0.27.0)", "sagemaker_schema_inference_artifacts (>=0.0.5)"]
 local = ["PyYAML (>=5.4.1,<7)", "docker (>=5.0.2,<8.0.0)", "urllib3 (>=1.26.8,<3.0.0)"]
 scipy = ["scipy (==1.10.1)"]
-test = ["Jinja2 (==3.1.4)", "PyYAML (==6.0)", "PyYAML (>=5.4.1,<7)", "accelerate (>=0.24.1,<=0.27.0)", "apache-airflow (==2.9.3)", "apache-airflow-providers-amazon (==7.2.1)", "attrs (>=23.1.0,<24)", "awslogs (==0.14.0)", "black (==24.3.0)", "build[virtualenv] (==1.2.1)", "cloudpickle (==2.2.1)", "contextlib2 (==21.6.0)", "coverage (>=5.2,<6.2)", "docker (>=5.0.2,<8.0.0)", "fabric (==2.6.0)", "flake8 (==4.0.1)", "huggingface-hub (>=0.23.4)", "mlflow (>=2.12.2,<2.13)", "mock (==4.0.3)", "nbformat (>=5.9,<6)", "onnx (>=1.15.0)", "pandas (>=1.3.5,<1.5)", "pillow (>=10.0.1,<=11)", "pyspark (==3.3.1)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "pytest-rerunfailures (==10.2)", "pytest-timeout (==2.1.0)", "pytest-xdist (==2.4.0)", "pyvis (==0.2.1)", "requests (==2.32.2)", "sagemaker-experiments (==0.1.35)", "sagemaker-feature-store-pyspark-3.3", "sagemaker-schema-inference-artifacts (>=0.0.5)", "schema (==0.7.5)", "scikit-learn (==1.3.0)", "scipy (==1.10.1)", "stopit (==1.1.2)", "tensorflow (>=2.1,<=2.16)", "tox (==3.24.5)", "tritonclient[http] (<2.37.0)", "urllib3 (>=1.26.8,<3.0.0)", "xgboost (>=1.6.2,<=1.7.6)"]
+test = ["Jinja2 (==3.1.4)", "PyYAML (==6.0)", "PyYAML (>=5.4.1,<7)", "accelerate (>=0.24.1,<=0.27.0)", "accelerate (>=0.24.1,<=0.27.0)", "apache-airflow (==2.9.2)", "apache-airflow-providers-amazon (==7.2.1)", "attrs (>=23.1.0,<24)", "awslogs (==0.14.0)", "black (==24.3.0)", "cloudpickle (==2.2.1)", "contextlib2 (==21.6.0)", "coverage (>=5.2,<6.2)", "docker (>=5.0.2,<8.0.0)", "fabric (==2.6.0)", "flake8 (==4.0.1)", "huggingface_hub (>=0.23.4)", "mlflow (>=2.12.2,<2.13)", "mock (==4.0.3)", "nbformat (>=5.9,<6)", "onnx (>=1.15.0)", "pandas (>=1.3.5,<1.5)", "pillow (>=10.0.1,<=11)", "pyspark (==3.3.1)", "pytest (==6.2.5)", "pytest-cov (==3.0.0)", "pytest-rerunfailures (==10.2)", "pytest-timeout (==2.1.0)", "pytest-xdist (==2.4.0)", "pyvis (==0.2.1)", "requests (==2.32.2)", "sagemaker-experiments (==0.1.35)", "sagemaker-feature-store-pyspark-3.3", "sagemaker_schema_inference_artifacts (>=0.0.5)", "schema (==0.7.5)", "scikit-learn (==1.3.0)", "scipy (==1.10.1)", "stopit (==1.1.2)", "tensorflow (>=2.1,<=2.16)", "tox (==3.24.5)", "tritonclient[http] (<2.37.0)", "urllib3 (>=1.26.8,<3.0.0)", "xgboost (>=1.6.2,<=1.7.6)"]
+
+[package.source]
+type = "file"
+url = "vendor/sagemaker-2.226.2.dev0.tar.gz"
 
 [[package]]
 name = "schema"
 version = "0.7.7"
 description = "Simple data validation library"
-optional = false
+optional = true
 python-versions = "*"
 files = [
     {file = "schema-0.7.7-py2.py3-none-any.whl", hash = "sha256:5d976a5b50f36e74e2157b47097b60002bd4d42e65425fcc9c9befadb4255dde"},
@@ -4202,7 +4205,7 @@ files = [
 name = "smdebug-rulesconfig"
 version = "1.0.1"
 description = "SMDebug RulesConfig"
-optional = false
+optional = true
 python-versions = ">=2.7"
 files = [
     {file = "smdebug_rulesconfig-1.0.1-py2.py3-none-any.whl", hash = "sha256:104da3e6931ecf879dfc687ca4bbb3bee5ea2bc27f4478e9dbb3ee3655f1ae61"},
@@ -4340,7 +4343,7 @@ resolved_reference = "92a195326138c834002faf5385edec4ba4906067"
 name = "tblib"
 version = "3.0.0"
 description = "Traceback serialization library."
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "tblib-3.0.0-py3-none-any.whl", hash = "sha256:80a6c77e59b55e83911e1e607c649836a69c103963c5f28a46cbeef44acf8129"},
@@ -5150,7 +5153,7 @@ PyYAML = "*"
 name = "zipp"
 version = "3.20.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "zipp-3.20.0-py3-none-any.whl", hash = "sha256:58da6168be89f0be59beb194da1250516fdaa062ccebd30127ac65d30045e10d"},
@@ -5165,8 +5168,9 @@ test = ["big-O", "importlib-resources", "jaraco.functools", "jaraco.itertools", 
 flash-attn = ["flash-attn"]
 kaggle = ["kaggle"]
 prismatic = ["prismatic"]
+sagemaker = ["sagemaker"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "1e028674f1e0e8aa84a3a371fbe58d786af7413cdb9c3bfba242d7e8f6470462"
+content-hash = "7c89cb134f3da14b3d8da9fe2fb816cfa6c88c2eb1e13ace9314427717882f18"

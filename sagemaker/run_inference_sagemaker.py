@@ -1,6 +1,7 @@
 import boto3
 from sagemaker.pytorch import PyTorch
 import sagemaker
+from sagemaker.batch_queueing.queue import Queue
 
 
 class BotoSession(boto3.Session):
@@ -37,6 +38,9 @@ def run(
     boto_session: BotoSession | None = None,
     use_reserved_capacity: bool = False,
     s3_hf_home: str | None = None,
+    use_queue: bool = True,
+    queue_priority: int = 10,
+    queue_fss_identifier: str = "default",
 ) -> None:
     env_vars = {
         "WANDB_API_KEY": wandb_api_key,
@@ -46,6 +50,8 @@ def run(
     if s3_hf_home is not None:
         s3_data_paths.append(s3_hf_home)
         env_vars["HF_HOME"] = f"/opt/ml/input/data/data_{len(s3_data_paths) -1}/"
+    sagemaker_session = sagemaker.Session(boto_session=boto_session)  # type: ignore
+    sagemaker_session.boto_region_name
     estimator = PyTorch(
         "scripts/run_inference.py",
         role=role_arn,
@@ -55,7 +61,7 @@ def run(
         image_uri=image_uri,
         hyperparameters=dict(run_inference_args),
         environment=env_vars,
-        sagemaker_session=sagemaker.Session(boto_session=boto_session),  # type: ignore
+        sagemaker_session=sagemaker_session,
         keep_alive_period_in_seconds=3600,
         max_run=60 * 60 * max_hours,
         distribution={"torch_distributed": {"enabled": True}},
@@ -71,13 +77,27 @@ def run(
         if tags is not None
         else None,
     )
-    estimator.fit(
-        inputs={
-            # input paths must have a trailing slash
-            f"data_{i}": path if path.endswith("/") else path + "/"
-            for i, path in enumerate(s3_data_paths)
-        }
-    )
+    inputs = {
+        # input paths must have a trailing slash
+        f"data_{i}": path if path.endswith("/") else path + "/"
+        for i, path in enumerate(s3_data_paths)
+    }
+    if use_queue:
+        queue = Queue(
+            f'video-vlm-eval-{instance_type.split(".")[1]}-{sagemaker_session.boto_region_name}'
+        )
+        print(f"Starting training job on queue {queue.queue_name}")
+        queued_job = queue.submit(
+            estimator,
+            inputs,
+            job_name=job_name,
+            priority=queue_priority,
+            share_identifier=queue_fss_identifier,
+            timeout={"attemptDurationSeconds": 60 * 60 * max_hours},
+        )
+        print(f"Queued job: {queued_job}")
+    else:
+        estimator.fit(inputs=inputs)
 
 
 if __name__ == "__main__":
