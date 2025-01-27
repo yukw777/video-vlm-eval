@@ -1,28 +1,8 @@
-import abc
 import ast
-from video_vlm_eval.task import ZeroShotQA
+from video_vlm_eval.task import ZeroShotQA, OpenAIEvalTask
 
 
-class VideoChatGPTTask(abc.ABC):
-    @abc.abstractmethod
-    def get_openai_request(self, datapoint: dict, pred: dict) -> dict: ...
-
-    @abc.abstractmethod
-    def parse_openai_response(self, response_message: str) -> dict: ...
-
-    @abc.abstractmethod
-    def calculate_metrics(self, anns: list[dict]) -> dict: ...
-
-    @property
-    @abc.abstractmethod
-    def pred_keys(self) -> list[str]: ...
-
-    @property
-    @abc.abstractmethod
-    def ann_keys(self) -> list[str]: ...
-
-
-class VideoChatGPTZeroShotQATask(ZeroShotQA, VideoChatGPTTask):
+class VideoChatGPTZeroShotQATask(ZeroShotQA, OpenAIEvalTask):
     SYSTEM_MSG = (
         "You are an intelligent chatbot designed for evaluating the correctness of generative outputs for question-answer pairs. "
         + "Your task is to compare the predicted answer with the correct answer and determine if they match meaningfully. Here's how you can accomplish the task:"
@@ -101,7 +81,7 @@ class VideoChatGPTZeroShotQATask(ZeroShotQA, VideoChatGPTTask):
         }
 
 
-class VideoChatGPTGeneralTask(VideoChatGPTTask):
+class VideoChatGPTGeneralTask(OpenAIEvalTask):
     SYSTEM_MSG: str
     USER_MSG: str
 

@@ -7,8 +7,8 @@ from pathlib import Path
 class MLVUDataset(Dataset[dict[str, Any]]):
     def __init__(
         self,
-        video_dir: str,
         annotation_file: str,
+        video_dir: str | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
         """
@@ -21,7 +21,8 @@ class MLVUDataset(Dataset[dict[str, Any]]):
         for i, ex in enumerate(self.examples):
             if "question_id" not in ex:
                 ex["question_id"] = f"{ex['question_type']}_{i}"
-            ex["video_path"] = Path(video_dir) / ex["video"]
+            if video_dir is not None:
+                ex["video_path"] = Path(video_dir) / ex["video"]
 
             # convert duration to string since this is not an input to the model
             ex["duration"] = str(ex["duration"])
@@ -55,11 +56,13 @@ class MLVUMultipleChoiceDataset(MLVUDataset):
 class MLVUMultipleChoiceTestDataset(MLVUDataset):
     def __init__(
         self,
-        video_dir: str,
         annotation_file: str,
+        video_dir: str | None = None,
         preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
     ) -> None:
-        super().__init__(video_dir, annotation_file, preprocessor)
+        super().__init__(
+            annotation_file, video_dir=video_dir, preprocessor=preprocessor
+        )
         # candidates for count questions are int's for some reason,
         # and wandb sees it as a type mismatch as the candidates for other questions
         # are strings. So let's just cast them to strings.
@@ -72,7 +75,13 @@ class MLVUMultipleChoiceTestDataset(MLVUDataset):
         return ["question_id", "question_type", "duration", "question", "candidates"]
 
 
-class MLVUGenerationDataset(MLVUDataset):
+class MLVUSSCDataset(MLVUDataset):
     @property
     def columns(self) -> list[str]:
         return ["question_id", "duration", "question", "answer", "scoring_points"]
+
+
+class MLVUSummaryDataset(MLVUDataset):
+    @property
+    def columns(self) -> list[str]:
+        return ["question_id", "duration", "question", "answer"]

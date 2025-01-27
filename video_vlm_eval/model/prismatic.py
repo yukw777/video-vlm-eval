@@ -352,12 +352,14 @@ class PrismaticMLVUGenerationModel(PrismaticZeroShotQAModel):
     @property
     def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
         def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
-            # the lengths of scoring_points are variable, so let's collate "candidates" manually
-            batch_candidates = [
-                datapoint.pop("scoring_points") for datapoint in datapoints
-            ]
-            collated = default_collate(datapoints)
-            collated["scoring_points"] = batch_candidates
-            return collated
+            # the lengths of scoring_points are variable, so let's collate "candidates" manually if they exist
+            if "scoring_points" in datapoints[0]:
+                batch_candidates = [
+                    datapoint.pop("scoring_points") for datapoint in datapoints
+                ]
+                collated = default_collate(datapoints)
+                collated["scoring_points"] = batch_candidates
+                return collated
+            return default_collate(datapoints)
 
         return collate

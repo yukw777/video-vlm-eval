@@ -13,12 +13,12 @@ from tenacity import (
 )
 from tqdm import tqdm
 
-from video_vlm_eval import Dataset, VideoChatGPTTask
+from video_vlm_eval import Dataset, OpenAIEvalTask
 
 
 @dataclass
 class OpenAIClient:
-    task: VideoChatGPTTask
+    task: OpenAIEvalTask
     client: OpenAI
 
     @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(10))
@@ -31,7 +31,7 @@ class OpenAIClient:
 
 
 def run(
-    task: VideoChatGPTTask,
+    task: OpenAIEvalTask,
     dataset: Dataset,
     openai_api_key: str,
     pred_path: str,

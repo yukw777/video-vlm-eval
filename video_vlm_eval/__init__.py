@@ -6,7 +6,8 @@ from .dataset.tgif_qa import TGIFQAFrameDataset
 from .dataset.egoschema import EgoSchemaDataset, EgoSchemaNeedleHaystackDataset
 from .dataset.mlvu import (
     MLVUMultipleChoiceDataset,
-    MLVUGenerationDataset,
+    MLVUSSCDataset,
+    MLVUSummaryDataset,
     MLVUMultipleChoiceTestDataset,
 )
 from .model import Model
@@ -27,9 +28,9 @@ from .model.tarsier import (
     TarsierZeroShotQAModel,
     TarsierVideoChatGPTConsistencyModel,
 )
-from .task import Task, MultipleChoice
+from .task import Task, MultipleChoice, OpenAIEvalTask
+from .task.mlvu import MLVUSSCTask, MLVUSummaryTask
 from .task.video_chatgpt import (
-    VideoChatGPTTask,
     VideoChatGPTZeroShotQATask,
     VideoChatGPTConsistencyTask,
     VideoChatGPTCorrectnessTask,
@@ -58,7 +59,6 @@ __all__ = [
     "Model",
     "PrismaticModel",
     "PrismaticZeroShotQAModel",
-    "VideoChatGPTTask",
     "VideoChatGPTZeroShotQATask",
     "VideoChatGPTConsistencyDataset",
     "PrismaticVideoChatGPTConsistencyModel",
@@ -86,8 +86,12 @@ __all__ = [
     "VideoLlama2EgoSchemaModel",
     "VideoLlama2EgoSchemaNeedleHaystackModel",
     "MLVUMultipleChoiceDataset",
-    "MLVUGenerationDataset",
     "MLVUMultipleChoiceTestDataset",
     "PrismaticMLVUMultipleChoiceModel",
     "PrismaticMLVUGenerationModel",
+    "OpenAIEvalTask",
+    "MLVUSSCTask",
+    "MLVUSummaryTask",
+    "MLVUSSCDataset",
+    "MLVUSummaryDataset",
 ]
