@@ -310,9 +310,10 @@ class PrismaticMLVUMultipleChoiceModel(PrismaticEgoSchemaModel):
         return prompt_dict
 
     def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
-        # confidence level for each option (batch, num_option)
-        confidence = np.zeros((batch["pixel_values"].size(0), 5))
-        for i in range(len(batch["candidates"][0])):
+        # confidence level for each option (batch, num_cands)
+        num_cands = len(batch["candidates"][0])
+        confidence = np.zeros((batch["pixel_values"].size(0), num_cands))
+        for i in range(num_cands):
             _, batch_gen_probs = self.model.generate_batch(
                 batch["pixel_values"],
                 batch[f"candidate_{i}_prompt"],

@@ -52,6 +52,12 @@ class MLVUMultipleChoiceDataset(MLVUDataset):
         return ["question_id", "duration", "question", "answer", "candidates"]
 
 
+class MLVUMultipleChoiceTestDataset(MLVUDataset):
+    @property
+    def columns(self) -> list[str]:
+        return ["question_id", "question_type", "duration", "question", "candidates"]
+
+
 class MLVUGenerationDataset(MLVUDataset):
     @property
     def columns(self) -> list[str]:
