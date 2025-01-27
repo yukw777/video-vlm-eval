@@ -53,6 +53,20 @@ class MLVUMultipleChoiceDataset(MLVUDataset):
 
 
 class MLVUMultipleChoiceTestDataset(MLVUDataset):
+    def __init__(
+        self,
+        video_dir: str,
+        annotation_file: str,
+        preprocessor: Callable[[dict[str, Any]], dict[str, Any]] | None = None,
+    ) -> None:
+        super().__init__(video_dir, annotation_file, preprocessor)
+        # candidates for count questions are int's for some reason,
+        # and wandb sees it as a type mismatch as the candidates for other questions
+        # are strings. So let's just cast them to strings.
+        for e in self.examples:
+            if not isinstance(e["candidates"][0], str):
+                e["candidates"] = [str(cand) for cand in e["candidates"]]
+
     @property
     def columns(self) -> list[str]:
         return ["question_id", "question_type", "duration", "question", "candidates"]
