@@ -295,7 +295,7 @@ class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):
         }
 
 
-class PrismaticMLVUModel(PrismaticEgoSchemaModel):
+class PrismaticMLVUMultipleChoiceModel(PrismaticEgoSchemaModel):
     def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
         prompt_dict = {}
         question = datapoint[MultipleChoice.question_key]
@@ -342,6 +342,21 @@ class PrismaticMLVUModel(PrismaticEgoSchemaModel):
             batch_candidates = [datapoint.pop("candidates") for datapoint in datapoints]
             collated = default_collate(datapoints)
             collated["candidates"] = batch_candidates
+            return collated
+
+        return collate
+
+
+class PrismaticMLVUGenerationModel(PrismaticZeroShotQAModel):
+    @property
+    def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+        def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
+            # the lengths of scoring_points are variable, so let's collate "candidates" manually
+            batch_candidates = [
+                datapoint.pop("scoring_points") for datapoint in datapoints
+            ]
+            collated = default_collate(datapoints)
+            collated["scoring_points"] = batch_candidates
             return collated
 
         return collate

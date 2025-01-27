@@ -42,9 +42,17 @@ class MLVUDataset(Dataset[dict[str, Any]]):
         return len(self.examples)
 
     @property
+    def id_key(self) -> str:
+        return "question_id"
+
+
+class MLVUMultipleChoiceDataset(MLVUDataset):
+    @property
     def columns(self) -> list[str]:
         return ["question_id", "duration", "question", "answer", "candidates"]
 
+
+class MLVUGenerationDataset(MLVUDataset):
     @property
-    def id_key(self) -> str:
-        return "question_id"
+    def columns(self) -> list[str]:
+        return ["question_id", "duration", "question", "answer", "scoring_points"]

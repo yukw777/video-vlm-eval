@@ -1,3 +1,4 @@
+import json
 import csv
 import os
 
@@ -57,7 +58,12 @@ def run(
             break
         gathered_objects: list[list] = []
         for column in dataset_columns:
-            gathered_objects.append(gather_object(batch[column]))
+            batched_obj = batch[column]
+            if not isinstance(batched_obj[0], str):
+                # if the batched element is not a string, e.g., list of strings,
+                # dump it as a json
+                batched_obj = [json.dumps(obj) for obj in batched_obj]
+            gathered_objects.append(gather_object(batched_obj))
         task_results = model.perform(batch, **gen_config)
         gathered_task_results = gather_object(task_results)
         if (

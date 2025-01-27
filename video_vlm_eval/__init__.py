@@ -4,7 +4,7 @@ from .dataset.msrvtt_qa import MSRVTTQADataset
 from .dataset.msvd_qa import MSVDQADataset
 from .dataset.tgif_qa import TGIFQAFrameDataset
 from .dataset.egoschema import EgoSchemaDataset, EgoSchemaNeedleHaystackDataset
-from .dataset.mlvu import MLVUDataset
+from .dataset.mlvu import MLVUMultipleChoiceDataset, MLVUGenerationDataset
 from .model import Model
 from .model.prismatic import (
     PrismaticModel,
@@ -13,7 +13,8 @@ from .model.prismatic import (
     PrismaticEgoSchemaModel,
     PrismaticEgoSchemaNeedleHaystackModel,
     PrismaticDirectAnswerEgoSchemaModel,
-    PrismaticMLVUModel,
+    PrismaticMLVUMultipleChoiceModel,
+    PrismaticMLVUGenerationModel,
 )
 from .model.tarsier import (
     TarsierEgoSchemaModel,
@@ -80,6 +81,8 @@ __all__ = [
     "VideoLlama2ZeroShotQAModel",
     "VideoLlama2EgoSchemaModel",
     "VideoLlama2EgoSchemaNeedleHaystackModel",
-    "MLVUDataset",
-    "PrismaticMLVUModel",
+    "MLVUMultipleChoiceDataset",
+    "MLVUGenerationDataset",
+    "PrismaticMLVUMultipleChoiceModel",
+    "PrismaticMLVUGenerationModel",
 ]
