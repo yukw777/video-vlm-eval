@@ -85,3 +85,9 @@ class MLVUSummaryDataset(MLVUDataset):
     @property
     def columns(self) -> list[str]:
         return ["question_id", "duration", "question", "answer"]
+
+
+class MLVUTestGenerationDataset(MLVUDataset):
+    @property
+    def columns(self) -> list[str]:
+        return ["duration", "question", "question_type"]

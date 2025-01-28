@@ -9,6 +9,7 @@ from .dataset.mlvu import (
     MLVUSSCDataset,
     MLVUSummaryDataset,
     MLVUMultipleChoiceTestDataset,
+    MLVUTestGenerationDataset,
 )
 from .model import Model
 from .model.prismatic import (
@@ -94,4 +95,5 @@ __all__ = [
     "MLVUSummaryTask",
     "MLVUSSCDataset",
     "MLVUSummaryDataset",
+    "MLVUTestGenerationDataset",
 ]
