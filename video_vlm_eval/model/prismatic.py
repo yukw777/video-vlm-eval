@@ -399,12 +399,12 @@ class PrismaticMovieChat1KModel(PrismaticZeroShotQAModel):
             )
         else:
             # breakpoint question, so extract frames from the interval centered around "time"
+            vr = VideoReader(str(datapoint.pop("video_path")))
             half = self.extract_frames.num_frame_samples // 2
+            start_frame = max(0, datapoint["time"] - half)
+            end_frame = min(datapoint["time"] + half, len(vr))
             pixel_values = self.model.vision_backbone.vision_transform(
-                self.extract_frames(
-                    VideoReader(str(datapoint.pop("video_path"))),
-                    time_interval=(datapoint["time"] - half, datapoint["time"] + half),
-                )
+                self.extract_frames(vr, time_interval=(start_frame, end_frame))
             )
         return {
             "pixel_values": pixel_values,
