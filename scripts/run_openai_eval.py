@@ -57,7 +57,17 @@ def run(
         for future in tqdm(as_completed(future_to_q_id), total=len(preds)):
             q_id = future_to_q_id[future]
             ann = future.result()
-            anns.append(ann)
+            anns.append(
+                {
+                    **{
+                        k: v
+                        for k, v in dataset.get_by_id(q_id).items()
+                        if k in dataset.columns
+                    },
+                    **{k: v for k, v in preds[q_id].items() if k in task.pred_keys},
+                    **ann,
+                }
+            )
             data.append(
                 [dataset.get_by_id(q_id)[c] for c in dataset.columns]
                 + [preds[q_id][key] for key in task.pred_keys]
