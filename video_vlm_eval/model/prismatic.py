@@ -363,3 +363,51 @@ class PrismaticMLVUGenerationModel(PrismaticZeroShotQAModel):
             return default_collate(datapoints)
 
         return collate
+
+
+class PrismaticMovieChat1KModel(PrismaticZeroShotQAModel):
+    def __init__(
+        self,
+        model_name_or_path: str,
+        dtype: TorchDType | None = None,
+        num_frame_samples: int | None = None,
+        rope_scaling_type: str | None = None,
+        rope_scaling_factor: float | None = None,
+        llm_backbone_ckpt_path: str | None = None,
+        frames_per_seg: int | None = None,
+    ):
+        super().__init__(
+            model_name_or_path,
+            dtype=dtype,
+            num_frame_samples=num_frame_samples,
+            rope_scaling_type=rope_scaling_type,
+            rope_scaling_factor=rope_scaling_factor,
+            llm_backbone_ckpt_path=llm_backbone_ckpt_path,
+            frames_per_seg=frames_per_seg,
+        )
+        self.extract_frames = (
+            self.model.vision_backbone.vision_transform.transforms.pop(0)  # type: ignore
+        )
+
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        prompt_builder = self.model.get_prompt_builder()
+        prompt_builder.add_turn("human", datapoint[ZeroShotQA.question_key])
+        if datapoint["time"] == -1:
+            # global question, so extract frames from the whole video
+            pixel_values = self.model.vision_backbone.vision_transform(
+                self.extract_frames(VideoReader(str(datapoint.pop("video_path"))))
+            )
+        else:
+            # breakpoint question, so extract frames from the interval centered around "time"
+            half = self.extract_frames.num_frame_samples // 2
+            pixel_values = self.model.vision_backbone.vision_transform(
+                self.extract_frames(
+                    VideoReader(str(datapoint.pop("video_path"))),
+                    time_interval=(datapoint["time"] - half, datapoint["time"] + half),
+                )
+            )
+        return {
+            "pixel_values": pixel_values,
+            "texts": prompt_builder.get_prompt(),
+            **datapoint,
+        }

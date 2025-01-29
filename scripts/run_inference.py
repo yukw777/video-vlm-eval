@@ -1,6 +1,7 @@
 import json
 import csv
 import os
+import torch
 
 from accelerate import Accelerator
 from accelerate.utils import gather_object, set_seed, tqdm
@@ -59,10 +60,14 @@ def run(
         gathered_objects: list[list] = []
         for column in dataset_columns:
             batched_obj = batch[column]
-            if not isinstance(batched_obj[0], str):
+            if isinstance(batched_obj[0], list):
                 # if the batched element is not a string, e.g., list of strings,
                 # dump it as a json
                 batched_obj = [json.dumps(obj) for obj in batched_obj]
+            elif isinstance(batched_obj[0], torch.Tensor):
+                # if the batched object is a tensor, turn it into a list
+                # and dumpt it as a json
+                batched_obj = [json.dumps(obj.tolist()) for obj in batched_obj]
             gathered_objects.append(gather_object(batched_obj))
         task_results = model.perform(batch, **gen_config)
         gathered_task_results = gather_object(task_results)

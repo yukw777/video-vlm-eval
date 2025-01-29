@@ -2909,8 +2909,8 @@ sagemaker = ["boto3", "sagemaker"]
 [package.source]
 type = "git"
 url = "git@github.com:yukw777/prismatic-dev.git"
-reference = "0a86778fd686ae4ae235310286bec4bd81c34a6a"
-resolved_reference = "0a86778fd686ae4ae235310286bec4bd81c34a6a"
+reference = "d192015bc1a850be4b6a8c9f522491d6548221ad"
+resolved_reference = "d192015bc1a850be4b6a8c9f522491d6548221ad"
 
 [[package]]
 name = "proglog"
@@ -5184,4 +5184,4 @@ sagemaker = ["nest-asyncio", "sagemaker"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "ea7395dc6cb39d6a0e155e6de3c3518bdca8151f446de5a7d08d9861100a114b"
+content-hash = "3898a6cb8917d9b35de7038b84c0189d168c6bee3f078c0c12552f3c4dbc8e56"
