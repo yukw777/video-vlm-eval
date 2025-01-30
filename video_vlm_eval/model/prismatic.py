@@ -333,10 +333,6 @@ class PrismaticMLVUMultipleChoiceModel(PrismaticEgoSchemaModel):
         ]
 
     @property
-    def result_keys(self) -> list[str]:
-        return [MultipleChoice.pred_key]
-
-    @property
     def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
         def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
             # the default collator transposes lists of lists, so let's collate "candidates" manually
