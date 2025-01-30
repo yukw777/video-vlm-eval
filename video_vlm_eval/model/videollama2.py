@@ -4,24 +4,20 @@ from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.task import ZeroShotQA, MultipleChoice
 from video_vlm_eval.model.utils import ORDINALS
 from decord import VideoReader
-from PIL import Image
 from videollama2.mm_utils import (
     tokenizer_multimodal_token,
     KeywordsStoppingCriteria,
     process_video,
-    frame_sample,
-    expand2square,
 )
 from videollama2.model.videollama2_qwen2 import Videollama2Qwen2ForCausalLM
 from videollama2.model.videollama2_mistral import Videollama2MistralForCausalLM
 from videollama2.model.videollama2_mixtral import Videollama2MixtralForCausalLM
-from videollama2.constants import DEFAULT_VIDEO_TOKEN, NUM_FRAMES, MAX_FRAMES
+from videollama2.constants import DEFAULT_VIDEO_TOKEN, NUM_FRAMES
 
 from typing import Any, Callable
 from torch.utils.data import default_collate
 from functools import partial
 import re
-import numpy as np
 
 
 class VideoLlama2Model(Model[dict[str, Any]]):
@@ -333,35 +329,19 @@ class VideoLlama2MovieChat1KModel(VideoLlama2ZeroShotQAModel):
             )
         else:
             # breakpoint question, so extract frames from the interval centered around "time"
-            vr = VideoReader(str(datapoint.pop("video_path")))
+            vr = VideoReader(str(datapoint["video_path"]))
             half = self.num_frames // 2
+            fps = vr.get_avg_fps()
             start_frame = max(0, datapoint["time"] - half)
+            start_time = start_frame / fps
             end_frame = min(datapoint["time"] + half, len(vr))
-            frame_indices = list(range(start_frame, end_frame))
-            duration = len(frame_indices)
-            sampled_frame_indices = [
-                frame_indices[i]
-                for i in frame_sample(
-                    duration, mode="uniform", num_frames=self.num_frames
-                )
-            ]
-            video_data = [
-                Image.fromarray(frame)
-                for frame in vr.get_batch(sampled_frame_indices).asnumpy()
-            ]
-            while len(video_data) < self.num_frames:
-                video_data.append(
-                    Image.fromarray(np.zeros((*video_data[-1].size, 3), dtype=np.uint8))
-                )
-            video_data = video_data[:MAX_FRAMES]
-            processor = self.model.get_vision_tower().image_processor
-            images = [
-                expand2square(f, tuple(int(x * 255) for x in processor.image_mean))
-                for f in video_data
-            ]
-            pixel_values = processor.preprocess(images, return_tensors="pt")[
-                "pixel_values"
-            ]
+            end_time = end_frame / fps
+            pixel_values = self.processor(
+                str(datapoint.pop("video_path")),
+                s=start_time,
+                e=end_time,
+                num_frames=self.num_frames,
+            )
         datapoint["pixel_values"] = pixel_values
         if self.dtype is not None:
             datapoint["pixel_values"] = datapoint["pixel_values"].to(self.dtype.value)
