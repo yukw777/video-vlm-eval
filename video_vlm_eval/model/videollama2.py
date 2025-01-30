@@ -3,20 +3,25 @@ from transformers import AutoTokenizer, AutoConfig
 from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.task import ZeroShotQA, MultipleChoice
 from video_vlm_eval.model.utils import ORDINALS
+from decord import VideoReader
+from PIL import Image
 from videollama2.mm_utils import (
     tokenizer_multimodal_token,
     KeywordsStoppingCriteria,
     process_video,
+    frame_sample,
+    expand2square,
 )
 from videollama2.model.videollama2_qwen2 import Videollama2Qwen2ForCausalLM
 from videollama2.model.videollama2_mistral import Videollama2MistralForCausalLM
 from videollama2.model.videollama2_mixtral import Videollama2MixtralForCausalLM
-from videollama2.constants import DEFAULT_VIDEO_TOKEN, NUM_FRAMES
+from videollama2.constants import DEFAULT_VIDEO_TOKEN, NUM_FRAMES, MAX_FRAMES
 
 from typing import Any, Callable
 from torch.utils.data import default_collate
 from functools import partial
 import re
+import numpy as np
 
 
 class VideoLlama2Model(Model[dict[str, Any]]):
@@ -309,3 +314,64 @@ class VideoLlama2MLVUGenerationModel(VideoLlama2ZeroShotQAModel):
             return default_collate(datapoints)
 
         return collate
+
+
+class VideoLlama2MovieChat1KModel(VideoLlama2ZeroShotQAModel):
+    def __init__(
+        self,
+        model_name_or_path: str,
+        dtype: TorchDType | None = None,
+        num_frames: int | None = None,
+    ) -> None:
+        super().__init__(model_name_or_path, dtype=dtype, num_frames=num_frames)
+
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        if datapoint["time"] == -1:
+            # global question, so extract frames from the whole video
+            pixel_values = self.processor(
+                str(datapoint.pop("video_path")), num_frames=self.num_frames
+            )
+        else:
+            # breakpoint question, so extract frames from the interval centered around "time"
+            vr = VideoReader(str(datapoint.pop("video_path")))
+            half = self.num_frames // 2
+            start_frame = max(0, datapoint["time"] - half)
+            end_frame = min(datapoint["time"] + half, len(vr))
+            frame_indices = list(range(start_frame, end_frame))
+            duration = len(frame_indices)
+            sampled_frame_indices = [
+                frame_indices[i]
+                for i in frame_sample(
+                    duration, mode="uniform", num_frames=self.num_frames
+                )
+            ]
+            video_data = [
+                Image.fromarray(frame)
+                for frame in vr.get_batch(sampled_frame_indices).asnumpy()
+            ]
+            while len(video_data) < self.num_frames:
+                video_data.append(
+                    Image.fromarray(np.zeros((*video_data[-1].size, 3), dtype=np.uint8))
+                )
+            video_data = video_data[:MAX_FRAMES]
+            processor = self.model.get_vision_tower().image_processor
+            images = [
+                expand2square(f, tuple(int(x * 255) for x in processor.image_mean))
+                for f in video_data
+            ]
+            pixel_values = processor.preprocess(images, return_tensors="pt")[
+                "pixel_values"
+            ]
+        datapoint["pixel_values"] = pixel_values
+        if self.dtype is not None:
+            datapoint["pixel_values"] = datapoint["pixel_values"].to(self.dtype.value)
+        datapoint["input_ids"] = tokenizer_multimodal_token(
+            self._build_prompt(datapoint),
+            self.tokenizer,
+            DEFAULT_VIDEO_TOKEN,
+            return_tensors="pt",
+        ).unsqueeze(0)
+        datapoint["attention_mask"] = (
+            datapoint["input_ids"].ne(self.tokenizer.pad_token_id).long()
+        )
+        return datapoint
