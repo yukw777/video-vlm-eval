@@ -13,7 +13,8 @@ from videollama2.model.videollama2_mistral import Videollama2MistralForCausalLM
 from videollama2.model.videollama2_mixtral import Videollama2MixtralForCausalLM
 from videollama2.constants import DEFAULT_VIDEO_TOKEN, NUM_FRAMES
 
-from typing import Any
+from typing import Any, Callable
+from torch.utils.data import default_collate
 from functools import partial
 import re
 
@@ -277,3 +278,14 @@ class VideoLlama2MLVUMultipleChoiceModel(VideoLlama2Model):
     @property
     def result_keys(self) -> list[str]:
         return [MultipleChoice.pred_key]
+
+    @property
+    def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+        def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
+            # the default collator transposes lists of lists, so let's collate "candidates" manually
+            batch_candidates = [datapoint.pop("candidates") for datapoint in datapoints]
+            collated = default_collate(datapoints)
+            collated["candidates"] = batch_candidates
+            return collated
+
+        return collate
