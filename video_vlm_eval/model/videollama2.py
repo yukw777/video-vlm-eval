@@ -235,3 +235,45 @@ class VideoLlama2EgoSchemaNeedleHaystackModel(VideoLlama2EgoSchemaModel):
             datapoint["input_ids"].ne(self.tokenizer.pad_token_id).long()
         )
         return datapoint
+
+
+class VideoLlama2MLVUMultipleChoiceModel(VideoLlama2Model):
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        options = "".join(
+            f"({i}) {cand}\n" for i, cand in enumerate(datapoint["candidates"])
+        )
+        return super()._build_prompt(
+            {
+                "question": (
+                    "Select the best answer to the following multiple-choice question based on the video.\n"
+                    f"{datapoint['question']}\n"
+                    "Options:\n"
+                    + options
+                    + "Answer with the option's number from the given choices directly and only give the best option. "
+                    "The best answer is: "
+                )
+            },
+        )
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        outputs = super().perform(batch, **gen_config)
+        preds: list[dict] = []
+        for output, candidates in zip(outputs, batch["candidates"]):
+            answer = output["answer"]
+            answer = answer.replace("answer", "")
+            answer = answer.replace("Answer", "")
+            pred_answer = re.findall("[\(\ ]*\d[\)\ ]*", answer)
+            try:
+                assert len(pred_answer) >= 1
+                pred = pred_answer[0].strip()
+                pred = pred.strip("()")
+            except Exception:
+                # VideoLLaMA 2 generated an invalid answer, so set it to 2.
+                # https://github.com/DAMO-NLP-SG/VideoLLaMA2/blob/e99445860638d1e99a8a060068a0fa31f0f2b4da/videollama2/eval/inference_video_mcqa_egoschema.py#L100
+                pred = "2"
+            preds.append({MultipleChoice.pred_key: candidates[int(pred)]})
+        return preds
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [MultipleChoice.pred_key]
