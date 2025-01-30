@@ -28,25 +28,10 @@ def main(
     # Clear any existing cache to get an accurate reading
     torch.cuda.empty_cache()
 
-    # Start timing
-    start_time = torch.cuda.Event(enable_timing=True)
-    end_time = torch.cuda.Event(enable_timing=True)
-
-    start_time.record()
-
     # Perform inference
-    with torch.no_grad():
+    with torch.no_grad(), torch.autograd.profiler.profile(use_cuda=True) as prof:
         model.perform(preprocessed, max_new_tokens=1)
-
-    # End timing
-    end_time.record()
-
-    # Synchronize to make sure timing is accurate
-    torch.cuda.synchronize()
-
-    # Calculate elapsed time in milliseconds
-    inference_time = start_time.elapsed_time(end_time)
-    print(f"Inference time: {inference_time:.2f} ms")
+    print(prof)
 
     # Calculate peak memory usage during inference
     peak_memory = torch.cuda.max_memory_allocated()
