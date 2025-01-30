@@ -272,6 +272,9 @@ class VideoLlama2MLVUMultipleChoiceModel(VideoLlama2Model):
                 # VideoLLaMA 2 generated an invalid answer, so set it to 2.
                 # https://github.com/DAMO-NLP-SG/VideoLLaMA2/blob/e99445860638d1e99a8a060068a0fa31f0f2b4da/videollama2/eval/inference_video_mcqa_egoschema.py#L100
                 pred = "2"
+            if "0" > pred or pred >= str(len(candidates)):
+                # VideoLLaMA 2 generated an invalid answer, so set it to 2.
+                pred = "2"
             preds.append({MultipleChoice.pred_key: candidates[int(pred)]})
         return preds
 
@@ -287,5 +290,22 @@ class VideoLlama2MLVUMultipleChoiceModel(VideoLlama2Model):
             collated = default_collate(datapoints)
             collated["candidates"] = batch_candidates
             return collated
+
+        return collate
+
+
+class VideoLlama2MLVUGenerationModel(VideoLlama2ZeroShotQAModel):
+    @property
+    def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+        def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
+            # the lengths of scoring_points are variable, so let's collate "candidates" manually if they exist
+            if "scoring_points" in datapoints[0]:
+                batch_candidates = [
+                    datapoint.pop("scoring_points") for datapoint in datapoints
+                ]
+                collated = default_collate(datapoints)
+                collated["scoring_points"] = batch_candidates
+                return collated
+            return default_collate(datapoints)
 
         return collate
