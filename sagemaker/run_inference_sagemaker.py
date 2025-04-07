@@ -29,7 +29,6 @@ def run(
     output_path: str,
     s3_data_paths: list[str],
     run_inference_args: list[tuple[str, str]],
-    role_arn: str = "arn:aws:iam::124224456861:role/service-role/SageMaker-SageMakerAllAccess",
     instance_count: int = 1,
     instance_type: str = "ml.g5.12xlarge",
     image_uri: str = "124224456861.dkr.ecr.us-east-1.amazonaws.com/peter.yu-video-vlm-eval-inference:latest",
@@ -49,9 +48,23 @@ def run(
     }
     if s3_hf_home is not None:
         s3_data_paths.append(s3_hf_home)
-        env_vars["HF_HOME"] = f"/opt/ml/input/data/data_{len(s3_data_paths) -1}/"
+        env_vars["HF_HOME"] = f"/opt/ml/input/data/data_{len(s3_data_paths) - 1}/"
+
+    if boto_session is None:
+        boto_session = BotoSession()
+
+    if boto_session.region_name == "us-east-1":
+        role_arn = (
+            "arn:aws:iam::124224456861:role/service-role/SageMaker-SageMakerAllAccess"
+        )
+    elif boto_session.region_name == "us-west-2":
+        role_arn = (
+            "arn:aws:iam::124224456861:role/SageMaker-SageMakerAllAccess-us-west-2"
+        )
+    else:
+        raise ValueError(f"Unknown region: {boto_session.region_name}")
+
     sagemaker_session = sagemaker.Session(boto_session=boto_session)  # type: ignore
-    sagemaker_session.boto_region_name
     estimator = PyTorch(
         "scripts/run_inference.py",
         role=role_arn,
@@ -84,7 +97,7 @@ def run(
     }
     if use_queue:
         queue = Queue(
-            f'fss-{instance_type.replace(".", "-")}-{sagemaker_session.boto_region_name}'
+            f"fss-{instance_type.replace('.', '-')}-{sagemaker_session.boto_region_name}"
         )
         print(f"Starting training job on queue {queue.queue_name}")
         queued_job = queue.submit(
