@@ -35,7 +35,7 @@ def run(
     max_hours: int = 24,
     tags: dict[str, str] | None = None,
     boto_session: BotoSession | None = None,
-    use_reserved_capacity: bool = False,
+    use_reserved_capacity: bool = True,
     s3_hf_home: str | None = None,
     use_queue: bool = True,
     queue_priority: int = 10,
