@@ -12,6 +12,7 @@ from .dataset.mlvu import (
     MLVUTestGenerationDataset,
 )
 from .dataset.movie_chat_1k import MovieChat1KDataset
+from .dataset.video_mme import VideoMMEDataset
 from .model import Model
 from .model.prismatic import (
     PrismaticModel,
@@ -23,6 +24,7 @@ from .model.prismatic import (
     PrismaticMLVUMultipleChoiceModel,
     PrismaticMLVUGenerationModel,
     PrismaticMovieChat1KModel,
+    PrismaticVideoMMEModel,
 )
 from .model.tarsier import (
     TarsierEgoSchemaModel,
@@ -108,4 +110,6 @@ __all__ = [
     "VideoLlama2MLVUMultipleChoiceModel",
     "VideoLlama2MLVUGenerationModel",
     "VideoLlama2MovieChat1KModel",
+    "PrismaticVideoMMEModel",
+    "VideoMMEDataset",
 ]

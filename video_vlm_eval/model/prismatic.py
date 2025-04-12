@@ -1,5 +1,6 @@
 import numpy as np
 import torch
+import re
 from prismatic import load
 from decord import VideoReader
 
@@ -407,3 +408,55 @@ class PrismaticMovieChat1KModel(PrismaticZeroShotQAModel):
             "texts": prompt_builder.get_prompt(),
             **datapoint,
         }
+
+
+class PrismaticVideoMMEModel(PrismaticEgoSchemaModel):
+    OPTS = "ABCD"
+    OPT_REGEX = re.compile(r"^([ABCD])\. *(.+)")
+
+    def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        prompt_dict = {}
+        question = datapoint[MultipleChoice.question_key]
+        for option in datapoint["options"]:
+            m = self.OPT_REGEX.match(option)
+            assert m is not None, f"Non-standard option: {option}"
+            option_letter = m.group(1)
+            option_name = m.group(2)
+            prompt_builder = self.model.get_prompt_builder()
+            prompt_builder.add_turn(
+                "human",
+                f'Given the question "{question}", is the answer "{option_name}" correct? '
+                'Please answer only "yes" or "no".',
+            )
+            prompt_dict[f"option_{option_letter}_prompt"] = prompt_builder.get_prompt()
+        return prompt_dict
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        # confidence level for each option (batch, num_option)
+        confidence = np.zeros((batch["pixel_values"].size(0), 4))
+        for o, k in enumerate(self.OPTS):
+            _, batch_gen_probs = self.model.generate_batch(
+                batch["pixel_values"],
+                batch[f"option_{k}_prompt"],
+                return_string_probabilities=["Yes", "No"],
+                **gen_config,
+            )
+            for i, gen_probs in enumerate(batch_gen_probs):
+                confidence[i][o] = gen_probs[0]  # type: ignore
+
+        batch_pred = confidence.argmax(axis=1)
+
+        return [
+            {MultipleChoice.pred_key: self.OPTS[pred]} for pred in batch_pred.tolist()
+        ]
+
+    @property
+    def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+        def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
+            # the default collator transposes lists of lists, so let's collate "options" manually
+            batch_candidates = [datapoint.pop("options") for datapoint in datapoints]
+            collated = default_collate(datapoints)
+            collated["options"] = batch_candidates
+            return collated
+
+        return collate
