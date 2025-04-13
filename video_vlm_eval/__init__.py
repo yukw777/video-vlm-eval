@@ -32,6 +32,7 @@ from .model.tarsier import (
     TarsierModel,
     TarsierZeroShotQAModel,
     TarsierVideoChatGPTConsistencyModel,
+    TarsierVideoMMEModel,
 )
 from .task import Task, MultipleChoice, OpenAIEvalTask
 from .task.mlvu import MLVUSSCTask, MLVUSummaryTask
@@ -114,4 +115,5 @@ __all__ = [
     "PrismaticVideoMMEModel",
     "VideoMMEDataset",
     "VideoLlama2VideoMMEModel",
+    "TarsierVideoMMEModel",
 ]

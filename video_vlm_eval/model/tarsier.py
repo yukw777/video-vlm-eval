@@ -55,7 +55,7 @@ class TarsierModel(Model[dict[str, Any]]):
 
     def _build_prompt(self, datapoint: dict[str, Any]) -> str:
         return (
-            f'USER: <video> Based on the given video, generate a detailed answer for the following question: {datapoint["question"]}\n'
+            f"USER: <video> Based on the given video, generate a detailed answer for the following question: {datapoint['question']}\n"
             "ASSISTANT: Answer: "
         )
 
@@ -262,3 +262,40 @@ class TarsierEgoSchemaNeedleHaystackModel(TarsierEgoSchemaModel):
         preprocessed["input_ids"].squeeze_(dim=0)
         preprocessed.update(datapoint)
         return preprocessed
+
+
+class TarsierVideoMMEModel(TarsierModel):
+    OPTS = "ABCD"
+
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        return (
+            "USER: <video> Select the best answer to the following multiple-choice question based on the video. Respond with only the letter (A, B, C, or D) of the correct option.\n"
+            f"{datapoint['question']}\n"
+            + "\n".join(datapoint["options"])
+            + "\n"
+            + "ASSISTANT: The best answer is: "
+        )
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        outputs = self.model.generate(
+            input_ids=batch["input_ids"],
+            attention_mask=batch["attention_mask"],
+            pixel_values=batch["pixel_values"],
+            **gen_config,
+        )
+        preds: list[dict] = []
+        for decoded in self.processor.tokenizer.batch_decode(
+            outputs[:, batch["input_ids"].size(1) :], skip_special_tokens=True
+        ):
+            pred = decoded[0]
+            if "0" <= decoded <= "3":
+                # Tarsier may erroneously generate numbers.
+                # The original code translates the numbers into letters.
+                # https://github.com/bytedance/tarsier/blob/9ff5567a8882cbcc81060f392bead76afb16e19d/evaluation/metrics/evaluate_qa_mc.py#L45-L47
+                pred = chr(int(pred) + ord("A"))
+            preds.append({MultipleChoice.pred_key: pred})
+        return preds
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [MultipleChoice.pred_key]
