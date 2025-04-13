@@ -1,10 +1,12 @@
 import torch
+import re
 from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.task import MultipleChoice, ZeroShotQA
 from video_vlm_eval.model.utils import ORDINALS
 from video_vlm_eval.task.video_chatgpt import VideoChatGPTConsistencyTask
 from decord import VideoReader
 
+from torch.utils.data import default_collate
 from tarsier.models.modeling_tarsier import (
     TarsierForConditionalGeneration,
     LlavaConfig as TarsierLlavaConfig,
@@ -327,3 +329,67 @@ class TarsierMovieChat1KModel(TarsierZeroShotQAModel):
         preprocessed["input_ids"].squeeze_(dim=0)
         preprocessed.update(datapoint)
         return preprocessed
+
+
+class TarsierMLVUMultipleChoiceModel(TarsierModel):
+    OPTS = "ABCDEF"
+
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        return (
+            "USER: <video> Select the best answer to the following multiple-choice question based on the video. Respond with only the letter of the correct option.\n"
+            f"{datapoint['question']}\n"
+            "ASSISTANT: The best answer is: "
+        )
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        outputs = self.model.generate(
+            input_ids=batch["input_ids"],
+            attention_mask=batch["attention_mask"],
+            pixel_values=batch["pixel_values"],
+            **gen_config,
+        )
+        preds: list[dict] = []
+        for decoded in self.processor.tokenizer.batch_decode(
+            outputs[:, batch["input_ids"].size(1) :], skip_special_tokens=True
+        ):
+            pred_answer = re.findall(f"[\(\ ]*[{self.OPTS}][\)\ ]*", decoded.strip())
+            try:
+                assert len(pred_answer) >= 1
+                pred = pred_answer[0].strip()
+                pred = pred.strip("()")
+            except Exception:
+                # Tarsier generated an invalid answer, so set it to C.
+                pred = "C"
+            if pred not in self.OPTS:
+                # Tarsier generated an invalid answer, so set it to C.
+                pred = "C"
+            if "0" <= decoded <= "5":
+                # Tarsier may erroneously generate numbers.
+                # The original code translates the numbers into letters.
+                # https://github.com/bytedance/tarsier/blob/9ff5567a8882cbcc81060f392bead76afb16e19d/evaluation/metrics/evaluate_qa_mc.py#L45-L47
+                pred = chr(int(pred) + ord("A"))
+            preds.append({MultipleChoice.pred_key: pred})
+        return preds
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [MultipleChoice.pred_key]
+
+
+class TarsierMLVUGenerationModel(TarsierZeroShotQAModel):
+    @property
+    def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+        super_collate_fn = super().collate_fn
+
+        def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
+            # the lengths of scoring_points are variable, so let's collate "candidates" manually if they exist
+            if "scoring_points" in datapoints[0]:
+                batch_candidates = [
+                    datapoint.pop("scoring_points") for datapoint in datapoints
+                ]
+                collated = super_collate_fn(datapoints)
+                collated["scoring_points"] = batch_candidates
+                return collated
+            return default_collate(datapoints)
+
+        return collate
