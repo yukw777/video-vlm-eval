@@ -1,4 +1,4 @@
-from video_vlm_eval.task import ZeroShotQA, OpenAIEvalTask
+from video_vlm_eval.task import ZeroShotQA, OpenAIEvalTask, MultipleChoice
 
 
 class MLVUSSCTask(ZeroShotQA, OpenAIEvalTask):
@@ -179,3 +179,16 @@ class MLVUSummaryTask(ZeroShotQA, OpenAIEvalTask):
         total = comp + reli
 
         return {"completeness": comp, "reliability": reli, "total": total}
+
+
+class MLVUMultiplechoice(MultipleChoice):
+    def calculate_metrics(self, anns: list[dict]) -> dict:
+        # calculate accuracy for each task type
+        task_types = {ann["task_type"] for ann in anns}
+        metrics = {}
+        for task_type in task_types:
+            task_anns = [ann for ann in anns if ann["task_type"] == task_type]
+            acc = super().calculate_metrics(task_anns)["accuracy"]
+            metrics[f"{task_type}_accuracy"] = acc
+        metrics["avg"] = sum(metrics.values()) / len(metrics)
+        return metrics

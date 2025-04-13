@@ -38,7 +38,7 @@ from .model.tarsier import (
     TarsierMLVUGenerationModel,
 )
 from .task import Task, MultipleChoice, OpenAIEvalTask
-from .task.mlvu import MLVUSSCTask, MLVUSummaryTask
+from .task.mlvu import MLVUSSCTask, MLVUSummaryTask, MLVUMultiplechoice
 from .task.video_chatgpt import (
     VideoChatGPTZeroShotQATask,
     VideoChatGPTConsistencyTask,
@@ -124,4 +124,5 @@ __all__ = [
     "TarsierMovieChat1KModel",
     "TarsierMLVUMultipleChoiceModel",
     "TarsierMLVUGenerationModel",
+    "MLVUMultiplechoice",
 ]
