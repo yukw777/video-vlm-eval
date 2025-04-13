@@ -314,14 +314,6 @@ class VideoLlama2MLVUGenerationModel(VideoLlama2ZeroShotQAModel):
 
 
 class VideoLlama2MovieChat1KModel(VideoLlama2ZeroShotQAModel):
-    def __init__(
-        self,
-        model_name_or_path: str,
-        dtype: TorchDType | None = None,
-        num_frames: int | None = None,
-    ) -> None:
-        super().__init__(model_name_or_path, dtype=dtype, num_frames=num_frames)
-
     def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
         if datapoint["time"] == -1:
             # global question, so extract frames from the whole video
