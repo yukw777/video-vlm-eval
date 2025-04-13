@@ -46,6 +46,7 @@ from .task.video_chatgpt import (
 )
 from .task.egoschema import EgoSchemaMultipleChoice
 from .task.movie_chat_1k import MovieChat1KTask
+from .task.video_mme import VideoMMEMultiplechoice
 from .dataset.video_chatgpt import (
     VideoChatGPTConsistencyDataset,
     VideoChatGPTGeneralDataset,
@@ -116,4 +117,5 @@ __all__ = [
     "VideoMMEDataset",
     "VideoLlama2VideoMMEModel",
     "TarsierVideoMMEModel",
+    "VideoMMEMultiplechoice",
 ]
