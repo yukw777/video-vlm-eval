@@ -363,7 +363,7 @@ class TarsierMLVUMultipleChoiceModel(TarsierModel):
             if pred not in self.OPTS:
                 # Tarsier generated an invalid answer, so set it to C.
                 pred = "C"
-            if "0" <= decoded <= "5":
+            if "0" <= pred <= "5":
                 # Tarsier may erroneously generate numbers.
                 # The original code translates the numbers into letters.
                 # https://github.com/bytedance/tarsier/blob/9ff5567a8882cbcc81060f392bead76afb16e19d/evaluation/metrics/evaluate_qa_mc.py#L45-L47
