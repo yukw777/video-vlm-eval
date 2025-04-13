@@ -6,7 +6,6 @@ from video_vlm_eval.model.utils import ORDINALS
 from video_vlm_eval.task.video_chatgpt import VideoChatGPTConsistencyTask
 from decord import VideoReader
 
-from torch.utils.data import default_collate
 from tarsier.models.modeling_tarsier import (
     TarsierForConditionalGeneration,
     LlavaConfig as TarsierLlavaConfig,
@@ -390,6 +389,6 @@ class TarsierMLVUGenerationModel(TarsierZeroShotQAModel):
                 collated = super_collate_fn(datapoints)
                 collated["scoring_points"] = batch_candidates
                 return collated
-            return default_collate(datapoints)
+            return super_collate_fn(datapoints)
 
         return collate
