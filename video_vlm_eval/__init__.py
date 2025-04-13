@@ -57,6 +57,7 @@ from .model.videollama2 import (
     VideoLlama2MLVUMultipleChoiceModel,
     VideoLlama2MLVUGenerationModel,
     VideoLlama2MovieChat1KModel,
+    VideoLlama2VideoMMEModel,
 )
 
 __all__ = [
@@ -112,4 +113,5 @@ __all__ = [
     "VideoLlama2MovieChat1KModel",
     "PrismaticVideoMMEModel",
     "VideoMMEDataset",
+    "VideoLlama2VideoMMEModel",
 ]

@@ -115,11 +115,12 @@ class VideoLlama2Model(Model[dict[str, Any]]):
         return datapoint
 
     def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        # NOTE: we do not support batch inference
+        assert batch["input_ids"].size(0) == 1
         stopping_criteria = KeywordsStoppingCriteria(
             [self.tokenizer.eos_token], self.tokenizer, batch["input_ids"]
         )
 
-        # NOTE: we do not support batch inference
         output_ids = self.model.generate(
             batch["input_ids"].squeeze(0),
             attention_mask=batch["attention_mask"].squeeze(0),
@@ -355,3 +356,47 @@ class VideoLlama2MovieChat1KModel(VideoLlama2ZeroShotQAModel):
             datapoint["input_ids"].ne(self.tokenizer.pad_token_id).long()
         )
         return datapoint
+
+
+class VideoLlama2VideoMMEModel(VideoLlama2Model):
+    OPTS = "ABCD"
+
+    def _build_prompt(self, datapoint: dict[str, Any]) -> str:
+        return super()._build_prompt(
+            {
+                "question": (
+                    "Select the best answer to the following multiple-choice question based on the video. Respond with only the letter (A, B, C, or D) of the correct option.\n"
+                    f"{datapoint['question']}\n"
+                    + "\n".join(datapoint["options"])
+                    + "\n"
+                    + "The best answer is: "
+                )
+            },
+        )
+
+    def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
+        outputs = super().perform(batch, **gen_config)
+        preds: list[dict] = []
+        for output in outputs:
+            if output["answer"] in self.OPTS:
+                pred = output["answer"]
+            else:
+                # VideoLLaMA 2 generated an invalid answer, so set it to C.
+                pred = "C"
+            preds.append({MultipleChoice.pred_key: pred})
+        return preds
+
+    @property
+    def result_keys(self) -> list[str]:
+        return [MultipleChoice.pred_key]
+
+    @property
+    def collate_fn(self) -> Callable[[list[dict[str, Any]]], dict[str, Any]]:
+        def collate(datapoints: list[dict[str, Any]]) -> dict[str, Any]:
+            # the default collator transposes lists of lists, so let's collate "options" manually
+            batch_candidates = [datapoint.pop("options") for datapoint in datapoints]
+            collated = default_collate(datapoints)
+            collated["options"] = batch_candidates
+            return collated
+
+        return collate
