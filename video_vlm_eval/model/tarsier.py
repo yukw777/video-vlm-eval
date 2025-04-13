@@ -3,6 +3,7 @@ from video_vlm_eval.model import TorchDType, Model
 from video_vlm_eval.task import MultipleChoice, ZeroShotQA
 from video_vlm_eval.model.utils import ORDINALS
 from video_vlm_eval.task.video_chatgpt import VideoChatGPTConsistencyTask
+from decord import VideoReader
 
 from tarsier.models.modeling_tarsier import (
     TarsierForConditionalGeneration,
@@ -299,3 +300,30 @@ class TarsierVideoMMEModel(TarsierModel):
     @property
     def result_keys(self) -> list[str]:
         return [MultipleChoice.pred_key]
+
+
+class TarsierMovieChat1KModel(TarsierZeroShotQAModel):
+    def preprocess(self, datapoint: dict[str, Any]) -> dict[str, Any]:
+        if datapoint["time"] == -1:
+            # global question, so extract frames from the whole video
+            frames = self.processor.load_images(str(datapoint.pop("video_path")))
+        else:
+            # breakpoint question, so extract frames from the interval centered around "time"
+            vr = VideoReader(str(datapoint["video_path"]))
+            half = self.processor.max_n_frames // 2
+            fps = vr.get_avg_fps()
+            start_frame = max(0, datapoint["time"] - half)
+            start_time = start_frame / fps
+            end_frame = min(datapoint["time"] + half, len(vr))
+            end_time = end_frame / fps
+            frames = self.processor.load_images(
+                str(datapoint.pop("video_path")),
+                start_time=start_time,
+                end_time=end_time,
+            )
+        preprocessed = self.processor(
+            self._build_prompt(datapoint), images=frames, edit_prompt=True
+        )
+        preprocessed["input_ids"].squeeze_(dim=0)
+        preprocessed.update(datapoint)
+        return preprocessed
