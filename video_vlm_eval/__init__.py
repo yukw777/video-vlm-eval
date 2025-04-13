@@ -5,10 +5,10 @@ from .dataset.msvd_qa import MSVDQADataset
 from .dataset.tgif_qa import TGIFQAFrameDataset
 from .dataset.egoschema import EgoSchemaDataset, EgoSchemaNeedleHaystackDataset
 from .dataset.mlvu import (
-    MLVUMultipleChoiceDataset,
+    MLVUMultipleChoiceDevDataset,
+    MLVUMultipleChoiceTestDataset,
     MLVUSSCDataset,
     MLVUSummaryDataset,
-    MLVUMultipleChoiceTestDataset,
     MLVUTestGenerationDataset,
 )
 from .dataset.movie_chat_1k import MovieChat1KDataset
@@ -98,7 +98,7 @@ __all__ = [
     "VideoLlama2ZeroShotQAModel",
     "VideoLlama2EgoSchemaModel",
     "VideoLlama2EgoSchemaNeedleHaystackModel",
-    "MLVUMultipleChoiceDataset",
+    "MLVUMultipleChoiceDevDataset",
     "MLVUMultipleChoiceTestDataset",
     "PrismaticMLVUMultipleChoiceModel",
     "PrismaticMLVUGenerationModel",

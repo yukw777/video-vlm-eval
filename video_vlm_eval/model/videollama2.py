@@ -241,18 +241,14 @@ class VideoLlama2EgoSchemaNeedleHaystackModel(VideoLlama2EgoSchemaModel):
 
 
 class VideoLlama2MLVUMultipleChoiceModel(VideoLlama2Model):
+    OPTS = "ABCDEF"
+
     def _build_prompt(self, datapoint: dict[str, Any]) -> str:
-        options = "".join(
-            f"({i}) {cand}\n" for i, cand in enumerate(datapoint["candidates"])
-        )
         return super()._build_prompt(
             {
                 "question": (
-                    "Select the best answer to the following multiple-choice question based on the video.\n"
+                    "Select the best answer to the following multiple-choice question based on the video.  Respond with only the letter of the correct option.\n"
                     f"{datapoint['question']}\n"
-                    "Options:\n"
-                    + options
-                    + "Answer with the option's number from the given choices directly and only give the best option. "
                     "The best answer is: "
                 )
             },
@@ -261,23 +257,23 @@ class VideoLlama2MLVUMultipleChoiceModel(VideoLlama2Model):
     def perform(self, batch: dict[str, Any], **gen_config) -> list[dict]:
         outputs = super().perform(batch, **gen_config)
         preds: list[dict] = []
-        for output, candidates in zip(outputs, batch["candidates"]):
+        for output in outputs:
             answer = output["answer"]
             answer = answer.replace("answer", "")
             answer = answer.replace("Answer", "")
-            pred_answer = re.findall("[\(\ ]*\d[\)\ ]*", answer)
+            pred_answer = re.findall(f"[\(\ ]*[{self.OPTS}][\)\ ]*", answer)
             try:
                 assert len(pred_answer) >= 1
                 pred = pred_answer[0].strip()
                 pred = pred.strip("()")
             except Exception:
-                # VideoLLaMA 2 generated an invalid answer, so set it to 2.
+                # VideoLLaMA 2 generated an invalid answer, so set it to C.
                 # https://github.com/DAMO-NLP-SG/VideoLLaMA2/blob/e99445860638d1e99a8a060068a0fa31f0f2b4da/videollama2/eval/inference_video_mcqa_egoschema.py#L100
-                pred = "2"
-            if "0" > pred or pred >= str(len(candidates)):
-                # VideoLLaMA 2 generated an invalid answer, so set it to 2.
-                pred = "2"
-            preds.append({MultipleChoice.pred_key: candidates[int(pred)]})
+                pred = "C"
+            if pred not in self.OPTS:
+                # VideoLLaMA 2 generated an invalid answer, so set it to C.
+                pred = "C"
+            preds.append({MultipleChoice.pred_key: pred})
         return preds
 
     @property

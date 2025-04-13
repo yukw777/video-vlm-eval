@@ -297,9 +297,11 @@ class PrismaticEgoSchemaNeedleHaystackModel(PrismaticEgoSchemaModel):
 
 
 class PrismaticMLVUMultipleChoiceModel(PrismaticEgoSchemaModel):
+    OPTS = "ABCDEF"
+
     def _build_prompt(self, datapoint: dict[str, Any]) -> dict[str, Any]:
         prompt_dict = {}
-        question = datapoint[MultipleChoice.question_key]
+        question = datapoint[MultipleChoice.question_key].split("\n", 1)[0]
         for i, cand in enumerate(datapoint["candidates"]):
             prompt_builder = self.model.get_prompt_builder()
             prompt_builder.add_turn(
@@ -327,10 +329,7 @@ class PrismaticMLVUMultipleChoiceModel(PrismaticEgoSchemaModel):
         batch_pred = confidence.argmax(axis=1)
 
         return [
-            {MultipleChoice.pred_key: cands[pred]}
-            for cands, pred in zip(
-                batch["candidates"], batch_pred.tolist(), strict=True
-            )
+            {MultipleChoice.pred_key: self.OPTS[pred]} for pred in batch_pred.tolist()
         ]
 
     @property
