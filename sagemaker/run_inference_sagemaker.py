@@ -36,7 +36,7 @@ def run(
     tags: dict[str, str] | None = None,
     boto_session: BotoSession | None = None,
     use_reserved_capacity: bool = True,
-    s3_hf_home: str | None = None,
+    s3_hf_hub_cache: str | None = None,
     use_queue: bool = True,
     queue_priority: int = 10,
     queue_fss_identifier: str = "default",
@@ -46,9 +46,9 @@ def run(
         "WANDB_NAME": wandb_name,
         "SM_USE_RESERVED_CAPACITY": "1" if use_reserved_capacity else "0",
     }
-    if s3_hf_home is not None:
-        s3_data_paths.append(s3_hf_home)
-        env_vars["HF_HOME"] = f"/opt/ml/input/data/data_{len(s3_data_paths) - 1}/"
+    if s3_hf_hub_cache is not None:
+        s3_data_paths.append(s3_hf_hub_cache)
+        env_vars["HF_HUB_CACHE"] = f"/opt/ml/input/data/data_{len(s3_data_paths) - 1}/"
 
     if boto_session is None:
         boto_session = BotoSession()
