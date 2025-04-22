@@ -11,7 +11,7 @@ python = "^3.10"
 jsonargparse = "^4.29.0"
 torch = "~2.4.0"
 # set prismatic to optional for easier docker build cache management
-prismatic = { git = "git@github.com:yukw777/prismatic-dev.git", rev = "0bd568851f8b3a0e0ac1723fbf424af2bed1bf41", optional = true }
+prismatic = { git = "git@github.com:yukw777/prismatic-dev.git", rev = "0a8c7f7e896a9fbdae07b4b7415d9f9c77234c6b", optional = true }
 decord = "^0.6.0"
 openai = "^1.33.0"
 tenacity = "^8.3.0"
@@ -42,6 +42,9 @@ prismatic = ["prismatic"]
 kaggle = ["kaggle"]
 flash-attn = ["flash-attn"]
 sagemaker = ["sagemaker", "nest-asyncio"]
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.9"
 
 [build-system]
 requires = ["poetry-core"]
