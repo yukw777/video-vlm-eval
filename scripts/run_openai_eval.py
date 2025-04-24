@@ -1,4 +1,4 @@
-import csv
+import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from pprint import pprint
@@ -30,61 +30,80 @@ class OpenAIClient:
         )
 
 
-def run(
+def main(
     task: OpenAIEvalTask,
     dataset: Dataset,
     openai_api_key: str,
-    pred_path: str,
-    out_path: str | None,
+    inference_entity: str,
+    inference_project: str,
+    inference_run_name_regex: str,
+    eval_project: str,
+    eval_entity: str | None = None,
 ) -> None:
-    wandb.init()
-    with open(pred_path, newline="") as f:
-        reader = csv.DictReader(f)
-        preds = {p[dataset.id_key]: p for p in reader}
+    if eval_entity is None:
+        eval_entity = inference_entity
+    wandb_api = wandb.Api()
+    pattern = re.compile(inference_run_name_regex)
+    inference_runs = [
+        run
+        for run in wandb_api.runs(f"{inference_entity}/{inference_project}")
+        if pattern.search(run.name)
+    ]
+    print("Running evaluation for the following inference runs:")
+    pprint([run.name for run in inference_runs])
+    print("===========================================")
+    for inference_run in inference_runs:
+        table = inference_run.logged_artifacts()[0]["inference"]
+        df = table.get_dataframe()
+        preds = df.to_dict(orient="records")
+        eval_results = run_eval(task, dataset, openai_api_key, preds)
+        with wandb.init(
+            entity=eval_entity, project=eval_project, name=inference_run.name
+        ) as eval_run:
+            eval_run.log(eval_results)
 
+
+def run_eval(
+    task: OpenAIEvalTask, dataset: Dataset, openai_api_key: str, preds: dict
+) -> dict:
     client = OpenAIClient(task, OpenAI(api_key=openai_api_key))
 
     data: list[list] = []
     anns: list[dict] = []
     with ThreadPoolExecutor() as executor:
-        future_to_q_id = {
+        future_to_pred = {
             executor.submit(
                 client.annotate,
-                task.get_openai_request(dataset.get_by_id(q_id), preds[q_id]),
-            ): q_id
-            for q_id in preds
+                task.get_openai_request(dataset.get_by_id(pred[dataset.id_key]), pred),
+            ): pred
+            for pred in preds
         }
-        for future in tqdm(as_completed(future_to_q_id), total=len(preds)):
-            q_id = future_to_q_id[future]
+        for future in tqdm(as_completed(future_to_pred), total=len(preds)):
+            pred = future_to_pred[future]
             ann = future.result()
             anns.append(
                 {
                     **{
                         k: v
-                        for k, v in dataset.get_by_id(q_id).items()
+                        for k, v in dataset.get_by_id(pred[dataset.id_key]).items()
                         if k in dataset.columns
                     },
-                    **{k: v for k, v in preds[q_id].items() if k in task.pred_keys},
+                    **{k: v for k, v in pred.items() if k in task.pred_keys},
                     **ann,
                 }
             )
             data.append(
-                [dataset.get_by_id(q_id)[c] for c in dataset.columns]
-                + [preds[q_id][key] for key in task.pred_keys]
+                [dataset.get_by_id(pred[dataset.id_key])[c] for c in dataset.columns]
+                + [pred[key] for key in task.pred_keys]
                 + [ann[key] for key in task.ann_keys]
             )
     columns = dataset.columns + task.pred_keys + task.ann_keys
-    if out_path is not None:
-        with open(out_path, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(columns)
-            writer.writerows(data)
     table = wandb.Table(columns=columns, data=data)
     metrics = task.calculate_metrics(anns)
     log_dict = {"eval_results": table, **metrics}
     pprint(log_dict)
-    wandb.log(log_dict)
+    return log_dict
 
 
 if __name__ == "__main__":
-    CLI(run, as_positional=False)
+    CLI(main, as_positional=False)
