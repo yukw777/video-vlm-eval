@@ -6,7 +6,12 @@ from pprint import pprint
 import wandb
 from jsonargparse import CLI
 from openai import OpenAI
-from tenacity import retry, wait_random_exponential
+from tenacity import (
+    retry,
+    wait_random_exponential,
+    stop_after_attempt,
+    retry_if_not_exception_type,
+)
 from tqdm import tqdm
 
 from video_vlm_eval import Dataset, OpenAIEvalTask
@@ -17,13 +22,28 @@ class OpenAIClient:
     task: OpenAIEvalTask
     client: OpenAI
 
-    @retry(wait=wait_random_exponential(min=1, max=60))
     def annotate(self, request: dict) -> dict:
         # Compute the correctness score
-        chat_completion = self.client.chat.completions.create(**request)
-        return self.task.parse_openai_response(
-            chat_completion.choices[0].message.content
+        @retry(
+            wait=wait_random_exponential(min=1, max=60),
+            stop=stop_after_attempt(10),
+            retry=retry_if_not_exception_type(SyntaxError),
         )
+        def compute_score(request: dict) -> dict:
+            chat_completion = self.client.chat.completions.create(**request)
+            parsed = self.task.parse_openai_response(
+                chat_completion.choices[0].message.content
+            )
+            return parsed
+
+        try:
+            parsed = compute_score(request)
+        except SyntaxError as e:
+            print(f"Caught SyntaxError: {e}")
+            print("Retrying with gpt-4o-mini")
+            request["model"] = "gpt-4o-mini"
+            parsed = compute_score(request)
+        return parsed
 
 
 def main(

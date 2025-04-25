@@ -40,12 +40,7 @@ class VideoChatGPTZeroShotQATask(ZeroShotQA, OpenAIEvalTask):
         }
 
     def parse_openai_response(self, response_message: str) -> dict:
-        try:
-            parsed = ast.literal_eval(response_message)
-        except Exception as e:
-            print(f"Exception raised parsing response: {response_message}")
-            print(f"Exception: {e}")
-            raise e
+        parsed = ast.literal_eval(response_message)
         return {"chatgpt_pred": parsed["pred"], "chatgpt_score": parsed["score"]}
 
     @property
