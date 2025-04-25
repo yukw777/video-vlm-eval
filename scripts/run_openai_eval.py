@@ -6,11 +6,7 @@ from pprint import pprint
 import wandb
 from jsonargparse import CLI
 from openai import OpenAI
-from tenacity import (
-    retry,
-    stop_after_attempt,
-    wait_random_exponential,
-)
+from tenacity import retry, wait_random_exponential
 from tqdm import tqdm
 
 from video_vlm_eval import Dataset, OpenAIEvalTask
@@ -21,7 +17,7 @@ class OpenAIClient:
     task: OpenAIEvalTask
     client: OpenAI
 
-    @retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(10))
+    @retry(wait=wait_random_exponential(min=1, max=60))
     def annotate(self, request: dict) -> dict:
         # Compute the correctness score
         chat_completion = self.client.chat.completions.create(**request)
